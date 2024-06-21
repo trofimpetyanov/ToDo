@@ -16,6 +16,7 @@
 		AC1C1BA72C2375B00094D57C /* ToDoItem+Parsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1C1BA62C2375B00094D57C /* ToDoItem+Parsing.swift */; };
 		ACA0D20E2C24ACE4003659A2 /* FileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA0D20D2C24ACE4003659A2 /* FileCache.swift */; };
 		ACF2A2952C25C58200C7D20E /* ToDoItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACF2A2942C25C58200C7D20E /* ToDoItemTests.swift */; };
+		ACF2A2992C25F4BC00C7D20E /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACF2A2982C25F4BC00C7D20E /* Date+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +42,7 @@
 		ACA0D20D2C24ACE4003659A2 /* FileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCache.swift; sourceTree = "<group>"; };
 		ACF2A28B2C25C55F00C7D20E /* ToDoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ToDoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACF2A2942C25C58200C7D20E /* ToDoItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemTests.swift; sourceTree = "<group>"; };
+		ACF2A2982C25F4BC00C7D20E /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 				AC1C1BA02C2374780094D57C /* Views */,
 				AC1C1B9F2C23746E0094D57C /* Models */,
 				ACF2A2862C25C17F00C7D20E /* Service */,
+				ACF2A29A2C25FC7900C7D20E /* Extensions */,
 				AC1C1BA12C2374800094D57C /* Resources */,
 				AC1C1B972C2374570094D57C /* Preview Content */,
 			);
@@ -149,6 +152,14 @@
 				ACF2A2942C25C58200C7D20E /* ToDoItemTests.swift */,
 			);
 			path = ToDoTests;
+			sourceTree = "<group>";
+		};
+		ACF2A29A2C25FC7900C7D20E /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				ACF2A2982C25F4BC00C7D20E /* Date+.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -254,6 +265,7 @@
 			files = (
 				AC1C1B932C2374560094D57C /* ContentView.swift in Sources */,
 				AC1C1BA52C2374E60094D57C /* Importance.swift in Sources */,
+				ACF2A2992C25F4BC00C7D20E /* Date+.swift in Sources */,
 				AC1C1B912C2374560094D57C /* ToDoApp.swift in Sources */,
 				AC1C1BA32C2374920094D57C /* ToDoItem.swift in Sources */,
 				ACA0D20E2C24ACE4003659A2 /* FileCache.swift in Sources */,

@@ -41,12 +41,18 @@ final class ToDoItemTests: XCTestCase {
         let importance = Importance.important
         let dueDate = Date(timeIntervalSinceNow: 86400)
         let isCompleted = false
+        let dateCreated = Date()
+        let dateEdited = Date()
         
-        let toDoItem = ToDoItem(id: id,
-                                text: text,
-                                importance: importance,
-                                dueDate: dueDate,
-                                isCompleted: isCompleted)
+        let toDoItem = ToDoItem(
+            id: id,
+            text: text,
+            importance: importance,
+            dueDate: dueDate,
+            isCompleted: isCompleted,
+            dateCreated: dateCreated,
+            dateEdited: dateEdited
+        )
         
         // When
         let json = toDoItem.json
@@ -60,8 +66,10 @@ final class ToDoItemTests: XCTestCase {
         XCTAssertEqual(jsonDictionary["id"] as? String, id)
         XCTAssertEqual(jsonDictionary["text"] as? String, text)
         XCTAssertEqual(jsonDictionary["importance"] as? String, importance.rawValue)
-        XCTAssertEqual(jsonDictionary["isCompleted"] as? Bool, isCompleted)
         XCTAssertEqual(jsonDictionary["dueDate"] as? TimeInterval, dueDate.timeIntervalSince1970)
+        XCTAssertEqual(jsonDictionary["isCompleted"] as? Bool, isCompleted)
+        XCTAssertEqual(jsonDictionary["dateCreated"] as? TimeInterval, dateCreated.timeIntervalSince1970)
+        XCTAssertEqual(jsonDictionary["dateEdited"] as? TimeInterval, dateEdited.timeIntervalSince1970)
     }
     
     func testToDoItemJSONParsing() {
@@ -71,7 +79,9 @@ final class ToDoItemTests: XCTestCase {
             "text": "Test",
             "importance": "important",
             "dueDate": 1719066998.1372972,
-            "isCompleted": false
+            "isCompleted": false,
+            "dateCreated": 1719065998.1372972,
+            "dateEdited": 1719065998.1372972
         ]
         
         // When
@@ -84,7 +94,9 @@ final class ToDoItemTests: XCTestCase {
         XCTAssertEqual(toDoItem.id, json["id"] as? String)
         XCTAssertEqual(toDoItem.text, json["text"] as? String)
         XCTAssertEqual(toDoItem.importance.rawValue, json["importance"] as? String)
-        XCTAssertEqual(toDoItem.isCompleted, json["isCompleted"] as? Bool)
         XCTAssertEqual(toDoItem.dueDate?.timeIntervalSince1970, json["dueDate"] as? TimeInterval)
+        XCTAssertEqual(toDoItem.isCompleted, json["isCompleted"] as? Bool)
+        XCTAssertEqual(toDoItem.dateCreated.timeIntervalSince1970, json["dateCreated"] as? TimeInterval)
+        XCTAssertEqual(toDoItem.dateEdited?.timeIntervalSince1970, json["dateEdited"] as? TimeInterval)
     }
 }

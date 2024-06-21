@@ -10,6 +10,7 @@ extension ToDoItem {
         guard let dictionary = json as? [String: Any],
               let id = dictionary["id"] as? String,
               let text = dictionary["text"] as? String,
+              let dateCreatedTimeInterval = dictionary["dateCreated"] as? TimeInterval,
               let isCompleted = dictionary["isCompleted"] as? Bool
         else { return nil }
         
@@ -20,19 +21,9 @@ extension ToDoItem {
             importance = .ordinary
         }
         
-        let dueDate: Date?
-        if let dueDateTimestamp = dictionary["dueDate"] as? TimeInterval {
-            dueDate = Date(timeIntervalSince1970: dueDateTimestamp)
-        } else {
-            dueDate = nil
-        }
-        
-        let dateEdited: Date?
-        if let dateEditedTimestamp = dictionary["dateEdited"] as? TimeInterval {
-            dateEdited = Date(timeIntervalSince1970: dateEditedTimestamp)
-        } else {
-            dateEdited = nil
-        }
+        let dueDate = Date(anyTimeIntervalSince1970: dictionary["dueDate"])
+        let dateCreated = Date(anyTimeIntervalSince1970: dateCreatedTimeInterval) ?? Date()
+        let dateEdited = Date(anyTimeIntervalSince1970: dictionary["dateEdited"])
         
         return ToDoItem(
             id: id,
@@ -40,20 +31,18 @@ extension ToDoItem {
             importance: importance,
             dueDate: dueDate,
             isCompleted: isCompleted,
+            dateCreated: dateCreated,
             dateEdited: dateEdited
         )
     }
     
     /// A computed property that converts the `ToDoItem` into a JSON-compatible dictionary.
-    ///
-    /// The resulting dictionary contains the `id`, `text`, and `isCompleted` properties.
-    /// If the `importance` property is not `.ordinary`, it is also included.
-    /// If the `dueDate` property is set, it is included as a time interval since 1970.
     var json: Any {
         var dictionary: [String: Any] = [
             "id": id,
             "text": text,
-            "isCompleted": isCompleted
+            "isCompleted": isCompleted,
+            "dateCreated": dateCreated.timeIntervalSince1970
         ]
         
         if importance != .ordinary {
@@ -62,6 +51,10 @@ extension ToDoItem {
         
         if let dueDate = dueDate {
             dictionary["dueDate"] = dueDate.timeIntervalSince1970
+        }
+        
+        if let dateEdited = dateEdited {
+            dictionary["dateEdited"] = dateEdited.timeIntervalSince1970
         }
         
         return dictionary

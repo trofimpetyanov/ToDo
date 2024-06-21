@@ -3,9 +3,13 @@ import Foundation
 /// A structure for managing `ToDoItem` objects in cache, providing methods to add, delete, save, and load items.
 struct FileCache {
     
+    enum FileFormat: String {
+        case json, csv
+    }
+    
     static let mock = [
         ToDoItem(text: "Buy groceries", isCompleted: true),
-        ToDoItem(text: "Walk the dog", importance: .important, dueDate: Date(timeIntervalSinceNow: 3600)),
+        ToDoItem(text: "Walk the dog named \"Daisy\"", importance: .important, dueDate: Date(timeIntervalSinceNow: 3600)),
         ToDoItem(text: "Read a book", dateCreated: Date(timeIntervalSinceNow: -86400)),
         ToDoItem(text: "Write a blog post", importance: .unimportant),
         ToDoItem(text: "Workout", dueDate: Date(timeIntervalSinceNow: 7200), isCompleted: false),
@@ -18,6 +22,7 @@ struct FileCache {
     
     private var documentsDirectory: URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        
         return paths[0]
     }
     
@@ -70,7 +75,6 @@ struct FileCache {
             
             return toDoItems
         } catch {
-            print("Error reading data from the file \"\(file)\"")
             
             return []
         }
