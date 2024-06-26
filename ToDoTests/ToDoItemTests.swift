@@ -3,7 +3,7 @@ import XCTest
 
 final class ToDoItemTests: XCTestCase {
     
-    func testToDoItemInitialization() {
+    func testInitializationWithAllProperties() {
         // Given
         let id = "1"
         let text = "Test"
@@ -34,7 +34,24 @@ final class ToDoItemTests: XCTestCase {
         XCTAssertEqual(toDoItem.dateEdited, dateEdited)
     }
     
-    func testToDoItemJSONConversion() {
+    func testToDoItemInitializationWithRequiredProperties() {
+        // Given
+        let id = "1"
+        let text = "Test"
+        let isCompleted = false
+        
+        // When
+        let toDoItem = ToDoItem(text: "Test")
+        
+        // Then
+        XCTAssertEqual(toDoItem.text, text)
+        XCTAssertEqual(toDoItem.importance, .ordinary)
+        XCTAssertNil(toDoItem.dueDate)
+        XCTAssertEqual(toDoItem.isCompleted, false)
+        XCTAssertNil(toDoItem.dateEdited)
+    }
+    
+    func testJSONConversion() {
         // Given
         let id = "1"
         let text = "Test"
@@ -72,7 +89,7 @@ final class ToDoItemTests: XCTestCase {
         XCTAssertEqual(jsonDictionary["dateEdited"] as? TimeInterval, dateEdited.timeIntervalSince1970)
     }
     
-    func testToDoItemJSONParsing() {
+    func testJSONParsing() {
         // Given
         let json: [String: Any] = [
             "id": "1",
@@ -98,5 +115,60 @@ final class ToDoItemTests: XCTestCase {
         XCTAssertEqual(toDoItem.isCompleted, json["isCompleted"] as? Bool)
         XCTAssertEqual(toDoItem.dateCreated.timeIntervalSince1970, json["dateCreated"] as? TimeInterval)
         XCTAssertEqual(toDoItem.dateEdited?.timeIntervalSince1970, json["dateEdited"] as? TimeInterval)
+    }
+    
+    func testCSVParsing() {
+        // Given
+        let csv = "\"123\",\"Test Task\",\"important\",\"1609459200\",\"true\",\"1609455600\",\"1609462800\""
+        
+        // When
+        guard let item = ToDoItem.parse(csv: csv) else {
+            XCTFail("Failed to parse CSV")
+            return
+        }
+        
+        // Then
+        XCTAssertEqual(item.id, "123")
+        XCTAssertEqual(item.text, "Test Task")
+        XCTAssertEqual(item.importance, .important)
+        XCTAssertEqual(item.dueDate?.timeIntervalSince1970, 1609459200)
+        XCTAssertEqual(item.isCompleted, true)
+        XCTAssertEqual(item.dateCreated.timeIntervalSince1970, 1609455600)
+        XCTAssertEqual(item.dateEdited?.timeIntervalSince1970, 1609462800)
+    }
+    
+    func testCSVConversion() {
+        // Given
+        let dateCreated = Date(timeIntervalSince1970: 1609455600)
+        let dueDate = Date(timeIntervalSince1970: 1609459200)
+        let dateEdited = Date(timeIntervalSince1970: 1609462800)
+        
+        let item = ToDoItem(
+            id: "123",
+            text: "Test Task",
+            importance: .important,
+            dueDate: dueDate,
+            isCompleted: true,
+            dateCreated: dateCreated,
+            dateEdited: dateEdited
+        )
+        
+        // When
+        let csv = item.csv
+        
+        // Then
+        let expectedCSV = "\"123\",\"Test Task\",\"important\",\"1609459200.0\",\"true\",\"1609455600.0\",\"1609462800.0\"\n"
+        XCTAssertEqual(csv, expectedCSV)
+    }
+    
+    func testParseInvalidCSV() {
+        // Given
+        let invalidCSV = "\"123\",\"Test Task\",\"high\",\"1609459200\",\"true\",\"1609455600\""
+        
+        // When
+        let item = ToDoItem.parse(csv: invalidCSV)
+        
+        // Then
+        XCTAssertNil(item)
     }
 }

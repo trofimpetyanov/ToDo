@@ -39,6 +39,3 @@ struct ToDoItem: Identifiable {
         self.dateEdited = dateEdited
     }
 }
-
-// MARK: – Codable
-extension ToDoItem: Codable { }

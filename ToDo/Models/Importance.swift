@@ -4,6 +4,3 @@ import Foundation
 enum Importance: String {
     case unimportant, ordinary, important
 }
-
-// MARK: – Codable
-extension Importance: Codable { }
