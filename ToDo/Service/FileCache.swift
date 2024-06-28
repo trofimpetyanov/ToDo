@@ -36,10 +36,23 @@ struct FileCache {
         toDoItems.insert(toDoItem, at: 0)
     }
     
+    /// Updates an existing `ToDoItem` in the cache or adds a new one if it does not exist.
+    ///
+    /// - Parameter toDoItem: The `ToDoItem` to be updated or added.
+    /// - Note: If an item with the same `id` already exists in the cache, it will be updated. Otherwise, the item will be added to the beginning of the list.
+    mutating func addOrUpdate(_ toDoItem: ToDoItem) {
+        if let index = toDoItems.firstIndex(where: { toDoItem.id == $0.id }) {
+            toDoItems[index] = toDoItem
+        } else {
+            toDoItems.insert(toDoItem, at: 0)
+        }
+    }
+    
     /// Deletes a `ToDoItem` from the cache by its `id`.
     ///
     /// - Parameter id: The `id` of the `ToDoItem` to be deleted.
     /// - Returns: The removed`ToDoItem` object.
+    @discardableResult
     mutating func delete(with id: String) -> ToDoItem? {
         guard let index = toDoItems.firstIndex(where: { id == $0.id }) else { return nil }
         
@@ -51,17 +64,18 @@ struct FileCache {
     /// - Parameters:
     ///   - file: The name of the file to save the items to.
     ///   - format: The format of the file (`.json` or `.csv`). Defaults to `.json`.
+    /// - Throws: An error if the save operation fails. Possible errors include file write errors or serialization errors.
     /// - Note: The items are saved in a pretty-printed format if the format is `.json`.
-    func save(to file: String, format: FileFormat = .json) {
+    func save(to file: String, format: FileFormat = .json) throws {
         let path = documentsDirectory
             .appending(path: file)
             .appendingPathExtension(format.rawValue)
         
         switch format {
         case .json:
-            saveToJSON(at: path)
+            try saveToJSON(at: path)
         case .csv:
-            saveToCSV(at: path)
+            try saveToCSV(at: path)
         }
     }
     
@@ -71,19 +85,18 @@ struct FileCache {
     ///   - file: The name of the file to load the items from.
     ///   - format: The format of the file (`.json` or `.csv`). Defaults to `.json`.
     /// - Returns: An array of `ToDoItem` objects loaded from the specified file.
+    /// - Throws: An error if the load operation fails. Possible errors include file read errors or deserialization errors.
     /// - Note: If there is an error reading from the file, an empty array is returned.
-    mutating func load(from file: String, format: FileFormat = .json) {
+    mutating func load(from file: String, format: FileFormat = .json) throws {
         let path = documentsDirectory
             .appending(path: file)
             .appendingPathExtension(format.rawValue)
         
-        print(path)
-        
         switch format {
         case .json:
-            toDoItems = loadFromJSON(at: path)
+            toDoItems = try loadFromJSON(at: path)
         case .csv:
-            toDoItems = loadFromCSV(at: path)
+            toDoItems = try loadFromCSV(at: path)
         }
     }
 }
@@ -92,34 +105,24 @@ struct FileCache {
 extension FileCache {
     
     // JSON
-    private func saveToJSON(at path: URL) {
+    private func saveToJSON(at path: URL) throws {
         let items = toDoItems
             .map { $0.json }
         
-        do {
-            let data = try JSONSerialization.data(withJSONObject: items, options: .prettyPrinted)
-            try data.write(to: path)
-        } catch {
-            print("Error writing data to a JSON file.")
-        }
+        let data = try JSONSerialization.data(withJSONObject: items, options: .prettyPrinted)
+        try data.write(to: path)
     }
     
-    private func loadFromJSON(at path: URL) -> [ToDoItem] {
-        do {
-            let data = try Data(contentsOf: path)
-            let items = try JSONSerialization.jsonObject(with: data) as! [Any]
-            let toDoItems = items.compactMap { ToDoItem.parse(json: $0) }
-            
-            return toDoItems
-        } catch {
-            print("Error loading data from a JSON file.")
-            
-            return []
-        }
+    private func loadFromJSON(at path: URL) throws -> [ToDoItem] {
+        let data = try Data(contentsOf: path)
+        let items = try JSONSerialization.jsonObject(with: data) as! [Any]
+        let toDoItems = items.compactMap { ToDoItem.parse(json: $0) }
+        
+        return toDoItems
     }
     
     // CSV
-    private func saveToCSV(at path: URL) {
+    private func saveToCSV(at path: URL) throws {
         let fields = ["id", "text", "importance", "dueDate", "isCompleted", "dateCreated", "dateEdited"]
         var data = "\"" + fields.joined(separator: "\",\"") + "\"\n"
         
@@ -128,19 +131,11 @@ extension FileCache {
                 return partialResult + toDoItem.csv
             })
         
-        do {
-            try data.write(to: path, atomically: true, encoding: .utf8)
-        } catch {
-            print("Error writing data to a CSV file.")
-        }
+        try data.write(to: path, atomically: true, encoding: .utf8)
     }
     
-    private func loadFromCSV(at path: URL) -> [ToDoItem] {
-        guard let data = try? String(contentsOf: path) else {
-            print("Error loading data from a CSV file.")
-            
-            return []
-        }
+    private func loadFromCSV(at path: URL) throws -> [ToDoItem] {
+        let data = try String(contentsOf: path)
         
         let lines = data.components(separatedBy: .newlines).dropFirst()
         let toDoItems: [ToDoItem] = lines.compactMap { ToDoItem.parse(csv: $0) }
