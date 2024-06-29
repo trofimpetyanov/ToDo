@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AC1C1B912C2374560094D57C /* ToDoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1C1B902C2374560094D57C /* ToDoApp.swift */; };
-		AC1C1B932C2374560094D57C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1C1B922C2374560094D57C /* ContentView.swift */; };
+		AC1C1B932C2374560094D57C /* ToDoItemsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1C1B922C2374560094D57C /* ToDoItemsList.swift */; };
 		AC1C1B952C2374570094D57C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC1C1B942C2374570094D57C /* Assets.xcassets */; };
 		AC1C1B992C2374570094D57C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC1C1B982C2374570094D57C /* Preview Assets.xcassets */; };
 		AC1C1BA32C2374920094D57C /* ToDoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1C1BA22C2374920094D57C /* ToDoItem.swift */; };
@@ -16,6 +16,16 @@
 		AC1C1BA72C2375B00094D57C /* ToDoItem+Parsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1C1BA62C2375B00094D57C /* ToDoItem+Parsing.swift */; };
 		ACA0D20E2C24ACE4003659A2 /* FileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA0D20D2C24ACE4003659A2 /* FileCache.swift */; };
 		ACDA31C22C2C885B00C5FDCE /* ToDoItem+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31C12C2C885B00C5FDCE /* ToDoItem+Properties.swift */; };
+		ACDA31C42C2D7A8100C5FDCE /* ListHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31C32C2D7A8100C5FDCE /* ListHeader.swift */; };
+		ACDA31C62C2D7AA600C5FDCE /* ListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31C52C2D7AA600C5FDCE /* ListRow.swift */; };
+		ACDA31C82C2DF7E900C5FDCE /* CheckmarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31C72C2DF7E900C5FDCE /* CheckmarkView.swift */; };
+		ACDA31CA2C2EE38E00C5FDCE /* ToDoItemDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31C92C2EE38E00C5FDCE /* ToDoItemDetail.swift */; };
+		ACDA31CC2C2EF27900C5FDCE /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31CB2C2EF27900C5FDCE /* Color+.swift */; };
+		ACDA31CE2C2EFC5100C5FDCE /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31CD2C2EFC5100C5FDCE /* AppColors.swift */; };
+		ACDA31D02C2F49DB00C5FDCE /* ToDoItemsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31CF2C2F49DB00C5FDCE /* ToDoItemsStore.swift */; };
+		ACDA31D22C2F9CC200C5FDCE /* ColorWheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31D12C2F9CC200C5FDCE /* ColorWheel.swift */; };
+		ACDA31D72C2FADE200C5FDCE /* ColorWheelPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31D62C2FADE200C5FDCE /* ColorWheelPicker.swift */; };
+		ACDA31D92C2FC10F00C5FDCE /* Color+HEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31D82C2FC10F00C5FDCE /* Color+HEX.swift */; };
 		ACF2A2952C25C58200C7D20E /* ToDoItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACF2A2942C25C58200C7D20E /* ToDoItemTests.swift */; };
 		ACF2A2992C25F4BC00C7D20E /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACF2A2982C25F4BC00C7D20E /* Date+.swift */; };
 /* End PBXBuildFile section */
@@ -33,7 +43,7 @@
 /* Begin PBXFileReference section */
 		AC1C1B8D2C2374560094D57C /* ToDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC1C1B902C2374560094D57C /* ToDoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoApp.swift; sourceTree = "<group>"; };
-		AC1C1B922C2374560094D57C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		AC1C1B922C2374560094D57C /* ToDoItemsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemsList.swift; sourceTree = "<group>"; };
 		AC1C1B942C2374570094D57C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AC1C1B962C2374570094D57C /* ToDo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ToDo.entitlements; sourceTree = "<group>"; };
 		AC1C1B982C2374570094D57C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -42,6 +52,16 @@
 		AC1C1BA62C2375B00094D57C /* ToDoItem+Parsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+Parsing.swift"; sourceTree = "<group>"; };
 		ACA0D20D2C24ACE4003659A2 /* FileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCache.swift; sourceTree = "<group>"; };
 		ACDA31C12C2C885B00C5FDCE /* ToDoItem+Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+Properties.swift"; sourceTree = "<group>"; };
+		ACDA31C32C2D7A8100C5FDCE /* ListHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListHeader.swift; sourceTree = "<group>"; };
+		ACDA31C52C2D7AA600C5FDCE /* ListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRow.swift; sourceTree = "<group>"; };
+		ACDA31C72C2DF7E900C5FDCE /* CheckmarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckmarkView.swift; sourceTree = "<group>"; };
+		ACDA31C92C2EE38E00C5FDCE /* ToDoItemDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemDetail.swift; sourceTree = "<group>"; };
+		ACDA31CB2C2EF27900C5FDCE /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
+		ACDA31CD2C2EFC5100C5FDCE /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
+		ACDA31CF2C2F49DB00C5FDCE /* ToDoItemsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemsStore.swift; sourceTree = "<group>"; };
+		ACDA31D12C2F9CC200C5FDCE /* ColorWheel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWheel.swift; sourceTree = "<group>"; };
+		ACDA31D62C2FADE200C5FDCE /* ColorWheelPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWheelPicker.swift; sourceTree = "<group>"; };
+		ACDA31D82C2FC10F00C5FDCE /* Color+HEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+HEX.swift"; sourceTree = "<group>"; };
 		ACF2A28B2C25C55F00C7D20E /* ToDoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ToDoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACF2A2942C25C58200C7D20E /* ToDoItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemTests.swift; sourceTree = "<group>"; };
 		ACF2A2982C25F4BC00C7D20E /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
@@ -118,7 +138,8 @@
 		AC1C1BA02C2374780094D57C /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				AC1C1B922C2374560094D57C /* ContentView.swift */,
+				ACDA31DA2C2FC64A00C5FDCE /* ToDoItems */,
+				ACDA31DC2C2FC65E00C5FDCE /* ColorWheelPicker */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -141,10 +162,41 @@
 			path = ToDoItem;
 			sourceTree = "<group>";
 		};
+		ACDA31DA2C2FC64A00C5FDCE /* ToDoItems */ = {
+			isa = PBXGroup;
+			children = (
+				ACDA31DB2C2FC65400C5FDCE /* Helpers */,
+				AC1C1B922C2374560094D57C /* ToDoItemsList.swift */,
+				ACDA31C92C2EE38E00C5FDCE /* ToDoItemDetail.swift */,
+			);
+			path = ToDoItems;
+			sourceTree = "<group>";
+		};
+		ACDA31DB2C2FC65400C5FDCE /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				ACDA31C32C2D7A8100C5FDCE /* ListHeader.swift */,
+				ACDA31C52C2D7AA600C5FDCE /* ListRow.swift */,
+				ACDA31C72C2DF7E900C5FDCE /* CheckmarkView.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		ACDA31DC2C2FC65E00C5FDCE /* ColorWheelPicker */ = {
+			isa = PBXGroup;
+			children = (
+				ACDA31D12C2F9CC200C5FDCE /* ColorWheel.swift */,
+				ACDA31D62C2FADE200C5FDCE /* ColorWheelPicker.swift */,
+			);
+			path = ColorWheelPicker;
+			sourceTree = "<group>";
+		};
 		ACF2A2862C25C17F00C7D20E /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				ACDA31CD2C2EFC5100C5FDCE /* AppColors.swift */,
 				ACA0D20D2C24ACE4003659A2 /* FileCache.swift */,
+				ACDA31CF2C2F49DB00C5FDCE /* ToDoItemsStore.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -161,6 +213,8 @@
 			isa = PBXGroup;
 			children = (
 				ACF2A2982C25F4BC00C7D20E /* Date+.swift */,
+				ACDA31CB2C2EF27900C5FDCE /* Color+.swift */,
+				ACDA31D82C2FC10F00C5FDCE /* Color+HEX.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -266,14 +320,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AC1C1B932C2374560094D57C /* ContentView.swift in Sources */,
+				AC1C1B932C2374560094D57C /* ToDoItemsList.swift in Sources */,
 				ACDA31C22C2C885B00C5FDCE /* ToDoItem+Properties.swift in Sources */,
 				AC1C1BA52C2374E60094D57C /* Importance.swift in Sources */,
 				ACF2A2992C25F4BC00C7D20E /* Date+.swift in Sources */,
+				ACDA31D02C2F49DB00C5FDCE /* ToDoItemsStore.swift in Sources */,
+				ACDA31D72C2FADE200C5FDCE /* ColorWheelPicker.swift in Sources */,
+				ACDA31C62C2D7AA600C5FDCE /* ListRow.swift in Sources */,
 				AC1C1B912C2374560094D57C /* ToDoApp.swift in Sources */,
 				AC1C1BA32C2374920094D57C /* ToDoItem.swift in Sources */,
+				ACDA31CA2C2EE38E00C5FDCE /* ToDoItemDetail.swift in Sources */,
 				ACA0D20E2C24ACE4003659A2 /* FileCache.swift in Sources */,
+				ACDA31C42C2D7A8100C5FDCE /* ListHeader.swift in Sources */,
+				ACDA31CC2C2EF27900C5FDCE /* Color+.swift in Sources */,
+				ACDA31CE2C2EFC5100C5FDCE /* AppColors.swift in Sources */,
 				AC1C1BA72C2375B00094D57C /* ToDoItem+Parsing.swift in Sources */,
+				ACDA31D92C2FC10F00C5FDCE /* Color+HEX.swift in Sources */,
+				ACDA31D22C2F9CC200C5FDCE /* ColorWheel.swift in Sources */,
+				ACDA31C82C2DF7E900C5FDCE /* CheckmarkView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

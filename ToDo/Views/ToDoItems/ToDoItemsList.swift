@@ -55,7 +55,7 @@ struct ToDoItemsList: View {
                 }
             }
         }
-        .background(Color.listBackground)
+        .background(AppColors.backPrimary)
         .scrollContentBackground(.hidden)
         .environment(\.defaultMinListRowHeight, 56)
         .overlay(addNewItemButton, alignment: .bottom)

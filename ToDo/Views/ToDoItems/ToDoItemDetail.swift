@@ -26,7 +26,7 @@ struct ToDoItemDetail: View {
             contentView
                 .navigationTitle("Дело")
                 .navigationBarTitleDisplayMode(.inline)
-                .background(Color.listBackground)
+                .background(AppColors.backPrimary)
                 .scrollContentBackground(.hidden)
                 .environment(\.defaultMinListRowHeight, 56)
                 .toolbarBackground(horizontalSizeClass == .regular ? .visible : .automatic, for: .navigationBar)
@@ -138,7 +138,7 @@ struct ToDoItemDetail: View {
             ColorWheelPicker(color: $color)
                 .presentationDetents([.medium])
                 .presentationDragIndicator(.visible)
-                .background(Color.listBackground)
+                .background(AppColors.backPrimary)
         }
         
     }
