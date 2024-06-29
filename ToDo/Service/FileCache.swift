@@ -12,10 +12,10 @@ struct FileCache {
         ToDoItem(text: "Walk the dog named \"Daisy\"", importance: .important, dueDate: Date(timeIntervalSinceNow: 3600)),
         ToDoItem(text: "Read a book", dateCreated: Date(timeIntervalSinceNow: -86400)),
         ToDoItem(text: "Write a blog post", importance: .unimportant),
-        ToDoItem(text: "Workout", dueDate: Date(timeIntervalSinceNow: 7200), isCompleted: false),
+        ToDoItem(text: "Workout", dueDate: Date(timeIntervalSinceNow: 7200), color: "73FCD6", isCompleted: false),
         ToDoItem(text: "Plan vacation", isCompleted: true, dateEdited: Date(timeIntervalSinceNow: -3600)),
         ToDoItem(text: "Clean the house", importance: .important),
-        ToDoItem(text: "Call mom", importance: .ordinary, dueDate: Date(timeIntervalSinceNow: 1800), isCompleted: false)
+        ToDoItem(text: "Call mom", importance: .ordinary, dueDate: Date(timeIntervalSinceNow: 1800), color: "8EFA00", isCompleted: false)
     ]
     
     private(set) var toDoItems: [ToDoItem] = []
@@ -33,7 +33,7 @@ struct FileCache {
     mutating func add(_ toDoItem: ToDoItem) {
         guard !toDoItems.contains(where: { toDoItem.id == $0.id }) else { return }
         
-        toDoItems.insert(toDoItem, at: 0)
+        toDoItems.append(toDoItem)
     }
     
     /// Updates an existing `ToDoItem` in the cache or adds a new one if it does not exist.
@@ -44,7 +44,7 @@ struct FileCache {
         if let index = toDoItems.firstIndex(where: { toDoItem.id == $0.id }) {
             toDoItems[index] = toDoItem
         } else {
-            toDoItems.insert(toDoItem, at: 0)
+            toDoItems.append(toDoItem)
         }
     }
     
