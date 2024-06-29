@@ -36,9 +36,7 @@ final class ToDoItemTests: XCTestCase {
     
     func testToDoItemInitializationWithRequiredProperties() {
         // Given
-        let id = "1"
         let text = "Test"
-        let isCompleted = false
         
         // When
         let toDoItem = ToDoItem(text: "Test")

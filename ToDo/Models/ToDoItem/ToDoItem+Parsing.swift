@@ -30,6 +30,7 @@ extension ToDoItem {
             text: text,
             importance: importance,
             dueDate: dueDate,
+            color: dictionary[Properties.color.rawValue] as? String,
             isCompleted: isCompleted,
             dateCreated: dateCreated,
             dateEdited: dateEdited
@@ -44,21 +45,23 @@ extension ToDoItem {
         let values = csv
             .components(separatedBy: "\",\"")
         
-        guard values.count == 7 else { return nil }
+        guard values.count == 8 else { return nil }
         
         let id = "\(values[0].dropFirst())"
         let text = values[1]
         let importance = Importance(rawValue: values[2]) ?? .ordinary
         let dueDate = Date(anyTimeIntervalSince1970: values[3])
-        let isCompleted = Bool(values[4]) ?? false
-        let dateCreated = Date(anyTimeIntervalSince1970: values[5]) ?? Date()
-        let dateEdited = Date(anyTimeIntervalSince1970: "\(values[6].dropLast())")
+        let color = values[4]
+        let isCompleted = Bool(values[5]) ?? false
+        let dateCreated = Date(anyTimeIntervalSince1970: values[6]) ?? Date()
+        let dateEdited = Date(anyTimeIntervalSince1970: "\(values[7].dropLast())")
         
         return ToDoItem(
             id: id,
             text: text,
             importance: importance,
             dueDate: dueDate,
+            color: color,
             isCompleted: isCompleted,
             dateCreated: dateCreated,
             dateEdited: dateEdited
@@ -84,6 +87,10 @@ extension ToDoItem {
         
         if let dateEdited = dateEdited {
             dictionary[Properties.dateEdited.rawValue] = dateEdited.timeIntervalSince1970
+        }
+        
+        if let color = color {
+            dictionary[Properties.color.rawValue] = color
         }
         
         return dictionary

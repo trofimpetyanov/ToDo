@@ -1,12 +1,14 @@
 import Foundation
 
 /// A structure representing a todo item.
-struct ToDoItem: Identifiable {
+struct ToDoItem: Identifiable, Equatable {
     let id: String
     let text: String
     
     let importance: Importance
     let dueDate: Date?
+    
+    let color: String?
     
     let isCompleted: Bool
 
@@ -27,12 +29,14 @@ struct ToDoItem: Identifiable {
          text: String,
          importance: Importance = .ordinary,
          dueDate: Date? = nil,
+         color: String? = nil,
          isCompleted: Bool = false,
          dateCreated: Date = Date(),
          dateEdited: Date? = nil) {
         self.id = id
         self.text = text
         self.importance = importance
+        self.color = color
         self.dueDate = dueDate
         self.isCompleted = isCompleted
         self.dateCreated = dateCreated

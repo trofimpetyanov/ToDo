@@ -9,6 +9,7 @@ extension ToDoItem {
         case text = "text"
         case importance = "importance"
         case dueDate = "dueDate"
+        case color = "color"
         case isCompleted = "isCompleted"
         case dateCreated = "dateCreated"
         case dateEdited = "dateEdited"
