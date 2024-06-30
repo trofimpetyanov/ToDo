@@ -100,15 +100,11 @@ struct ToDoItemDetail: View {
                 ForEach(Importance.allCases, id: \.self) { importance in
                     switch importance {
                     case .unimportant:
-                        Image(systemName: "arrow.down")
-                            .foregroundStyle(.gray)
-                            .symbolRenderingMode(.palette)
+                        Image.systemImage("arrow.down", for: .boldSystemFont(ofSize: UIFont.buttonFontSize), tint: .gray)
                     case .ordinary:
                         Text("нет")
                     case .important:
-                        Image(systemName: "exclamationmark.2")
-                            .foregroundStyle(.red)
-                            .symbolRenderingMode(.palette)
+                        Image.systemImage("exclamationmark.2", for: .boldSystemFont(ofSize: UIFont.buttonFontSize), tint: .red)
                     }
                 }
             }
@@ -122,21 +118,23 @@ struct ToDoItemDetail: View {
         HStack {
             Text("Цвет")
             
-            if isColorToggled {
-                Circle()
-                    .fill(color)
-                    .frame(width: 24)
-                    .padding(.leading, 8)
-                    .onTapGesture {
-                        isColorPickerPresented = true
-                    }
-            }
+            Circle()
+                .fill(color)
+                .frame(width: isColorToggled ? 24 : 0, alignment: .center)
+                .offset(x: isColorToggled ? -12 : 0)
+                .padding(.leading, 16)
+                .animation(.bouncy(duration: 0.2), value: isColorToggled)
+                .onTapGesture {
+                    isColorPickerPresented = true
+                }
+            
             
             Toggle("", isOn: $isColorToggled)
+            
         }
         .sheet(isPresented: $isColorPickerPresented) {
             ColorWheelPicker(color: $color)
-                .presentationDetents([.medium])
+                .presentationDetents([.fraction(3/5)])
                 .presentationDragIndicator(.visible)
                 .background(AppColors.backPrimary)
         }
@@ -213,7 +211,7 @@ struct ToDoItemDetail: View {
                         id: toDoItem.id,
                         text: text,
                         importance: importance,
-                        dueDate: isDueDateToggled ? dueDate : nil, 
+                        dueDate: isDueDateToggled ? dueDate : nil,
                         color: isColorToggled ? color.hex : nil,
                         isCompleted: toDoItem.isCompleted,
                         dateCreated: toDoItem.dateCreated,
