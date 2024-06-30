@@ -43,7 +43,7 @@ class ToDoItemsStore: ObservableObject {
     }
     
     var completedCount: Int {
-        currentToDoItems
+        toDoItems
             .filter { $0.isCompleted }
             .count
     }
