@@ -4,7 +4,6 @@ struct ToDoItemDetail: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @Binding var editingToDoItem: ToDoItem?
-    @Binding var isDetailPresented: Bool
     
     let onComplete: (ToDoItem) -> Void
     let onDismiss: () -> Void
@@ -21,6 +20,9 @@ struct ToDoItemDetail: View {
     @State private var isDueDateToggled = false
     @State private var isDatePickerShown = false
     
+    @State private var isAlertShowing = false
+    @State private var isEditing = false
+    
     var body: some View {
         NavigationStack {
             contentView
@@ -36,6 +38,10 @@ struct ToDoItemDetail: View {
                     }
                     ToolbarItem(placement: .cancellationAction) {
                         cancelButton
+                    }
+                    
+                    ToolbarItem(placement: .keyboard) {
+                        hideButton
                     }
                 }
             
@@ -66,11 +72,14 @@ struct ToDoItemDetail: View {
             }
             .scrollIndicators(.hidden)
             
-            Form {
-                detailsSection
-                deleteSection
+            if !isEditing {
+                Form {
+                    detailsSection
+                    deleteSection
+                }
             }
         }
+        .animation(.default, value: isEditing)
     }
     
     private var defaultSizeContentView: some View {
@@ -81,12 +90,13 @@ struct ToDoItemDetail: View {
         }
     }
     
-    // Haven't implemented the full screen view of the TextField in landscape mode on purpose,
-    // as it is inconvenient and view behaves weirdly.
     private var textSection: some View {
         Section {
             TextField("Что надо сделать?", text: $text, axis: .vertical)
-                .frame(minHeight: 120, alignment: .topLeading)
+                .lineLimit(5...)
+                .onTapGesture {
+                    isEditing = true
+                }
         }
     }
     
@@ -205,11 +215,19 @@ struct ToDoItemDetail: View {
     
     private var saveButton: some View {
         Button("Сохранить") {
+            let plainText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            if plainText.isEmpty {
+                isAlertShowing = true
+                text = ""
+                
+                return
+            }
+            
             if let toDoItem = editingToDoItem {
                 onComplete(
                     ToDoItem(
                         id: toDoItem.id,
-                        text: text,
+                        text: plainText,
                         importance: importance,
                         dueDate: isDueDateToggled ? dueDate : nil,
                         color: isColorToggled ? color.hex : nil,
@@ -221,7 +239,7 @@ struct ToDoItemDetail: View {
             } else {
                 onComplete(
                     ToDoItem(
-                        text: text,
+                        text: plainText,
                         importance: importance,
                         dueDate: isDueDateToggled ? dueDate : nil,
                         color: isColorToggled ? color.hex : nil
@@ -229,11 +247,28 @@ struct ToDoItemDetail: View {
                 )
             }
         }
+        .alert("Ошибка", isPresented: $isAlertShowing) {
+            Button(role: .cancel) {
+                isAlertShowing = false
+            } label: {
+                Text("Понятно")
+            }
+        } message: {
+            Text("Название задачи не введено")
+        }
     }
     
     private var cancelButton: some View {
         Button("Отменить") {
             onDismiss()
+        }
+    }
+    
+    private var hideButton: some View {
+        Button("Скрыть", systemImage: "keyboard.chevron.compact.down") {
+            isEditing = false
+            
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
     }
     
@@ -262,7 +297,6 @@ struct ToDoItemDetail: View {
 #Preview {
     ToDoItemDetail(
         editingToDoItem: .constant(FileCache.mock[0]),
-        isDetailPresented: .constant(true),
         onComplete: { _ in },
         onDismiss: {},
         onDelete: {}
