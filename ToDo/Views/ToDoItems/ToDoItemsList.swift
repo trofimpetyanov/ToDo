@@ -20,7 +20,6 @@ struct ToDoItemsList: View {
         } else {
             NavigationStack {
                 listSection
-                    .navigationTitle("Мои Дела")
             }
             .sheet(
                 isPresented: $isDetailPresented,
@@ -31,18 +30,54 @@ struct ToDoItemsList: View {
         }
     }
     
+    private var listSection: some View {
+        List {
+            Section(
+                header: Text("Выполнено – \(toDoItemsStore.completedCount)")
+                    .contentTransition(.numericText())
+            ) {
+                ForEach($toDoItemsStore.currentToDoItems) { toDoItem in
+                    listRow(for: toDoItem)
+                }
+                
+                TextField("Новое", text: $newToDoItemText)
+                    .onSubmit {
+                        let plainText = newToDoItemText.trimmingCharacters(in: .whitespacesAndNewlines)
+                        
+                        if !plainText.isEmpty {
+                            let toDoItem = ToDoItem(text: newToDoItemText)
+                            toDoItemsStore.add(toDoItem)
+                        }
+                        
+                        newToDoItemText = ""
+                    }
+                    .submitLabel(.done)
+                    .padding(.leading, 40)
+            }
+        }
+        .navigationTitle("Мои Дела")
+        .background(AppColors.backPrimary)
+        .scrollContentBackground(.hidden)
+        .environment(\.defaultMinListRowHeight, 56)
+        .overlay(addNewItemButton, alignment: .bottom)
+        .animation(.default, value: toDoItemsStore.currentToDoItems)
+        .toolbar {
+            settingsMenu
+        }
+    }
+    
     private var settingsMenu: some View {
         Menu("Настройки", systemImage: "line.3.horizontal.decrease.circle") {
-            Button(action: {
+            Button {
                 withAnimation {
                     toDoItemsStore.areCompletedShown.toggle()
                 }
-            }, label: {
+            } label: {
                 Label(
                     "\(toDoItemsStore.areCompletedShown ? "Скрыть" : "Показать") выполненные",
                     systemImage: toDoItemsStore.areCompletedShown ? "eye.slash" : "eye"
                 )
-            })
+            }
             
             Divider()
             
@@ -54,6 +89,7 @@ struct ToDoItemsList: View {
                     }
                     
                 }
+                
                 Divider()
                 
                 Picker("Порядок", selection: $toDoItemsStore.sortingOrder) {
@@ -66,51 +102,19 @@ struct ToDoItemsList: View {
         }
     }
     
-    private var listSection: some View {
-        List {
-            Section(
-                header: Text("Выполнено – \(toDoItemsStore.completedCount)")
-            ) {
-                ForEach($toDoItemsStore.currentToDoItems) { toDoItem in
-                    listRow(for: toDoItem)
-                }
-                
-                TextField("Новое", text: $newToDoItemText)
-                    .onSubmit {
-                        let toDoItem = ToDoItem(text: newToDoItemText)
-                        newToDoItemText = ""
-                        toDoItemsStore.add(toDoItem)
-                    }
-                    .padding(.leading, 40)
-            }
-        }
-        .background(AppColors.backPrimary)
-        .scrollContentBackground(.hidden)
-        .environment(\.defaultMinListRowHeight, 56)
-        .overlay(addNewItemButton, alignment: .bottom)
-        .animation(.default, value: toDoItemsStore.currentToDoItems)
-        .toolbar {
-            settingsMenu
-        }
-    }
-    
     private var addNewItemButton: some View {
-        VStack {
-            Spacer()
-            
-            Button {
-                isDetailViewPresenting = true
-                editingToDoItem = nil
-                isDetailPresented = true
-            } label: {
-                Image(systemName: "plus.circle.fill")
-                    .resizable()
-                    .foregroundStyle(.white, .blue)
-                    .frame(width: 44, height: 44)
-                    .shadow(radius: 8, y: 4)
-            }
-            .padding(.bottom, 20)
+        Button {
+            isDetailViewPresenting = true
+            editingToDoItem = nil
+            isDetailPresented = true
+        } label: {
+            Image(systemName: "plus.circle.fill")
+                .resizable()
+                .foregroundStyle(.white, .blue)
+                .frame(width: 44, height: 44)
+                .shadow(radius: 8, y: 4)
         }
+        .padding(.bottom, 20)
     }
     
     private var detailView: some View {
@@ -119,7 +123,6 @@ struct ToDoItemsList: View {
                 if isDetailViewPresenting {
                     ToDoItemDetail(
                         editingToDoItem: $editingToDoItem,
-                        isDetailPresented: $isDetailViewPresenting,
                         onComplete: { toDoItem in onSave(toDoItem) },
                         onDismiss: { onDismiss() },
                         onDelete: { onDelete() }
@@ -130,7 +133,6 @@ struct ToDoItemsList: View {
             } else {
                 ToDoItemDetail(
                     editingToDoItem: $editingToDoItem,
-                    isDetailPresented: $isDetailViewPresenting,
                     onComplete: { toDoItem in onSave(toDoItem) },
                     onDismiss: { onDismiss() },
                     onDelete: { onDelete() }
