@@ -210,6 +210,8 @@ struct ToDoItemsList: View {
         withAnimation {
             toDoItemsStore.addOrUpdate(toDoItem)
         }
+        
+        discardDetailView()
     }
     
     private func onDismiss() {
