@@ -72,7 +72,7 @@ struct ToDoItemDetail: View {
             }
             .scrollIndicators(.hidden)
             
-            if !isEditing {
+            if !isEditing || UIDevice.current.userInterfaceIdiom != .phone {
                 Form {
                     detailsSection
                     deleteSection
@@ -96,6 +96,9 @@ struct ToDoItemDetail: View {
                 .lineLimit(5...)
                 .onTapGesture {
                     isEditing = true
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                    isEditing = false
                 }
         }
     }
