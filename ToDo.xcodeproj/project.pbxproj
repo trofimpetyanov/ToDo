@@ -26,6 +26,8 @@
 		ACDA31D22C2F9CC200C5FDCE /* ColorWheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31D12C2F9CC200C5FDCE /* ColorWheel.swift */; };
 		ACDA31D72C2FADE200C5FDCE /* ColorWheelPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31D62C2FADE200C5FDCE /* ColorWheelPicker.swift */; };
 		ACDA31D92C2FC10F00C5FDCE /* Color+HEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31D82C2FC10F00C5FDCE /* Color+HEX.swift */; };
+		ACE0757D2C319B0200F0EA26 /* Image+.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE0757C2C319B0200F0EA26 /* Image+.swift */; };
+		ACE0757F2C31A8D400F0EA26 /* Color+IdealTextColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE0757E2C31A8D400F0EA26 /* Color+IdealTextColor.swift */; };
 		ACF2A2952C25C58200C7D20E /* ToDoItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACF2A2942C25C58200C7D20E /* ToDoItemTests.swift */; };
 		ACF2A2992C25F4BC00C7D20E /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACF2A2982C25F4BC00C7D20E /* Date+.swift */; };
 /* End PBXBuildFile section */
@@ -62,6 +64,8 @@
 		ACDA31D12C2F9CC200C5FDCE /* ColorWheel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWheel.swift; sourceTree = "<group>"; };
 		ACDA31D62C2FADE200C5FDCE /* ColorWheelPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWheelPicker.swift; sourceTree = "<group>"; };
 		ACDA31D82C2FC10F00C5FDCE /* Color+HEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+HEX.swift"; sourceTree = "<group>"; };
+		ACE0757C2C319B0200F0EA26 /* Image+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+.swift"; sourceTree = "<group>"; };
+		ACE0757E2C31A8D400F0EA26 /* Color+IdealTextColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+IdealTextColor.swift"; sourceTree = "<group>"; };
 		ACF2A28B2C25C55F00C7D20E /* ToDoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ToDoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACF2A2942C25C58200C7D20E /* ToDoItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemTests.swift; sourceTree = "<group>"; };
 		ACF2A2982C25F4BC00C7D20E /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
@@ -175,8 +179,8 @@
 		ACDA31DB2C2FC65400C5FDCE /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				ACDA31C32C2D7A8100C5FDCE /* ListHeader.swift */,
 				ACDA31C52C2D7AA600C5FDCE /* ListRow.swift */,
+				ACDA31C32C2D7A8100C5FDCE /* ListHeader.swift */,
 				ACDA31C72C2DF7E900C5FDCE /* CheckmarkView.swift */,
 			);
 			path = Helpers;
@@ -215,6 +219,8 @@
 				ACF2A2982C25F4BC00C7D20E /* Date+.swift */,
 				ACDA31CB2C2EF27900C5FDCE /* Color+.swift */,
 				ACDA31D82C2FC10F00C5FDCE /* Color+HEX.swift */,
+				ACE0757E2C31A8D400F0EA26 /* Color+IdealTextColor.swift */,
+				ACE0757C2C319B0200F0EA26 /* Image+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -329,8 +335,10 @@
 				ACDA31C62C2D7AA600C5FDCE /* ListRow.swift in Sources */,
 				AC1C1B912C2374560094D57C /* ToDoApp.swift in Sources */,
 				AC1C1BA32C2374920094D57C /* ToDoItem.swift in Sources */,
+				ACE0757F2C31A8D400F0EA26 /* Color+IdealTextColor.swift in Sources */,
 				ACDA31CA2C2EE38E00C5FDCE /* ToDoItemDetail.swift in Sources */,
 				ACA0D20E2C24ACE4003659A2 /* FileCache.swift in Sources */,
+				ACE0757D2C319B0200F0EA26 /* Image+.swift in Sources */,
 				ACDA31C42C2D7A8100C5FDCE /* ListHeader.swift in Sources */,
 				ACDA31CC2C2EF27900C5FDCE /* Color+.swift in Sources */,
 				ACDA31CE2C2EFC5100C5FDCE /* AppColors.swift in Sources */,

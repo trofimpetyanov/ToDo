@@ -3,10 +3,9 @@ import SwiftUI
 struct ToDoItemsList: View {
     @ObservedObject var toDoItemsStore: ToDoItemsStore
     
-    @State private var isCompletedSectionExpanded: Bool = true
     @State private var newToDoItemText: String = ""
-    
     @State private var editingToDoItem: ToDoItem?
+    
     @State private var isDetailPresented: Bool = false
     @State private var isDetailViewPresenting: Bool = false
     
@@ -32,38 +31,117 @@ struct ToDoItemsList: View {
         }
     }
     
+    private var settingsMenu: some View {
+        Menu("Настройки", systemImage: "line.3.horizontal.decrease.circle") {
+            Button(action: {
+                withAnimation {
+                    toDoItemsStore.areCompletedShown.toggle()
+                }
+            }, label: {
+                Label(
+                    "\(toDoItemsStore.areCompletedShown ? "Скрыть" : "Показать") выполненные",
+                    systemImage: toDoItemsStore.areCompletedShown ? "eye.slash" : "eye"
+                )
+            })
+            
+            Divider()
+            
+            Menu("Сортировать", systemImage: "arrow.up.arrow.down") {
+                Picker("Опции", selection: $toDoItemsStore.sortingOption) {
+                    ForEach(ToDoItemsStore.SortingOption.allCases) { option in
+                        Text(option.rawValue)
+                            .tag(option)
+                    }
+                    
+                }
+                Divider()
+                
+                Picker("Порядок", selection: $toDoItemsStore.sortingOrder) {
+                    ForEach(ToDoItemsStore.SortingOrder.allCases) { order in
+                        Text(order.rawValue)
+                            .tag(order)
+                    }
+                }
+            }
+        }
+    }
+    
     private var listSection: some View {
         List {
             Section(
-                header: ListHeader(
-                    toDoItems: $toDoItemsStore.toDoItems,
-                    isExpanded: $isCompletedSectionExpanded
-                )
+                header: Text("Выполнено – \(toDoItemsStore.completedCount)")
             ) {
-                if isCompletedSectionExpanded {
-                    ForEach($toDoItemsStore.toDoItems) { toDoItem in
-                        listRow(for: toDoItem)
-                    }
-                    
-                        TextField("Новое", text: $newToDoItemText)
-                            .onSubmit {
-                                let toDoItem = ToDoItem(text: newToDoItemText)
-                                newToDoItemText = ""
-                                toDoItemsStore.add(toDoItem)
-                            }
-                            .padding(.leading, 40)
+                ForEach($toDoItemsStore.currentToDoItems) { toDoItem in
+                    listRow(for: toDoItem)
                 }
+                
+                TextField("Новое", text: $newToDoItemText)
+                    .onSubmit {
+                        let toDoItem = ToDoItem(text: newToDoItemText)
+                        newToDoItemText = ""
+                        toDoItemsStore.add(toDoItem)
+                    }
+                    .padding(.leading, 40)
             }
         }
         .background(AppColors.backPrimary)
         .scrollContentBackground(.hidden)
         .environment(\.defaultMinListRowHeight, 56)
         .overlay(addNewItemButton, alignment: .bottom)
+        .animation(.default, value: toDoItemsStore.currentToDoItems)
+        .toolbar {
+            settingsMenu
+        }
+    }
+    
+    private var addNewItemButton: some View {
+        VStack {
+            Spacer()
+            
+            Button {
+                isDetailViewPresenting = true
+                editingToDoItem = nil
+                isDetailPresented = true
+            } label: {
+                Image(systemName: "plus.circle.fill")
+                    .resizable()
+                    .foregroundStyle(.white, .blue)
+                    .frame(width: 44, height: 44)
+                    .shadow(radius: 8, y: 4)
+            }
+            .padding(.bottom, 20)
+        }
+    }
+    
+    private var detailView: some View {
+        Group {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                if isDetailViewPresenting {
+                    ToDoItemDetail(
+                        editingToDoItem: $editingToDoItem,
+                        isDetailPresented: $isDetailViewPresenting,
+                        onComplete: { toDoItem in onSave(toDoItem) },
+                        onDismiss: { onDismiss() },
+                        onDelete: { onDelete() }
+                    )
+                } else {
+                    ContentUnavailableView("Выберите задачу", systemImage: "filemenu.and.selection")
+                }
+            } else {
+                ToDoItemDetail(
+                    editingToDoItem: $editingToDoItem,
+                    isDetailPresented: $isDetailViewPresenting,
+                    onComplete: { toDoItem in onSave(toDoItem) },
+                    onDismiss: { onDismiss() },
+                    onDelete: { onDelete() }
+                )
+            }
+        }
     }
     
     private func listRow(for toDoItem: Binding<ToDoItem>) -> some View {
         ListRow(toDoItem: toDoItem,
-                onCompleted: { toDoItemsStore.addOrUpdate(toDoItem.wrappedValue) })
+                onComplete: { toDoItemsStore.addOrUpdate(toDoItem.wrappedValue) })
         .onTapGesture {
             presentDetailView(for: toDoItem.wrappedValue)
         }
@@ -112,51 +190,6 @@ struct ToDoItemsList: View {
         }
     }
     
-    private var addNewItemButton: some View {
-        VStack {
-            Spacer()
-            
-            Button {
-                isDetailViewPresenting = true
-                editingToDoItem = nil
-                isDetailPresented = true
-            } label: {
-                Image(systemName: "plus.circle.fill")
-                    .resizable()
-                    .foregroundStyle(.white, .blue)
-                    .frame(width: 44, height: 44)
-                    .shadow(radius: 8, y: 4)
-            }
-            .padding(.bottom, 20)
-        }
-    }
-    
-    private var detailView: some View {
-        Group {
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                if isDetailViewPresenting {
-                    ToDoItemDetail(
-                        editingToDoItem: $editingToDoItem,
-                        isDetailPresented: $isDetailViewPresenting,
-                        onComplete: { toDoItem in onComplete(toDoItem) },
-                        onDismiss: { onDismiss() },
-                        onDelete: { onDelete() }
-                    )
-                } else {
-                    ContentUnavailableView("Выберите задачу", systemImage: "filemenu.and.selection")
-                }
-            } else {
-                ToDoItemDetail(
-                    editingToDoItem: $editingToDoItem,
-                    isDetailPresented: $isDetailViewPresenting,
-                    onComplete: { toDoItem in onComplete(toDoItem) },
-                    onDismiss: { onDismiss() },
-                    onDelete: { onDelete() }
-                )
-            }
-        }
-    }
-    
     private func presentDetailView(for toDoItem: ToDoItem) {
         if UIDevice.current.userInterfaceIdiom == .pad {
             isDetailViewPresenting = true
@@ -173,13 +206,10 @@ struct ToDoItemsList: View {
         isDetailPresented = false
     }
     
-    private func onComplete(_ toDoItem: ToDoItem) {
+    private func onSave(_ toDoItem: ToDoItem) {
         withAnimation {
             toDoItemsStore.addOrUpdate(toDoItem)
         }
-        
-        
-        discardDetailView()
     }
     
     private func onDismiss() {
@@ -200,7 +230,6 @@ struct ToDoItemsList: View {
 struct ToDoItemsList_Previews: PreviewProvider {
     static var previews: some View {
         let toDoItemsStore = ToDoItemsStore()
-        toDoItemsStore.toDoItems = FileCache.mock
         
         return ToDoItemsList(toDoItemsStore: toDoItemsStore)
     }

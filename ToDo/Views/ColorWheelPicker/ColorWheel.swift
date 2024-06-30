@@ -64,7 +64,7 @@ struct ColorWheel: View {
                 if let location = location {
                     Circle()
                         .stroke(.white, lineWidth: 8)
-                        .fill(Color(hue: hue, saturation: 1, brightness: 1))
+                        .fill(Color(hue: hue, saturation: saturation, brightness: 1))
                         .foregroundStyle(.cyan)
                         .shadow(radius: 16, y: 2)
                         .frame(width: 44, height: 44)

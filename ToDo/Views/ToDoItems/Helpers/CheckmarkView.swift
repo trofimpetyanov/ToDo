@@ -4,7 +4,7 @@ struct CheckmarkView: View {
     @Binding var toDoItem: ToDoItem
     
     let size: CGFloat = 24
-    let onCompleted: () -> Void
+    let onComplete: () -> Void
     
     var body: some View {
         Button {
@@ -46,10 +46,10 @@ struct CheckmarkView: View {
             dateEdited: toDoItem.dateEdited
         )
         
-        onCompleted()
+        onComplete()
     }
 }
 
 #Preview {
-    CheckmarkView(toDoItem: .constant(FileCache.mock[1]), onCompleted: {})
+    CheckmarkView(toDoItem: .constant(FileCache.mock[1]), onComplete: {})
 }
