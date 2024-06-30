@@ -12,7 +12,16 @@ struct ColorWheelPicker: View {
             Rectangle()
                 .fill(color)
                 .clipShape(.capsule)
-                .frame(width: 80, height: 24)
+                .frame(width: 100, height: 32)
+                .blur(radius: 4)
+                .overlay {
+                    Text(color.hex)
+                        .bold()
+                        .monospaced()
+                        .foregroundStyle(color.idealTextColor)
+                        .animation(.default, value: color)
+                        .contentTransition(.numericText())
+                }
             
             ColorWheel(hue: $hue, saturation: $saturation)
             
