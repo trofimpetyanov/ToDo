@@ -3,11 +3,11 @@ import SwiftUI
 struct ListRow: View {
     @Binding var toDoItem: ToDoItem
     
-    let onCompleted: () -> Void
+    let onComplete: () -> Void
     
     var body: some View {
         HStack {
-            CheckmarkView(toDoItem: $toDoItem, onCompleted: onCompleted)
+            CheckmarkView(toDoItem: $toDoItem, onComplete: onComplete)
             
             VStack(alignment: .leading) {
                 HStack {
@@ -15,6 +15,10 @@ struct ListRow: View {
                         Image(systemName: "exclamationmark.2")
                             .fontWeight(.bold)
                             .foregroundStyle(toDoItem.isCompleted ? Color.secondary : .red)
+                    } else if toDoItem.importance == .unimportant {
+                        Image(systemName: "arrow.down")
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.secondary)
                     }
                     
                     Text(toDoItem.text)
@@ -51,5 +55,5 @@ struct ListRow: View {
 }
 
 #Preview {
-    ListRow(toDoItem: .constant(FileCache.mock[1]), onCompleted: {})
+    ListRow(toDoItem: .constant(FileCache.mock[1]), onComplete: {})
 }

@@ -15,20 +15,6 @@ struct ListHeader: View {
             Text("Выполнено – \(completedCount)")
                 .textCase(.none)
                 .contentTransition(.numericText(value: Double(completedCount)))
-            
-            Spacer()
-            
-            Button(action: {
-                withAnimation(.easeInOut) {
-                    isExpanded.toggle()
-                }
-            }) {
-                Text(isExpanded ? "Скрыть" : "Показать")
-                    .font(.subheadline)
-                    .bold()
-                    .contentTransition(.identity)
-            }
-            .textCase(.none)
         }
     }
 }
