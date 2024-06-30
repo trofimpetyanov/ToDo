@@ -1,11 +1,18 @@
 import SwiftUI
 
 extension Color {
+    /// Initializes a color from a hexadecimal string.
+    /// - Parameter hex: A hexadecimal color string. Supports the following formats:
+    ///   - RGB (12-bit): `#RGB`
+    ///   - RGB (24-bit): `#RRGGBB`
+    ///   - ARGB (32-bit): `#AARRGGBB`
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        let a, r, g, b: UInt64
+        
         var int: UInt64 = 0
         Scanner(string: hex).scanHexInt64(&int)
-        let a, r, g, b: UInt64
+        
         switch hex.count {
         case 3: // RGB (12-bit)
             (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
@@ -26,6 +33,7 @@ extension Color {
         )
     }
     
+    /// A hexadecimal color string representation of the color.
     var hex: String {
         let components = UIColor(self).cgColor.components
         let r: CGFloat = components?[0] ?? 0.0
