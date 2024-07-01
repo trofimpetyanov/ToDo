@@ -20,7 +20,6 @@ struct ToDoItemDetail: View {
     @State private var isDueDateToggled = false
     @State private var isDatePickerShown = false
     
-    @State private var isAlertShowing = false
     @State private var isEditing = false
     
     var body: some View {
@@ -219,12 +218,6 @@ struct ToDoItemDetail: View {
     private var saveButton: some View {
         Button("Сохранить") {
             let plainText = text.trimmingCharacters(in: .whitespacesAndNewlines)
-            if plainText.isEmpty {
-                isAlertShowing = true
-                text = ""
-                
-                return
-            }
             
             if let toDoItem = editingToDoItem {
                 onComplete(
@@ -250,15 +243,7 @@ struct ToDoItemDetail: View {
                 )
             }
         }
-        .alert("Ошибка", isPresented: $isAlertShowing) {
-            Button(role: .cancel) {
-                isAlertShowing = false
-            } label: {
-                Text("Понятно")
-            }
-        } message: {
-            Text("Название задачи не введено")
-        }
+        .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
     }
     
     private var cancelButton: some View {
