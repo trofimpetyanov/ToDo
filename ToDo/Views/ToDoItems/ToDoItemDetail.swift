@@ -164,9 +164,14 @@ struct ToDoItemDetail: View {
                             isDatePickerShown.toggle()
                         }
                     } label: {
-                        Text(dueDate.formatted(date: .long, time: .omitted))
-                            .font(.caption)
-                            .fontWeight(.semibold)
+                        Text(
+                            dueDate.formatted(
+                                .dateTime.day().month().year()
+                                .locale(.init(identifier: "ru_RU"))
+                            )
+                        )
+                        .font(.caption)
+                        .fontWeight(.semibold)
                     }
                     .submitScope()
                 }
