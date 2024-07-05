@@ -164,12 +164,7 @@ struct ToDoItemDetail: View {
                             isDatePickerShown.toggle()
                         }
                     } label: {
-                        Text(
-                            dueDate.formatted(
-                                .dateTime.day().month().year()
-                                .locale(.init(identifier: "ru_RU"))
-                            )
-                        )
+                        Text(dueDate.dayMonthFormatted)
                         .font(.caption)
                         .fontWeight(.semibold)
                     }

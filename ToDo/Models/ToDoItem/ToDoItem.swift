@@ -1,7 +1,7 @@
 import Foundation
 
 /// A structure representing a todo item.
-struct ToDoItem: Identifiable, Equatable {
+struct ToDoItem: Identifiable, Equatable, Hashable {
     let id: String
     let text: String
     

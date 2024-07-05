@@ -32,10 +32,7 @@ struct ToDoItemsList: View {
     
     private var listSection: some View {
         List {
-            Section(
-                header: Text("Выполнено – \(toDoItemsStore.completedCount)")
-                    .contentTransition(.numericText())
-            ) {
+            Section {
                 ForEach($toDoItemsStore.currentToDoItems) { toDoItem in
                     listRow(for: toDoItem)
                 }
@@ -53,6 +50,16 @@ struct ToDoItemsList: View {
                     }
                     .submitLabel(.done)
                     .padding(.leading, 40)
+            } header: {
+                HStack {
+                    Text("Выполнено – \(toDoItemsStore.completedCount)")
+                        .contentTransition(.numericText())
+                    
+                    Spacer()
+                    
+                    settingsMenu
+                        .textCase(.none)
+                }
             }
         }
         .navigationTitle("Мои Дела")
@@ -62,12 +69,23 @@ struct ToDoItemsList: View {
         .overlay(addNewItemButton, alignment: .bottom)
         .animation(.default, value: toDoItemsStore.currentToDoItems)
         .toolbar {
-            settingsMenu
+            ToolbarItem(placement: .primaryAction) {
+                NavigationLink {
+                    CalendarView(toDoItems: toDoItemsStore.currentToDoItems)
+                        .navigationTitle("Календарь")
+                        .toolbarTitleDisplayMode(.inline)
+                        .toolbarBackground(.visible, for: .navigationBar)
+                        .background(AppColors.backPrimary)
+                        .ignoresSafeArea(edges: .bottom)
+                } label: {
+                    Label("Календарь", systemImage: "calendar")
+                }
+            }
         }
     }
     
     private var settingsMenu: some View {
-        Menu("Настройки", systemImage: "line.3.horizontal.decrease.circle") {
+        Menu("Опции", systemImage: "line.3.horizontal.decrease.circle") {
             Button {
                 withAnimation {
                     toDoItemsStore.areCompletedShown.toggle()

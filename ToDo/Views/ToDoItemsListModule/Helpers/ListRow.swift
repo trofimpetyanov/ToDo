@@ -30,13 +30,7 @@ struct ListRow: View {
                 if let dueDate = toDoItem.dueDate {
                     HStack {
                         Image(systemName: "calendar")
-                        Text(
-                            dueDate
-                            .formatted(
-                                .dateTime.day().month().year()
-                                .locale(.init(identifier: "ru_RU"))
-                            )
-                        )
+                        Text(dueDate.dayMonthFormatted)
                     }
                     .font(.caption)
                     .foregroundStyle(.secondary)
