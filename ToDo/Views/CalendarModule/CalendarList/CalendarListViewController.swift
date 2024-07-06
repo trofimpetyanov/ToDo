@@ -1,4 +1,5 @@
 import UIKit
+import SwiftUI
 
 class CalendarListViewController: UICollectionViewController {
     
@@ -137,6 +138,18 @@ class CalendarListViewController: UICollectionViewController {
         contentConfiguration.attributedText = attributedText
         contentConfiguration.textProperties.numberOfLines = 3
         cell.contentConfiguration = contentConfiguration
+        
+        if let category = row.category {
+            cell.accessories = [.customView(
+                configuration: UICellAccessory.CustomViewConfiguration(
+                    customView: CategoryAccessoryView(color: UIColor(Color(hex: category.color))),
+                    placement: .trailing(displayed: .always, at: { _ in 0 }),
+                    isHidden: category.color == "00000000"
+                )
+            )]
+        } else {
+            cell.accessories = []
+        }
     }
     
     private func headerRegistrationHandler(supplementaryView: UICollectionViewListCell, elementKind: String, indexPath: IndexPath) {

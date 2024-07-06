@@ -41,11 +41,11 @@ struct ListRow: View {
             })
             .padding(.leading, 8)
             
-            if let hex = toDoItem.color {
+            if let category = toDoItem.category {
                 Spacer()
                 
                 Rectangle()
-                    .fill(Color(hex: hex))
+                    .fill(Color(hex: category.color))
                     .clipShape(.capsule)
                     .frame(width: 5)
                     .padding(.vertical, 8)

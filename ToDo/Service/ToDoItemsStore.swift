@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 
 /// A class that manages a collection of `ToDoItem` objects and provides functionality for adding, updating, deleting, and sorting these items.
 class ToDoItemsStore: ObservableObject {
@@ -54,6 +55,10 @@ class ToDoItemsStore: ObservableObject {
         toDoItems
             .filter { $0.isCompleted }
             .count
+    }
+    
+    var isFirstLaunch: Bool {
+        fileCache.isFirstLaunch
     }
     
     /// Initializes a new instance of `ToDoItemsStore`.

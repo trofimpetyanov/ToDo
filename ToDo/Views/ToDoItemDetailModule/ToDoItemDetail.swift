@@ -1,6 +1,10 @@
 import SwiftUI
+import SwiftData
 
 struct ToDoItemDetail: View {
+    @Query(sort: \Category.color) private var categories: [Category]
+    
+    @Environment(\.modelContext) private var context
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @Binding var editingToDoItem: ToDoItem?
@@ -11,11 +15,7 @@ struct ToDoItemDetail: View {
     
     @State private var text: String = ""
     @State private var importance: Importance = .ordinary
-    
-    @State private var color: Color = .red
-    @State private var isColorToggled = false
-    @State private var isColorPickerPresented: Bool = false
-    
+    @State private var category: Category = .other
     @State private var dueDate = Date(timeIntervalSinceNow: 86400)
     @State private var isDueDateToggled = false
     @State private var isDatePickerShown = false
@@ -35,6 +35,7 @@ struct ToDoItemDetail: View {
                     ToolbarItem(placement: .confirmationAction) {
                         saveButton
                     }
+                    
                     ToolbarItem(placement: .cancellationAction) {
                         cancelButton
                     }
@@ -125,32 +126,20 @@ struct ToDoItemDetail: View {
         }
     }
     
-    // The color picker is circular and bigger on purpose, smaller one is hard to select.
-    private var colorPickerRow: some View {
-        HStack {
-            Text("Цвет")
-            
-            Circle()
-                .fill(color)
-                .frame(width: isColorToggled ? 24 : 0, alignment: .center)
-                .offset(x: isColorToggled ? -12 : 0)
-                .padding(.leading, 16)
-                .animation(.bouncy(duration: 0.2), value: isColorToggled)
-                .onTapGesture {
-                    isColorPickerPresented = true
-                }
-            
-            
-            Toggle("", isOn: $isColorToggled)
-            
+    private var categoryRow: some View {
+        Picker("Категория", selection: $category) {
+            ForEach(categories) { category in
+                Label(
+                    title: {
+                        Text(category.name)
+                    },
+                    icon: {
+                        Image.systemImage("circle.fill", for: .systemFont(ofSize: 16), tint: UIColor(Color(hex: category.color)))
+                    }
+                )
+                .tag(category)
+            }
         }
-        .sheet(isPresented: $isColorPickerPresented) {
-            ColorWheelPicker(color: $color)
-                .presentationDetents([.fraction(3/5)])
-                .presentationDragIndicator(.visible)
-                .background(AppColors.backPrimary)
-        }
-        
     }
     
     private var toggleRow: some View {
@@ -165,8 +154,8 @@ struct ToDoItemDetail: View {
                         }
                     } label: {
                         Text(dueDate.dayMonthFormatted)
-                        .font(.caption)
-                        .fontWeight(.semibold)
+                            .font(.caption)
+                            .fontWeight(.semibold)
                     }
                     .submitScope()
                 }
@@ -188,7 +177,7 @@ struct ToDoItemDetail: View {
     private var detailsSection: some View {
         Section {
             importanceRow
-            colorPickerRow
+            categoryRow
             toggleRow
             
             if isDatePickerShown && isDueDateToggled {
@@ -234,7 +223,8 @@ struct ToDoItemDetail: View {
                         text: plainText,
                         importance: importance,
                         dueDate: newDueDate,
-                        color: isColorToggled ? color.hex : nil,
+                        category: category,
+                        categoryId: category.id,
                         isCompleted: toDoItem.isCompleted,
                         dateCreated: toDoItem.dateCreated,
                         dateEdited: Date()
@@ -246,7 +236,8 @@ struct ToDoItemDetail: View {
                         text: plainText,
                         importance: importance,
                         dueDate: newDueDate,
-                        color: isColorToggled ? color.hex : nil
+                        category: category,
+                        categoryId: category.id
                     )
                 )
             }
@@ -272,12 +263,11 @@ struct ToDoItemDetail: View {
         if let editingToDoItem = editingToDoItem {
             text = editingToDoItem.text
             importance = editingToDoItem.importance
-            isColorToggled = editingToDoItem.color != nil
             isDueDateToggled = editingToDoItem.dueDate != nil
             dueDate = editingToDoItem.dueDate ?? Date(timeIntervalSinceNow: 86400)
             
-            if let hex = editingToDoItem.color {
-                color = Color(hex: hex)
+            if let category = editingToDoItem.category, let neededCategory = categories.first(where: { $0.id == category.id }) {
+                self.category = neededCategory
             }
         } else {
             text = ""
@@ -285,7 +275,7 @@ struct ToDoItemDetail: View {
             dueDate = Date(timeIntervalSinceNow: 86400)
             isDueDateToggled = false
             isDatePickerShown = false
-            isColorToggled = false
+            category = categories.first!
         }
     }
 }
@@ -297,4 +287,5 @@ struct ToDoItemDetail: View {
         onDismiss: {},
         onDelete: {}
     )
+    .modelContainer(for: Category.self)
 }

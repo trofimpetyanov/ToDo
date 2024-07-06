@@ -1,7 +1,7 @@
 import Foundation
+import SwiftData
 
 extension ToDoItem {
-    
     /// Parses a JSON-compatible dictionary into a `ToDoItem` instance.
     ///
     /// - Parameter json: The JSON-compatible dictionary to parse.
@@ -30,7 +30,8 @@ extension ToDoItem {
             text: text,
             importance: importance,
             dueDate: dueDate,
-            color: dictionary[Properties.color.rawValue] as? String,
+            category: nil,
+            categoryId: dictionary[Properties.categoryId.rawValue] as? String,
             isCompleted: isCompleted,
             dateCreated: dateCreated,
             dateEdited: dateEdited
@@ -51,7 +52,7 @@ extension ToDoItem {
         let text = values[1]
         let importance = Importance(rawValue: values[2]) ?? .ordinary
         let dueDate = Date(anyTimeIntervalSince1970: values[3])
-        let color = values[4]
+        let categoryId = values[4]
         let isCompleted = Bool(values[5]) ?? false
         let dateCreated = Date(anyTimeIntervalSince1970: values[6]) ?? Date()
         let dateEdited = Date(anyTimeIntervalSince1970: "\(values[7].dropLast())")
@@ -61,7 +62,8 @@ extension ToDoItem {
             text: text,
             importance: importance,
             dueDate: dueDate,
-            color: color,
+            category: nil,
+            categoryId: categoryId,
             isCompleted: isCompleted,
             dateCreated: dateCreated,
             dateEdited: dateEdited
@@ -89,8 +91,8 @@ extension ToDoItem {
             dictionary[Properties.dateEdited.rawValue] = dateEdited.timeIntervalSince1970
         }
         
-        if let color = color {
-            dictionary[Properties.color.rawValue] = color
+        if let category = category {
+            dictionary[Properties.categoryId.rawValue] = category.id
         }
         
         return dictionary

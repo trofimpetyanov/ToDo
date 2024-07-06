@@ -113,7 +113,14 @@ class CalendarContainerViewController: UIViewController {
     
     @objc
     private func didTapNewButton() {
-        let viewController = UIHostingController(rootView: ToDoItemDetail(editingToDoItem: .constant(nil), onSave: onSave, onDismiss: onDismiss, onDelete: { }))
+        let viewController = UIHostingController(
+            rootView: ToDoItemDetail(
+                editingToDoItem: .constant(nil),
+                onSave: onSave,
+                onDismiss: onDismiss,
+                onDelete: { }
+            )
+        )
         
         present(viewController, animated: true)
     }
@@ -145,6 +152,8 @@ extension CalendarContainerViewController: CalendarContainerViewControllerDelega
             text: toDoItem.text,
             importance: toDoItem.importance,
             dueDate: toDoItem.dueDate,
+            category: toDoItem.category,
+            categoryId: toDoItem.categoryId,
             isCompleted: isCompleted,
             dateCreated: toDoItem.dateCreated,
             dateEdited: toDoItem.dateEdited

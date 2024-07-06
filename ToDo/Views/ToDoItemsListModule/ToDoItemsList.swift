@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct ToDoItemsList: View {
+    @Environment(\.modelContext) private var context
+    
     @ObservedObject var toDoItemsStore: ToDoItemsStore
     
     @State private var newToDoItemText: String = ""
@@ -79,6 +81,38 @@ struct ToDoItemsList: View {
                         .ignoresSafeArea(edges: .bottom)
                 } label: {
                     Label("Календарь", systemImage: "calendar")
+                }
+            }
+        }
+        .task {
+            let categories = [
+                "0": Category(id: "0", name: "Работа", color: "FC2B2D"),
+                "1": Category(id: "1", name: "Учеба", color: "106BFF"),
+                "2": Category(id: "2", name: "Хобби", color: "30D33B"),
+                "3": Category(id: "3", name: "Другое", color: "00000000")
+            ]
+            
+            if toDoItemsStore.isFirstLaunch {
+                categories.values.forEach { category in
+                    context.insert(category)
+                }
+            }
+            
+            toDoItemsStore.currentToDoItems.forEach { toDoItem in
+                if let categoryId = toDoItem.categoryId {
+                    let toDoItem = ToDoItem(
+                        id: toDoItem.id,
+                        text: toDoItem.text,
+                        importance: toDoItem.importance,
+                        dueDate: toDoItem.dueDate,
+                        category: categories[categoryId],
+                        categoryId: categoryId,
+                        isCompleted: toDoItem.isCompleted,
+                        dateCreated: toDoItem.dateCreated,
+                        dateEdited: toDoItem.dateEdited
+                    )
+                    
+                    toDoItemsStore.addOrUpdate(toDoItem)
                 }
             }
         }
@@ -182,6 +216,8 @@ struct ToDoItemsList: View {
                     text: toDoItem.text,
                     importance: toDoItem.importance,
                     dueDate: toDoItem.dueDate,
+                    category: toDoItem.category, 
+                    categoryId: toDoItem.categoryId,
                     isCompleted: !toDoItem.isCompleted,
                     dateCreated: toDoItem.dateCreated,
                     dateEdited: toDoItem.dateEdited
