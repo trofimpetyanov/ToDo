@@ -74,8 +74,12 @@ class CalendarContainerViewController: UIViewController {
     
     private func updateData() {
         toDoItems = toDoItemsStore.currentToDoItems
+        
         listViewController.viewModel = .init(toDoItems: toDoItems)
         listViewController.updateSnapshot()
+        
+        datesViewController.viewModel = .init(toDoItems: toDoItems)
+        datesViewController.updateSnapshot()
     }
     
     private func layoutViews() {

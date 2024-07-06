@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct ToDoItemDetail: View {
-    @Query(sort: \Category.color) private var categories: [Category]
+    @Query(sort: \Category.id) private var categories: [Category]
     
     @Environment(\.modelContext) private var context
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -21,6 +21,7 @@ struct ToDoItemDetail: View {
     @State private var isDatePickerShown = false
     
     @State private var isEditing = false
+    @State private var isCategoryDetailPresenting = false
     
     var body: some View {
         NavigationStack {
@@ -30,6 +31,13 @@ struct ToDoItemDetail: View {
                 .background(AppColors.backPrimary)
                 .scrollContentBackground(.hidden)
                 .environment(\.defaultMinListRowHeight, 56)
+                .sheet(isPresented: $isCategoryDetailPresenting) {
+                    NavigationStack {
+                        CategoryDetail(
+                            onSave: { category in self.category = category },
+                            onDismiss: { isCategoryDetailPresenting = false })
+                    }
+                }
                 .toolbarBackground(horizontalSizeClass == .regular ? .visible : .automatic, for: .navigationBar)
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
@@ -127,21 +135,51 @@ struct ToDoItemDetail: View {
     }
     
     private var categoryRow: some View {
-        Picker("Категория", selection: $category) {
-            ForEach(categories) { category in
-                Label(
-                    title: {
-                        Text(category.name)
-                    },
-                    icon: {
-                        Image.systemImage("circle.fill", for: .systemFont(ofSize: 16), tint: UIColor(Color(hex: category.color)))
+        HStack {
+            Text("Категория")
+            
+            Spacer()
+            
+            Menu {
+                Picker("Категория", selection: $category) {
+                    ForEach(categories) { category in
+                        Label(
+                            title: {
+                                Text(category.name)
+                            },
+                            icon: {
+                                Image.systemImage(
+                                    "circle.fill",
+                                    for: .systemFont(ofSize: 16),
+                                    tint: UIColor(Color(hex: category.color))
+                                )
+                            }
+                        )
+                        .tag(category)
                     }
-                )
-                .tag(category)
+                }
+                
+                Button {
+                    isCategoryDetailPresenting = true
+                } label: {
+                    Label(
+                        title: { Text("Новая категория") },
+                        icon: { Image(uiImage: .add) }
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
+            } label: {
+                HStack {
+                    Circle()
+                        .fill(Color(hex: category.color))
+                        .frame(width: 24, height: 24)
+                    
+                    Text(category.name)
+                }
             }
         }
     }
-    
+        
     private var toggleRow: some View {
         Toggle(isOn: $isDueDateToggled) {
             VStack(alignment: .leading) {
@@ -268,6 +306,8 @@ struct ToDoItemDetail: View {
             
             if let category = editingToDoItem.category, let neededCategory = categories.first(where: { $0.id == category.id }) {
                 self.category = neededCategory
+            } else {
+                category = categories.first ?? .other
             }
         } else {
             text = ""

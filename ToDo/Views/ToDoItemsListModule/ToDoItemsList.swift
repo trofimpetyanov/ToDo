@@ -1,6 +1,8 @@
 import SwiftUI
+import SwiftData
 
 struct ToDoItemsList: View {
+    @Query(sort: \Category.id) private var categories: [Category]
     @Environment(\.modelContext) private var context
     
     @ObservedObject var toDoItemsStore: ToDoItemsStore
@@ -84,28 +86,28 @@ struct ToDoItemsList: View {
                 }
             }
         }
-        .task {
-            let categories = [
-                "0": Category(id: "0", name: "Работа", color: "FC2B2D"),
-                "1": Category(id: "1", name: "Учеба", color: "106BFF"),
-                "2": Category(id: "2", name: "Хобби", color: "30D33B"),
-                "3": Category(id: "3", name: "Другое", color: "00000000")
-            ]
-            
+        .onAppear {
             if toDoItemsStore.isFirstLaunch {
+                let categories = [
+                    "1": Category(id: "1", name: "Работа", color: "FC2B2D"),
+                    "2": Category(id: "2", name: "Учеба", color: "106BFF"),
+                    "3": Category(id: "3", name: "Хобби", color: "30D33B"),
+                    "0": Category(id: "0", name: "Другое", color: "00000000")
+                ]
+                
                 categories.values.forEach { category in
                     context.insert(category)
                 }
             }
             
             toDoItemsStore.currentToDoItems.forEach { toDoItem in
-                if let categoryId = toDoItem.categoryId {
+                if let categoryId = toDoItem.categoryId, let category = categories.first(where: { $0.id == categoryId }) {
                     let toDoItem = ToDoItem(
                         id: toDoItem.id,
                         text: toDoItem.text,
                         importance: toDoItem.importance,
                         dueDate: toDoItem.dueDate,
-                        category: categories[categoryId],
+                        category: category,
                         categoryId: categoryId,
                         isCompleted: toDoItem.isCompleted,
                         dateCreated: toDoItem.dateCreated,

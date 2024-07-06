@@ -4,6 +4,7 @@ import SwiftData
 struct CategoryDetail: View {
     @Environment(\.modelContext) private var context
 
+    let onSave: (Category) -> Void
     let onDismiss: () -> Void
     
     @State var text: String = ""
@@ -66,6 +67,9 @@ struct CategoryDetail: View {
             let category = Category(name: plainText, color: color.hex)
             
             context.insert(category)
+            
+            onSave(category)
+            onDismiss()
         }
         .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
     }
@@ -85,6 +89,6 @@ struct CategoryDetail: View {
 
 #Preview {
     NavigationStack {
-        CategoryDetail(onDismiss: { })
+        CategoryDetail(onSave: { _ in }, onDismiss: { })
     }
 }

@@ -61,6 +61,13 @@ class CalendarDatesViewController: UICollectionViewController {
         }
     }
     
+    func updateSnapshot() {
+        var snapshot = Snapshot()
+        snapshot.appendSections([0])
+        snapshot.appendItems(viewModel.rows, toSection: 0)
+        dataSource.apply(snapshot)
+    }
+    
     private func setup() {
         dataSource = createDataSource()
         collectionView.dataSource = dataSource
@@ -69,13 +76,6 @@ class CalendarDatesViewController: UICollectionViewController {
         collectionView.isScrollEnabled = false
         
         updateSnapshot()
-    }
-    
-    private func updateSnapshot() {
-        var snapshot = Snapshot()
-        snapshot.appendSections([0])
-        snapshot.appendItems(viewModel.rows, toSection: 0)
-        dataSource.apply(snapshot)
     }
     
     private func cellRegistrationHandler(cell: DateLabelCell, indexPath: IndexPath, row: Row) {

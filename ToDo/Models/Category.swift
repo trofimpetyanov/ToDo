@@ -13,5 +13,5 @@ class Category: Hashable, Identifiable {
         self.color = color
     }
     
-    static let other = Category(id: "3", name: "Другое", color: "000000")
+    static let other = Category(id: "0", name: "Другое", color: "00000000")
 }
