@@ -120,6 +120,7 @@ class CalendarContainerViewController: UIViewController {
                 onDismiss: onDismiss,
                 onDelete: { }
             )
+            .modelContainer(for: Category.self)
         )
         
         present(viewController, animated: true)

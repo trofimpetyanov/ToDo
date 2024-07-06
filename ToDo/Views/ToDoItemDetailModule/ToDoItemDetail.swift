@@ -275,7 +275,7 @@ struct ToDoItemDetail: View {
             dueDate = Date(timeIntervalSinceNow: 86400)
             isDueDateToggled = false
             isDatePickerShown = false
-            category = categories.first!
+            category = categories.first ?? .other
         }
     }
 }
