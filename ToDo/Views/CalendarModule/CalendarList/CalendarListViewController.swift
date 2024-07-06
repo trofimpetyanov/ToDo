@@ -113,7 +113,6 @@ class CalendarListViewController: UICollectionViewController {
         
         let actionHandler: UIContextualAction.Handler = { action, view, completion in
             self.delegate?.didCompleteToDoItem(self, toDoItem: toDoItem, isCompleted: isCompleted)
-            self.updateSnapshot()
             
             completion(true)
         }

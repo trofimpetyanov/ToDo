@@ -72,6 +72,12 @@ class CalendarContainerViewController: UIViewController {
         layoutViews()
     }
     
+    private func updateData() {
+        toDoItems = toDoItemsStore.currentToDoItems
+        listViewController.viewModel = .init(toDoItems: toDoItems)
+        listViewController.updateSnapshot()
+    }
+    
     private func layoutViews() {
         // ViewControllers.
         datesView = datesViewController.view
@@ -107,13 +113,20 @@ class CalendarContainerViewController: UIViewController {
     
     @objc
     private func didTapNewButton() {
-        let viewController = UIHostingController(rootView: ToDoItemDetail(editingToDoItem: .constant(nil), onSave: {_ in}, onDismiss: { }, onDelete: { }))
+        let viewController = UIHostingController(rootView: ToDoItemDetail(editingToDoItem: .constant(nil), onSave: onSave, onDismiss: onDismiss, onDelete: { }))
         
         present(viewController, animated: true)
     }
     
-    private func onComplete() {
+    private func onSave(_ toDoItem: ToDoItem) {
+        toDoItemsStore.addOrUpdate(toDoItem)
+        updateData()
         
+        dismiss(animated: true)
+    }
+    
+    private func onDismiss() {
+        dismiss(animated: true)
     }
 }
 
@@ -139,7 +152,6 @@ extension CalendarContainerViewController: CalendarContainerViewControllerDelega
         
         toDoItemsStore.addOrUpdate(updatedToDoItem)
         
-        toDoItems = toDoItemsStore.currentToDoItems
-        listViewController.viewModel = .init(toDoItems: toDoItems)
+        updateData()
     }
 }
