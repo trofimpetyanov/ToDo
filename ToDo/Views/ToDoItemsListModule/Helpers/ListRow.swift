@@ -30,13 +30,7 @@ struct ListRow: View {
                 if let dueDate = toDoItem.dueDate {
                     HStack {
                         Image(systemName: "calendar")
-                        Text(
-                            dueDate
-                            .formatted(
-                                .dateTime.day().month().year()
-                                .locale(.init(identifier: "ru_RU"))
-                            )
-                        )
+                        Text(dueDate.dayMonthFormatted)
                     }
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -47,11 +41,11 @@ struct ListRow: View {
             })
             .padding(.leading, 8)
             
-            if let hex = toDoItem.color {
+            if let category = toDoItem.category {
                 Spacer()
                 
                 Rectangle()
-                    .fill(Color(hex: hex))
+                    .fill(Color(hex: category.color))
                     .clipShape(.capsule)
                     .frame(width: 5)
                     .padding(.vertical, 8)

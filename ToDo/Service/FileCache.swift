@@ -7,15 +7,15 @@ struct FileCache {
         case json, csv
     }
     
-    static let mock = [
-        ToDoItem(text: "Buy groceries", isCompleted: true),
-        ToDoItem(text: "Walk the dog named \"Daisy\"", importance: .important, dueDate: Date(timeIntervalSinceNow: 3600)),
-        ToDoItem(text: "Read a book", dateCreated: Date(timeIntervalSinceNow: -86400)),
-        ToDoItem(text: "Write a blog post", importance: .unimportant),
-        ToDoItem(text: "Workout", dueDate: Date(timeIntervalSinceNow: 7200), color: "73FCD6", isCompleted: false),
-        ToDoItem(text: "Plan vacation", isCompleted: true, dateEdited: Date(timeIntervalSinceNow: -3600)),
-        ToDoItem(text: "Clean the house", importance: .important),
-        ToDoItem(text: "Call mom", importance: .ordinary, dueDate: Date(timeIntervalSinceNow: 1800), color: "8EFA00", isCompleted: false)
+    static let mock: [ToDoItem] = [
+//        ToDoItem(text: "Buy groceries", isCompleted: true),
+//        ToDoItem(text: "Walk the dog named \"Daisy\"", importance: .important, dueDate: Date(timeIntervalSinceNow: 3600)),
+//        ToDoItem(text: "Read a book", dateCreated: Date(timeIntervalSinceNow: -86400)),
+//        ToDoItem(text: "Write a blog post", importance: .unimportant),
+//        ToDoItem(text: "Workout", dueDate: Date(timeIntervalSinceNow: 7200), isCompleted: false),
+//        ToDoItem(text: "Plan vacation", isCompleted: true, dateEdited: Date(timeIntervalSinceNow: -3600)),
+//        ToDoItem(text: "Clean the house", importance: .important),
+//        ToDoItem(text: "Call mom", importance: .ordinary, dueDate: Date(timeIntervalSinceNow: 1800), isCompleted: false)
     ]
     
     private(set) var toDoItems: [ToDoItem] = []
@@ -24,6 +24,23 @@ struct FileCache {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         
         return paths[0]
+    }
+    
+    var isFirstLaunch: Bool {
+        let path = documentsDirectory
+            .appending(path: "hasLaunched")
+            .path()
+        
+        if !FileManager.default.fileExists(atPath: path) {
+            let path = documentsDirectory
+                .appending(path: "hasLaunched")
+            
+            try? "true".data(using: .utf8)?.write(to: path)
+            
+            return true
+        }
+        
+        return false
     }
     
     /// Adds a new `ToDoItem` to the cache.

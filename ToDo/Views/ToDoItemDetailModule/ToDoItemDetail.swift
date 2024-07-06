@@ -1,26 +1,27 @@
 import SwiftUI
+import SwiftData
 
 struct ToDoItemDetail: View {
+    @Query(sort: \Category.id) private var categories: [Category]
+    
+    @Environment(\.modelContext) private var context
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @Binding var editingToDoItem: ToDoItem?
     
-    let onComplete: (ToDoItem) -> Void
+    let onSave: (ToDoItem) -> Void
     let onDismiss: () -> Void
     let onDelete: () -> Void
     
     @State private var text: String = ""
     @State private var importance: Importance = .ordinary
-    
-    @State private var color: Color = .red
-    @State private var isColorToggled = false
-    @State private var isColorPickerPresented: Bool = false
-    
+    @State private var category: Category = .other
     @State private var dueDate = Date(timeIntervalSinceNow: 86400)
     @State private var isDueDateToggled = false
     @State private var isDatePickerShown = false
     
     @State private var isEditing = false
+    @State private var isCategoryDetailPresenting = false
     
     var body: some View {
         NavigationStack {
@@ -30,11 +31,19 @@ struct ToDoItemDetail: View {
                 .background(AppColors.backPrimary)
                 .scrollContentBackground(.hidden)
                 .environment(\.defaultMinListRowHeight, 56)
+                .sheet(isPresented: $isCategoryDetailPresenting) {
+                    NavigationStack {
+                        CategoryDetail(
+                            onSave: { category in self.category = category },
+                            onDismiss: { isCategoryDetailPresenting = false })
+                    }
+                }
                 .toolbarBackground(horizontalSizeClass == .regular ? .visible : .automatic, for: .navigationBar)
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
                         saveButton
                     }
+                    
                     ToolbarItem(placement: .cancellationAction) {
                         cancelButton
                     }
@@ -125,34 +134,52 @@ struct ToDoItemDetail: View {
         }
     }
     
-    // The color picker is circular and bigger on purpose, smaller one is hard to select.
-    private var colorPickerRow: some View {
+    private var categoryRow: some View {
         HStack {
-            Text("Цвет")
+            Text("Категория")
             
-            Circle()
-                .fill(color)
-                .frame(width: isColorToggled ? 24 : 0, alignment: .center)
-                .offset(x: isColorToggled ? -12 : 0)
-                .padding(.leading, 16)
-                .animation(.bouncy(duration: 0.2), value: isColorToggled)
-                .onTapGesture {
-                    isColorPickerPresented = true
+            Spacer()
+            
+            Menu {
+                Picker("Категория", selection: $category) {
+                    ForEach(categories) { category in
+                        Label(
+                            title: {
+                                Text(category.name)
+                            },
+                            icon: {
+                                Image.systemImage(
+                                    "circle.fill",
+                                    for: .systemFont(ofSize: 16),
+                                    tint: UIColor(Color(hex: category.color))
+                                )
+                            }
+                        )
+                        .tag(category)
+                    }
                 }
-            
-            
-            Toggle("", isOn: $isColorToggled)
-            
+                
+                Button {
+                    isCategoryDetailPresenting = true
+                } label: {
+                    Label(
+                        title: { Text("Новая категория") },
+                        icon: { Image(uiImage: .add) }
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
+            } label: {
+                HStack {
+                    Circle()
+                        .fill(Color(hex: category.color))
+                        .frame(width: 24, height: 24)
+                    
+                    Text(category.name)
+                }
+            }
         }
-        .sheet(isPresented: $isColorPickerPresented) {
-            ColorWheelPicker(color: $color)
-                .presentationDetents([.fraction(3/5)])
-                .presentationDragIndicator(.visible)
-                .background(AppColors.backPrimary)
-        }
-        
     }
-    
+        
     private var toggleRow: some View {
         Toggle(isOn: $isDueDateToggled) {
             VStack(alignment: .leading) {
@@ -164,14 +191,9 @@ struct ToDoItemDetail: View {
                             isDatePickerShown.toggle()
                         }
                     } label: {
-                        Text(
-                            dueDate.formatted(
-                                .dateTime.day().month().year()
-                                .locale(.init(identifier: "ru_RU"))
-                            )
-                        )
-                        .font(.caption)
-                        .fontWeight(.semibold)
+                        Text(dueDate.dayMonthFormatted)
+                            .font(.caption)
+                            .fontWeight(.semibold)
                     }
                     .submitScope()
                 }
@@ -193,7 +215,7 @@ struct ToDoItemDetail: View {
     private var detailsSection: some View {
         Section {
             importanceRow
-            colorPickerRow
+            categoryRow
             toggleRow
             
             if isDatePickerShown && isDueDateToggled {
@@ -224,26 +246,36 @@ struct ToDoItemDetail: View {
         Button("Сохранить") {
             let plainText = text.trimmingCharacters(in: .whitespacesAndNewlines)
             
+            let newDueDate: Date?
+            if isDueDateToggled {
+                let dateComponents = Calendar.current.dateComponents([.year, .month, .day], from: dueDate)
+                newDueDate = Calendar.current.date(from: dateComponents)
+            } else {
+                newDueDate = nil
+            }
+            
             if let toDoItem = editingToDoItem {
-                onComplete(
+                onSave(
                     ToDoItem(
                         id: toDoItem.id,
                         text: plainText,
                         importance: importance,
-                        dueDate: isDueDateToggled ? dueDate : nil,
-                        color: isColorToggled ? color.hex : nil,
+                        dueDate: newDueDate,
+                        category: category,
+                        categoryId: category.id,
                         isCompleted: toDoItem.isCompleted,
                         dateCreated: toDoItem.dateCreated,
                         dateEdited: Date()
                     )
                 )
             } else {
-                onComplete(
+                onSave(
                     ToDoItem(
                         text: plainText,
                         importance: importance,
-                        dueDate: isDueDateToggled ? dueDate : nil,
-                        color: isColorToggled ? color.hex : nil
+                        dueDate: newDueDate,
+                        category: category,
+                        categoryId: category.id
                     )
                 )
             }
@@ -269,12 +301,13 @@ struct ToDoItemDetail: View {
         if let editingToDoItem = editingToDoItem {
             text = editingToDoItem.text
             importance = editingToDoItem.importance
-            isColorToggled = editingToDoItem.color != nil
             isDueDateToggled = editingToDoItem.dueDate != nil
             dueDate = editingToDoItem.dueDate ?? Date(timeIntervalSinceNow: 86400)
             
-            if let hex = editingToDoItem.color {
-                color = Color(hex: hex)
+            if let category = editingToDoItem.category, let neededCategory = categories.first(where: { $0.id == category.id }) {
+                self.category = neededCategory
+            } else {
+                category = categories.first ?? .other
             }
         } else {
             text = ""
@@ -282,7 +315,7 @@ struct ToDoItemDetail: View {
             dueDate = Date(timeIntervalSinceNow: 86400)
             isDueDateToggled = false
             isDatePickerShown = false
-            isColorToggled = false
+            category = categories.first ?? .other
         }
     }
 }
@@ -290,8 +323,9 @@ struct ToDoItemDetail: View {
 #Preview {
     ToDoItemDetail(
         editingToDoItem: .constant(FileCache.mock[0]),
-        onComplete: { _ in },
+        onSave: { _ in },
         onDismiss: {},
         onDelete: {}
     )
+    .modelContainer(for: Category.self)
 }

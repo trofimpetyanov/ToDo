@@ -1,6 +1,10 @@
 import SwiftUI
+import SwiftData
 
 struct ToDoItemsList: View {
+    @Query(sort: \Category.id) private var categories: [Category]
+    @Environment(\.modelContext) private var context
+    
     @ObservedObject var toDoItemsStore: ToDoItemsStore
     
     @State private var newToDoItemText: String = ""
@@ -32,10 +36,7 @@ struct ToDoItemsList: View {
     
     private var listSection: some View {
         List {
-            Section(
-                header: Text("Выполнено – \(toDoItemsStore.completedCount)")
-                    .contentTransition(.numericText())
-            ) {
+            Section {
                 ForEach($toDoItemsStore.currentToDoItems) { toDoItem in
                     listRow(for: toDoItem)
                 }
@@ -53,6 +54,16 @@ struct ToDoItemsList: View {
                     }
                     .submitLabel(.done)
                     .padding(.leading, 40)
+            } header: {
+                HStack {
+                    Text("Выполнено – \(toDoItemsStore.completedCount)")
+                        .contentTransition(.numericText())
+                    
+                    Spacer()
+                    
+                    settingsMenu
+                        .textCase(.none)
+                }
             }
         }
         .navigationTitle("Мои Дела")
@@ -62,12 +73,55 @@ struct ToDoItemsList: View {
         .overlay(addNewItemButton, alignment: .bottom)
         .animation(.default, value: toDoItemsStore.currentToDoItems)
         .toolbar {
-            settingsMenu
+            ToolbarItem(placement: .primaryAction) {
+                NavigationLink {
+                    CalendarView(toDoItemsStore: toDoItemsStore)
+                        .navigationTitle("Календарь")
+                        .toolbarTitleDisplayMode(.inline)
+                        .toolbarBackground(.visible, for: .navigationBar)
+                        .background(AppColors.backPrimary)
+                        .ignoresSafeArea(edges: .bottom)
+                } label: {
+                    Label("Календарь", systemImage: "calendar")
+                }
+            }
+        }
+        .onAppear {
+            if toDoItemsStore.isFirstLaunch {
+                let categories = [
+                    "1": Category(id: "1", name: "Работа", color: "FC2B2D"),
+                    "2": Category(id: "2", name: "Учеба", color: "106BFF"),
+                    "3": Category(id: "3", name: "Хобби", color: "30D33B"),
+                    "0": Category(id: "0", name: "Другое", color: "00000000")
+                ]
+                
+                categories.values.forEach { category in
+                    context.insert(category)
+                }
+            }
+            
+            toDoItemsStore.currentToDoItems.forEach { toDoItem in
+                if let categoryId = toDoItem.categoryId, let category = categories.first(where: { $0.id == categoryId }) {
+                    let toDoItem = ToDoItem(
+                        id: toDoItem.id,
+                        text: toDoItem.text,
+                        importance: toDoItem.importance,
+                        dueDate: toDoItem.dueDate,
+                        category: category,
+                        categoryId: categoryId,
+                        isCompleted: toDoItem.isCompleted,
+                        dateCreated: toDoItem.dateCreated,
+                        dateEdited: toDoItem.dateEdited
+                    )
+                    
+                    toDoItemsStore.addOrUpdate(toDoItem)
+                }
+            }
         }
     }
     
     private var settingsMenu: some View {
-        Menu("Настройки", systemImage: "line.3.horizontal.decrease.circle") {
+        Menu("Опции", systemImage: "line.3.horizontal.decrease.circle") {
             Button {
                 withAnimation {
                     toDoItemsStore.areCompletedShown.toggle()
@@ -123,7 +177,7 @@ struct ToDoItemsList: View {
                 if isDetailViewPresenting {
                     ToDoItemDetail(
                         editingToDoItem: $editingToDoItem,
-                        onComplete: { toDoItem in onSave(toDoItem) },
+                        onSave: { toDoItem in onSave(toDoItem) },
                         onDismiss: { onDismiss() },
                         onDelete: { onDelete() }
                     )
@@ -133,7 +187,7 @@ struct ToDoItemsList: View {
             } else {
                 ToDoItemDetail(
                     editingToDoItem: $editingToDoItem,
-                    onComplete: { toDoItem in onSave(toDoItem) },
+                    onSave: { toDoItem in onSave(toDoItem) },
                     onDismiss: { onDismiss() },
                     onDelete: { onDelete() }
                 )
@@ -164,6 +218,8 @@ struct ToDoItemsList: View {
                     text: toDoItem.text,
                     importance: toDoItem.importance,
                     dueDate: toDoItem.dueDate,
+                    category: toDoItem.category, 
+                    categoryId: toDoItem.categoryId,
                     isCompleted: !toDoItem.isCompleted,
                     dateCreated: toDoItem.dateCreated,
                     dateEdited: toDoItem.dateEdited

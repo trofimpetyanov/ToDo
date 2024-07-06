@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 
 /// A class that manages a collection of `ToDoItem` objects and provides functionality for adding, updating, deleting, and sorting these items.
 class ToDoItemsStore: ObservableObject {
@@ -8,7 +9,7 @@ class ToDoItemsStore: ObservableObject {
             rawValue
         }
         
-        case dateAdded = "По дате добавления"
+        case dateCreated = "По дате добавления"
         case importance = "По важности"
     }
     
@@ -36,7 +37,7 @@ class ToDoItemsStore: ObservableObject {
     }
     
     /// The current sorting option for the to-do items.
-    @Published var sortingOption: SortingOption = .dateAdded {
+    @Published var sortingOption: SortingOption = .dateCreated {
         didSet {
             updateCurrentToDoItems()
         }
@@ -56,6 +57,10 @@ class ToDoItemsStore: ObservableObject {
             .count
     }
     
+    var isFirstLaunch: Bool {
+        fileCache.isFirstLaunch
+    }
+    
     /// Initializes a new instance of `ToDoItemsStore`.
     init() {
         fileCache = FileCache()
@@ -68,6 +73,7 @@ class ToDoItemsStore: ObservableObject {
             print("ToDoItemsStore: Failure while loading toDoItems from the file. It is normal if it is the first launch.")
         }
         
+        toDoItems = fileCache.toDoItems
         updateCurrentToDoItems()
     }
     
@@ -130,7 +136,7 @@ class ToDoItemsStore: ObservableObject {
             currentToDoItems = toDoItems.sorted(by: { lhs, rhs in
                 lhs.importance < rhs.importance
             })
-        case .dateAdded:
+        case .dateCreated:
             currentToDoItems = toDoItems.sorted(by: { lhs, rhs in
                 lhs.dateCreated < rhs.dateCreated
             })
