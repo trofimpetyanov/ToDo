@@ -19,8 +19,8 @@ class DateLabelContentView: UIView, UIContentView {
             background.cornerRadius = 8
             
             if state.isHighlighted || state.isSelected {
-                background.backgroundColor = .black.withAlphaComponent(0.08)
-                background.strokeColor = .black.withAlphaComponent(0.16)
+                background.backgroundColor = .label.withAlphaComponent(0.08)
+                background.strokeColor = .label.withAlphaComponent(0.16)
                 background.strokeWidth = 2
             }
             
@@ -28,7 +28,7 @@ class DateLabelContentView: UIView, UIContentView {
         }
     }
     
-    let label: UILabel = {
+    private lazy var label: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: UIFont.preferredFont(forTextStyle: .subheadline).pointSize)
         label.textAlignment = .center

@@ -71,7 +71,7 @@ struct ToDoItemsList: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 NavigationLink {
-                    CalendarView(toDoItems: toDoItemsStore.currentToDoItems)
+                    CalendarView(toDoItemsStore: toDoItemsStore)
                         .navigationTitle("Календарь")
                         .toolbarTitleDisplayMode(.inline)
                         .toolbarBackground(.visible, for: .navigationBar)
@@ -141,7 +141,7 @@ struct ToDoItemsList: View {
                 if isDetailViewPresenting {
                     ToDoItemDetail(
                         editingToDoItem: $editingToDoItem,
-                        onComplete: { toDoItem in onSave(toDoItem) },
+                        onSave: { toDoItem in onSave(toDoItem) },
                         onDismiss: { onDismiss() },
                         onDelete: { onDelete() }
                     )
@@ -151,7 +151,7 @@ struct ToDoItemsList: View {
             } else {
                 ToDoItemDetail(
                     editingToDoItem: $editingToDoItem,
-                    onComplete: { toDoItem in onSave(toDoItem) },
+                    onSave: { toDoItem in onSave(toDoItem) },
                     onDismiss: { onDismiss() },
                     onDelete: { onDelete() }
                 )

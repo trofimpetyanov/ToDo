@@ -18,10 +18,13 @@
 		AC9BF5A32C38308D008C6C58 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5A22C38308D008C6C58 /* Date+Format.swift */; };
 		AC9BF5A62C3840C2008C6C58 /* DateLabelContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5A52C3840C2008C6C58 /* DateLabelContentView.swift */; };
 		AC9BF5A82C384454008C6C58 /* DateLabelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5A72C384454008C6C58 /* DateLabelCell.swift */; };
-		AC9BF5AA2C3873ED008C6C58 /* CalendarViewController+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5A92C3873ED008C6C58 /* CalendarViewController+ViewModel.swift */; };
-		AC9BF5AC2C38867C008C6C58 /* DateLabelsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5AB2C38867C008C6C58 /* DateLabelsHeader.swift */; };
+		AC9BF5AA2C3873ED008C6C58 /* CalendarListViewController+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5A92C3873ED008C6C58 /* CalendarListViewController+ViewModel.swift */; };
+		AC9BF5AE2C388A2E008C6C58 /* CalendarDatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5AD2C388A2E008C6C58 /* CalendarDatesViewController.swift */; };
+		AC9BF5B12C388A52008C6C58 /* CalendarDatesViewController+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5B02C388A52008C6C58 /* CalendarDatesViewController+ViewModel.swift */; };
+		AC9BF5B42C388FB7008C6C58 /* CalendarContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5B32C388FB7008C6C58 /* CalendarContainerViewController.swift */; };
+		AC9BF5B82C3897F6008C6C58 /* CalendarContainerViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5B72C3897F6008C6C58 /* CalendarContainerViewControllerDelegate.swift */; };
 		ACA0D20E2C24ACE4003659A2 /* FileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA0D20D2C24ACE4003659A2 /* FileCache.swift */; };
-		ACCA505B2C358B17007669BB /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCA505A2C358B17007669BB /* CalendarViewController.swift */; };
+		ACCA505B2C358B17007669BB /* CalendarListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCA505A2C358B17007669BB /* CalendarListViewController.swift */; };
 		ACDA31C22C2C885B00C5FDCE /* ToDoItem+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31C12C2C885B00C5FDCE /* ToDoItem+Properties.swift */; };
 		ACDA31C42C2D7A8100C5FDCE /* ListHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31C32C2D7A8100C5FDCE /* ListHeader.swift */; };
 		ACDA31C62C2D7AA600C5FDCE /* ListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31C52C2D7AA600C5FDCE /* ListRow.swift */; };
@@ -63,10 +66,13 @@
 		AC9BF5A22C38308D008C6C58 /* Date+Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
 		AC9BF5A52C3840C2008C6C58 /* DateLabelContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateLabelContentView.swift; sourceTree = "<group>"; };
 		AC9BF5A72C384454008C6C58 /* DateLabelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateLabelCell.swift; sourceTree = "<group>"; };
-		AC9BF5A92C3873ED008C6C58 /* CalendarViewController+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CalendarViewController+ViewModel.swift"; sourceTree = "<group>"; };
-		AC9BF5AB2C38867C008C6C58 /* DateLabelsHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateLabelsHeader.swift; sourceTree = "<group>"; };
+		AC9BF5A92C3873ED008C6C58 /* CalendarListViewController+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CalendarListViewController+ViewModel.swift"; sourceTree = "<group>"; };
+		AC9BF5AD2C388A2E008C6C58 /* CalendarDatesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDatesViewController.swift; sourceTree = "<group>"; };
+		AC9BF5B02C388A52008C6C58 /* CalendarDatesViewController+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CalendarDatesViewController+ViewModel.swift"; sourceTree = "<group>"; };
+		AC9BF5B32C388FB7008C6C58 /* CalendarContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarContainerViewController.swift; sourceTree = "<group>"; };
+		AC9BF5B72C3897F6008C6C58 /* CalendarContainerViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarContainerViewControllerDelegate.swift; sourceTree = "<group>"; };
 		ACA0D20D2C24ACE4003659A2 /* FileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCache.swift; sourceTree = "<group>"; };
-		ACCA505A2C358B17007669BB /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
+		ACCA505A2C358B17007669BB /* CalendarListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarListViewController.swift; sourceTree = "<group>"; };
 		ACDA31C12C2C885B00C5FDCE /* ToDoItem+Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+Properties.swift"; sourceTree = "<group>"; };
 		ACDA31C32C2D7A8100C5FDCE /* ListHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListHeader.swift; sourceTree = "<group>"; };
 		ACDA31C52C2D7AA600C5FDCE /* ListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRow.swift; sourceTree = "<group>"; };
@@ -184,19 +190,54 @@
 		AC9BF5A42C3840A3008C6C58 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				AC9BF5AB2C38867C008C6C58 /* DateLabelsHeader.swift */,
+				AC9BF5B52C38972B008C6C58 /* Views */,
+				AC9BF5B62C389731008C6C58 /* Delegates */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		AC9BF5AF2C388A3B008C6C58 /* CalendarList */ = {
+			isa = PBXGroup;
+			children = (
+				ACCA505A2C358B17007669BB /* CalendarListViewController.swift */,
+				AC9BF5A92C3873ED008C6C58 /* CalendarListViewController+ViewModel.swift */,
+			);
+			path = CalendarList;
+			sourceTree = "<group>";
+		};
+		AC9BF5B22C388A5C008C6C58 /* CalendarDates */ = {
+			isa = PBXGroup;
+			children = (
+				AC9BF5AD2C388A2E008C6C58 /* CalendarDatesViewController.swift */,
+				AC9BF5B02C388A52008C6C58 /* CalendarDatesViewController+ViewModel.swift */,
+			);
+			path = CalendarDates;
+			sourceTree = "<group>";
+		};
+		AC9BF5B52C38972B008C6C58 /* Views */ = {
+			isa = PBXGroup;
+			children = (
 				AC9BF5A72C384454008C6C58 /* DateLabelCell.swift */,
 				AC9BF5A52C3840C2008C6C58 /* DateLabelContentView.swift */,
 			);
-			path = Helpers;
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AC9BF5B62C389731008C6C58 /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				AC9BF5B72C3897F6008C6C58 /* CalendarContainerViewControllerDelegate.swift */,
+			);
+			path = Delegates;
 			sourceTree = "<group>";
 		};
 		ACCA50582C358AA9007669BB /* CalendarModule */ = {
 			isa = PBXGroup;
 			children = (
 				AC9BF5A02C3819DF008C6C58 /* CalendarView.swift */,
-				ACCA505A2C358B17007669BB /* CalendarViewController.swift */,
-				AC9BF5A92C3873ED008C6C58 /* CalendarViewController+ViewModel.swift */,
+				AC9BF5B32C388FB7008C6C58 /* CalendarContainerViewController.swift */,
+				AC9BF5B22C388A5C008C6C58 /* CalendarDates */,
+				AC9BF5AF2C388A3B008C6C58 /* CalendarList */,
 				AC9BF5A42C3840A3008C6C58 /* Helpers */,
 			);
 			path = CalendarModule;
@@ -373,6 +414,7 @@
 			files = (
 				AC1C1B932C2374560094D57C /* ToDoItemsList.swift in Sources */,
 				AC9BF5A62C3840C2008C6C58 /* DateLabelContentView.swift in Sources */,
+				AC9BF5AE2C388A2E008C6C58 /* CalendarDatesViewController.swift in Sources */,
 				ACDA31C22C2C885B00C5FDCE /* ToDoItem+Properties.swift in Sources */,
 				AC1C1BA52C2374E60094D57C /* Importance.swift in Sources */,
 				ACF2A2992C25F4BC00C7D20E /* Date+.swift in Sources */,
@@ -384,11 +426,13 @@
 				AC1C1BA32C2374920094D57C /* ToDoItem.swift in Sources */,
 				AC9BF5A32C38308D008C6C58 /* Date+Format.swift in Sources */,
 				ACE0757F2C31A8D400F0EA26 /* Color+IdealTextColor.swift in Sources */,
+				AC9BF5B42C388FB7008C6C58 /* CalendarContainerViewController.swift in Sources */,
 				ACDA31CA2C2EE38E00C5FDCE /* ToDoItemDetail.swift in Sources */,
-				AC9BF5AC2C38867C008C6C58 /* DateLabelsHeader.swift in Sources */,
 				ACA0D20E2C24ACE4003659A2 /* FileCache.swift in Sources */,
-				ACCA505B2C358B17007669BB /* CalendarViewController.swift in Sources */,
-				AC9BF5AA2C3873ED008C6C58 /* CalendarViewController+ViewModel.swift in Sources */,
+				AC9BF5B82C3897F6008C6C58 /* CalendarContainerViewControllerDelegate.swift in Sources */,
+				AC9BF5B12C388A52008C6C58 /* CalendarDatesViewController+ViewModel.swift in Sources */,
+				ACCA505B2C358B17007669BB /* CalendarListViewController.swift in Sources */,
+				AC9BF5AA2C3873ED008C6C58 /* CalendarListViewController+ViewModel.swift in Sources */,
 				ACE0757D2C319B0200F0EA26 /* Image+.swift in Sources */,
 				ACDA31C42C2D7A8100C5FDCE /* ListHeader.swift in Sources */,
 				ACDA31CC2C2EF27900C5FDCE /* Color+.swift in Sources */,

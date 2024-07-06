@@ -1,22 +1,21 @@
 import SwiftUI
 
 struct CalendarView: UIViewControllerRepresentable {
-    typealias UIViewControllerType = CalendarViewController
+    typealias UIViewControllerType = CalendarContainerViewController
     
-    var toDoItems: [ToDoItem]
+    var toDoItemsStore: ToDoItemsStore
     
-    func makeUIViewController(context: Context) -> CalendarViewController {
-        let viewModel = CalendarViewController.ViewModel(toDoItems: toDoItems)
-        let calendarViewController = CalendarViewController(viewModel: viewModel)
+    func makeUIViewController(context: Context) -> UIViewControllerType {
+        let calendarContainerViewController = CalendarContainerViewController(toDoItemsStore: toDoItemsStore)
         
-        return calendarViewController
+        return calendarContainerViewController
     }
     
-    func updateUIViewController(_ uiViewController: CalendarViewController, context: Context) {
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
         return
     }
 }
 
 #Preview {
-    CalendarView(toDoItems: FileCache.mock)
+    CalendarView(toDoItemsStore: ToDoItemsStore())
 }

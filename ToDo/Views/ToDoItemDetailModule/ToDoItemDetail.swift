@@ -5,7 +5,7 @@ struct ToDoItemDetail: View {
     
     @Binding var editingToDoItem: ToDoItem?
     
-    let onComplete: (ToDoItem) -> Void
+    let onSave: (ToDoItem) -> Void
     let onDismiss: () -> Void
     let onDelete: () -> Void
     
@@ -219,13 +219,21 @@ struct ToDoItemDetail: View {
         Button("Сохранить") {
             let plainText = text.trimmingCharacters(in: .whitespacesAndNewlines)
             
+            let newDueDate: Date?
+            if isDueDateToggled {
+                let dateComponents = Calendar.current.dateComponents([.year, .month, .day], from: dueDate)
+                newDueDate = Calendar.current.date(from: dateComponents)
+            } else {
+                newDueDate = nil
+            }
+            
             if let toDoItem = editingToDoItem {
-                onComplete(
+                onSave(
                     ToDoItem(
                         id: toDoItem.id,
                         text: plainText,
                         importance: importance,
-                        dueDate: isDueDateToggled ? dueDate : nil,
+                        dueDate: newDueDate,
                         color: isColorToggled ? color.hex : nil,
                         isCompleted: toDoItem.isCompleted,
                         dateCreated: toDoItem.dateCreated,
@@ -233,11 +241,11 @@ struct ToDoItemDetail: View {
                     )
                 )
             } else {
-                onComplete(
+                onSave(
                     ToDoItem(
                         text: plainText,
                         importance: importance,
-                        dueDate: isDueDateToggled ? dueDate : nil,
+                        dueDate: newDueDate,
                         color: isColorToggled ? color.hex : nil
                     )
                 )
@@ -285,7 +293,7 @@ struct ToDoItemDetail: View {
 #Preview {
     ToDoItemDetail(
         editingToDoItem: .constant(FileCache.mock[0]),
-        onComplete: { _ in },
+        onSave: { _ in },
         onDismiss: {},
         onDelete: {}
     )
