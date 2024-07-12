@@ -36,7 +36,7 @@ struct ListRow: View {
                     .foregroundStyle(.secondary)
                 }
             }
-            .alignmentGuide(.listRowSeparatorLeading, computeValue: { dimension in
+            .alignmentGuide(.listRowSeparatorLeading, computeValue: { _ in
                 return 0
             })
             .padding(.leading, 8)

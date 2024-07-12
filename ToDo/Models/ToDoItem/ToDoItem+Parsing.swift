@@ -5,7 +5,8 @@ extension ToDoItem {
     /// Parses a JSON-compatible dictionary into a `ToDoItem` instance.
     ///
     /// - Parameter json: The JSON-compatible dictionary to parse.
-    /// - Returns: An optional `ToDoItem` if the parsing is successful, or `nil` if any required fields are missing or invalid.
+    /// - Returns: An optional `ToDoItem` if the parsing is successful, 
+    ///            or `nil` if any required fields are missing or invalid.
     static func parse(json: Any) -> ToDoItem? {
         guard let dictionary = json as? [String: Any],
               let id = dictionary[Properties.id.rawValue] as? String,

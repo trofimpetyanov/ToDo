@@ -58,7 +58,7 @@ struct ToDoItemDetail: View {
         .onChange(of: editingToDoItem) {
             setupEditingToDoItem()
         }
-        .onAppear() {
+        .onAppear {
             Logger.logInfo("ToDoItemDetail appeared.")
             
             setupEditingToDoItem()
@@ -124,11 +124,19 @@ struct ToDoItemDetail: View {
                 ForEach(Importance.allCases, id: \.self) { importance in
                     switch importance {
                     case .unimportant:
-                        Image.systemImage("arrow.down", for: .boldSystemFont(ofSize: UIFont.buttonFontSize), tint: .gray)
+                        Image.systemImage(
+                            "arrow.down",
+                            for: .boldSystemFont(ofSize: UIFont.buttonFontSize),
+                            tint: .gray
+                        )
                     case .ordinary:
                         Text("нет")
                     case .important:
-                        Image.systemImage("exclamationmark.2", for: .boldSystemFont(ofSize: UIFont.buttonFontSize), tint: .red)
+                        Image.systemImage(
+                            "exclamationmark.2",
+                            for: .boldSystemFont(ofSize: UIFont.buttonFontSize),
+                            tint: .red
+                        )
                     }
                 }
             }
@@ -244,7 +252,10 @@ struct ToDoItemDetail: View {
             }
         }
     }
-    
+}
+
+// MARK: – Buttons
+extension ToDoItemDetail {
     private var saveButton: some View {
         Button("Сохранить") {
             let plainText = text.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -303,7 +314,10 @@ struct ToDoItemDetail: View {
             Logger.logInfo("Hiding keyboard.")
         }
     }
-    
+}
+
+// MARK: – Methods
+extension ToDoItemDetail {
     private func setupEditingToDoItem() {
         if let editingToDoItem = editingToDoItem {
             text = editingToDoItem.text
@@ -311,7 +325,10 @@ struct ToDoItemDetail: View {
             isDueDateToggled = editingToDoItem.dueDate != nil
             dueDate = editingToDoItem.dueDate ?? Date(timeIntervalSinceNow: 86400)
             
-            if let category = editingToDoItem.category, let neededCategory = categories.first(where: { $0.id == category.id }) {
+            if let category = editingToDoItem.category,
+               let neededCategory = categories.first(where: {
+                   $0.id == category.id
+               }) {
                 self.category = neededCategory
             } else {
                 category = categories.first ?? .other

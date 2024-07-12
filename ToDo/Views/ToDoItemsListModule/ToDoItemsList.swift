@@ -101,7 +101,10 @@ struct ToDoItemsList: View {
             }
             
             toDoItemsStore.currentToDoItems.forEach { toDoItem in
-                if let categoryId = toDoItem.categoryId, let category = categories.first(where: { $0.id == categoryId }) {
+                if let categoryId = toDoItem.categoryId,
+                   let category = categories.first(where: {
+                       $0.id == categoryId
+                   }) {
                     let toDoItem = ToDoItem(
                         id: toDoItem.id,
                         text: toDoItem.text,
@@ -255,7 +258,10 @@ struct ToDoItemsList: View {
             Image(systemName: "info.circle.fill")
         }
     }
-    
+}
+
+// MARK: – Methods
+extension ToDoItemsList {
     private func presentDetailView(for toDoItem: ToDoItem) {
         if UIDevice.current.userInterfaceIdiom == .pad {
             isDetailViewPresenting = true

@@ -35,7 +35,12 @@ public struct Logger {
     ///   - file: The file where the log message originated (default is `#file`).
     ///   - function: The function where the log message originated (default is `#function`).
     ///   - line: The line number where the log message originated (default is `#line`).
-    public static func logVerbose(_ message: DDLogMessageFormat, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+    public static func logVerbose(
+        _ message: DDLogMessageFormat,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line
+    ) {
         DDLogVerbose(message, file: file, function: function, line: line)
     }
     
@@ -46,7 +51,12 @@ public struct Logger {
     ///   - file: The file where the log message originated (default is `#file`).
     ///   - function: The function where the log message originated (default is `#function`).
     ///   - line: The line number where the log message originated (default is `#line`).
-    public static func logDebug(_ message: DDLogMessageFormat, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+    public static func logDebug(
+        _ message: DDLogMessageFormat,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line
+    ) {
         DDLogDebug(message, file: file, function: function, line: line)
     }
     
@@ -57,7 +67,12 @@ public struct Logger {
     ///   - file: The file where the log message originated (default is `#file`).
     ///   - function: The function where the log message originated (default is `#function`).
     ///   - line: The line number where the log message originated (default is `#line`).
-    public static func logInfo(_ message: DDLogMessageFormat, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+    public static func logInfo(
+        _ message: DDLogMessageFormat,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line
+    ) {
         DDLogInfo(message, file: file, function: function, line: line)
     }
     
@@ -68,7 +83,12 @@ public struct Logger {
     ///   - file: The file where the log message originated (default is `#file`).
     ///   - function: The function where the log message originated (default is `#function`).
     ///   - line: The line number where the log message originated (default is `#line`).
-    public static func logWarning(_ message: DDLogMessageFormat, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+    public static func logWarning(
+        _ message: DDLogMessageFormat,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line
+    ) {
         DDLogWarn(message, file: file, function: function, line: line)
     }
     
@@ -79,7 +99,12 @@ public struct Logger {
     ///   - file: The file where the log message originated (default is `#file`).
     ///   - function: The function where the log message originated (default is `#function`).
     ///   - line: The line number where the log message originated (default is `#line`).
-    public static func logError(_ message: DDLogMessageFormat, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {
+    public static func logError(
+        _ message: DDLogMessageFormat,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line
+    ) {
         DDLogError(message, file: file, function: function, line: line)
     }
     

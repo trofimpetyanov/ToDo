@@ -72,7 +72,9 @@ class CalendarListViewController: UICollectionViewController {
            let section = dataSource.sectionIdentifier(for: firstVisibleIndexPath.section) {
             let sectionIndex = firstVisibleIndexPath.section
             
-            if !displayedSectionIndices.contains(sectionIndex) || displayedSectionIndices[0] != sectionIndex && !isScrolling {
+            if !displayedSectionIndices.contains(sectionIndex) ||
+                displayedSectionIndices[0] != sectionIndex && !isScrolling {
+                
                 displayedSectionIndices = visibleIndexPaths.map { $0.section }.sorted()
                 
                 switch section {
@@ -123,13 +125,16 @@ class CalendarListViewController: UICollectionViewController {
         guard let toDoItem = self.dataSource.itemIdentifier(for: indexPath)
         else { return UISwipeActionsConfiguration() }
         
-        let actionHandler: UIContextualAction.Handler = { action, view, completion in
+        let actionHandler: UIContextualAction.Handler = { _, _, completion in
             self.delegate?.didCompleteToDoItem(self, toDoItem: toDoItem, isCompleted: isCompleted)
             
             completion(true)
         }
         
-        let action = UIContextualAction(style: .normal, title: isCompleted ? "Выполнить" : "Отменить выполнение", handler: actionHandler)
+        let action = UIContextualAction(
+            style: .normal,
+            title: isCompleted ? "Выполнить" : "Отменить выполнение",
+            handler: actionHandler)
         action.image = UIImage(systemName: isCompleted ? "checkmark.circle.fill" : "circle.fill")
         action.backgroundColor = .systemGreen
         
@@ -163,7 +168,11 @@ class CalendarListViewController: UICollectionViewController {
         }
     }
     
-    private func headerRegistrationHandler(supplementaryView: UICollectionViewListCell, elementKind: String, indexPath: IndexPath) {
+    private func headerRegistrationHandler(
+        supplementaryView: UICollectionViewListCell,
+        elementKind: String,
+        indexPath: IndexPath
+    ) {
         let section = dataSource.sectionIdentifier(for: indexPath.section) ?? .other
         
         let text: String? = switch section {
@@ -187,7 +196,11 @@ class CalendarListViewController: UICollectionViewController {
         )
         
         let dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
-            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: itemIdentifier)
+            return collectionView.dequeueConfiguredReusableCell(
+                using: cellRegistration,
+                for: indexPath,
+                item: itemIdentifier
+            )
         }
         
         dataSource.supplementaryViewProvider = { collectionView, _, indexPath in

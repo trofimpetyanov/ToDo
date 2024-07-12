@@ -35,7 +35,8 @@ struct FileCache {
     /// Updates an existing `ToDoItem` in the cache or adds a new one if it does not exist.
     ///
     /// - Parameter toDoItem: The `ToDoItem` to be updated or added.
-    /// - Note: If an item with the same `id` already exists in the cache, it will be updated. Otherwise, the item will be added to the beginning of the list.
+    /// - Note: If an item with the same `id` already exists in the cache, it will be updated. 
+    ///         Otherwise, the item will be added to the beginning of the list.
     mutating func addOrUpdate(_ toDoItem: ToDoItem) {
         if let index = toDoItems.firstIndex(where: { toDoItem.id == $0.id }) {
             toDoItems[index] = toDoItem
@@ -68,7 +69,8 @@ struct FileCache {
     /// - Parameters:
     ///   - file: The name of the file to save the items to.
     ///   - format: The format of the file (`.json` or `.csv`). Defaults to `.json`.
-    /// - Throws: An error if the save operation fails. Possible errors include file write errors or serialization errors.
+    /// - Throws: An error if the save operation fails. 
+    ///           Possible errors include file write errors or serialization errors.
     /// - Note: The items are saved in a pretty-printed format if the format is `.json`.
     func save(to file: String, format: FileFormat = .json) throws {
         let path = documentsDirectory
@@ -91,7 +93,8 @@ struct FileCache {
     ///   - file: The name of the file to load the items from.
     ///   - format: The format of the file (`.json` or `.csv`). Defaults to `.json`.
     /// - Returns: An array of `ToDoItem` objects loaded from the specified file.
-    /// - Throws: An error if the load operation fails. Possible errors include file read errors or deserialization errors.
+    /// - Throws: An error if the load operation fails. 
+    ///           Possible errors include file read errors or deserialization errors.
     /// - Note: If there is an error reading from the file, an empty array is returned.
     mutating func load(from file: String, format: FileFormat = .json) throws {
         let path = documentsDirectory
@@ -123,7 +126,8 @@ extension FileCache {
     
     private func loadFromJSON(at path: URL) throws -> [ToDoItem] {
         let data = try Data(contentsOf: path)
-        let items = try JSONSerialization.jsonObject(with: data) as! [Any]
+        
+        guard let items = try JSONSerialization.jsonObject(with: data) as? [Any] else { return [] }
         let toDoItems = items.compactMap { ToDoItem.parse(json: $0) }
         
         return toDoItems

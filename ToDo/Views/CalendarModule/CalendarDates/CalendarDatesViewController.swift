@@ -100,20 +100,29 @@ class CalendarDatesViewController: UICollectionViewController {
         let cellRegistration = UICollectionView.CellRegistration(handler: cellRegistrationHandler)
         
         let dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
-            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: itemIdentifier)
+            
+            return collectionView.dequeueConfiguredReusableCell(
+                using: cellRegistration,
+                for: indexPath,
+                item: itemIdentifier
+            )
         }
         
         return dataSource
     }
     
     private static func createLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { sectionIndex, environment in
+        let layout = UICollectionViewCompositionalLayout { _, _ in
             let spacing: CGFloat = 8
             
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.16), heightDimension: .fractionalWidth(0.16))
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.16),
+                heightDimension: .fractionalWidth(0.16))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 1)
             
             let section = NSCollectionLayoutSection(group: group)

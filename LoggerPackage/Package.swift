@@ -9,7 +9,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "LoggerPackage",
-            targets: ["LoggerPackage"]),
+            targets: ["LoggerPackage"])
     ],
     dependencies: [
         .package(url: "https://github.com/CocoaLumberjack/CocoaLumberjack", .upToNextMajor(from: Version(3, 8, 5)))

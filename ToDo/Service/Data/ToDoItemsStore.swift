@@ -2,7 +2,8 @@ import Foundation
 import SwiftData
 import LoggerPackage
 
-/// A class that manages a collection of `ToDoItem` objects and provides functionality for adding, updating, deleting, and sorting these items.
+/// A class that manages a collection of `ToDoItem` objects 
+/// and provides functionality for adding, updating, deleting, and sorting these items.
 class ToDoItemsStore: ObservableObject {
     /// Sorting options for the to-do items.
     enum SortingOption: String, Identifiable, CaseIterable {
@@ -26,7 +27,7 @@ class ToDoItemsStore: ObservableObject {
     
     static let mock: [ToDoItem] = [
         ToDoItem(text: "Buy groceries", isCompleted: true),
-        ToDoItem(text: "Walk the dog named \"Daisy\"", importance: .important, dueDate: Date(timeIntervalSinceNow: 3600)),
+        ToDoItem(text: "Walk \"Daisy\"", importance: .important, dueDate: Date(timeIntervalSinceNow: 3600)),
         ToDoItem(text: "Read a book", dateCreated: Date(timeIntervalSinceNow: -86400)),
         ToDoItem(text: "Write a blog post", importance: .unimportant),
         ToDoItem(text: "Workout", dueDate: Date(timeIntervalSinceNow: 7200), isCompleted: false),
