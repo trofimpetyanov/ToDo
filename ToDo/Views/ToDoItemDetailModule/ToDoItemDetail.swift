@@ -58,6 +58,8 @@ struct ToDoItemDetail: View {
             setupEditingToDoItem()
         }
         .onAppear() {
+            Logger.logInfo("ToDoItemDetail appeared.")
+            
             setupEditingToDoItem()
         }
     }
@@ -255,29 +257,31 @@ struct ToDoItemDetail: View {
             }
             
             if let toDoItem = editingToDoItem {
-                onSave(
-                    ToDoItem(
-                        id: toDoItem.id,
-                        text: plainText,
-                        importance: importance,
-                        dueDate: newDueDate,
-                        category: category,
-                        categoryId: category.id,
-                        isCompleted: toDoItem.isCompleted,
-                        dateCreated: toDoItem.dateCreated,
-                        dateEdited: Date()
-                    )
+                let newToDoItem = ToDoItem(
+                    id: toDoItem.id,
+                    text: plainText,
+                    importance: importance,
+                    dueDate: newDueDate,
+                    category: category,
+                    categoryId: category.id,
+                    isCompleted: toDoItem.isCompleted,
+                    dateCreated: toDoItem.dateCreated,
+                    dateEdited: Date()
                 )
+                
+                onSave(newToDoItem)
             } else {
-                onSave(
-                    ToDoItem(
-                        text: plainText,
-                        importance: importance,
-                        dueDate: newDueDate,
-                        category: category,
-                        categoryId: category.id
-                    )
+                let newToDoItem = ToDoItem(
+                    text: plainText,
+                    importance: importance,
+                    dueDate: newDueDate,
+                    category: category,
+                    categoryId: category.id
                 )
+                
+                Logger.logDebug("Saving new ToDoItem: \(newToDoItem.id).")
+                
+                onSave(newToDoItem)
             }
         }
         .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
@@ -294,6 +298,8 @@ struct ToDoItemDetail: View {
             isEditing = false
             
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            
+            Logger.logInfo("Hiding keyboard.")
         }
     }
     
@@ -309,6 +315,8 @@ struct ToDoItemDetail: View {
             } else {
                 category = categories.first ?? .other
             }
+            
+            Logger.logDebug("Editing ToDoItem: \(editingToDoItem.id).")
         } else {
             text = ""
             importance = .ordinary
@@ -322,7 +330,7 @@ struct ToDoItemDetail: View {
 
 #Preview {
     ToDoItemDetail(
-        editingToDoItem: .constant(FileCache.mock[0]),
+        editingToDoItem: .constant(ToDoItemsStore.mock[0]),
         onSave: { _ in },
         onDismiss: {},
         onDelete: {}

@@ -87,17 +87,16 @@ struct ToDoItemsList: View {
             }
         }
         .onAppear {
+            Logger.logInfo("ToDoItemsList appeared.")
+            
             if toDoItemsStore.isFirstLaunch {
-                let categories = [
-                    "1": Category(id: "1", name: "Работа", color: "FC2B2D"),
-                    "2": Category(id: "2", name: "Учеба", color: "106BFF"),
-                    "3": Category(id: "3", name: "Хобби", color: "30D33B"),
-                    "0": Category(id: "0", name: "Другое", color: "00000000")
-                ]
+                toDoItemsStore.isFirstLaunch = false
                 
-                categories.values.forEach { category in
+                Category.template.forEach { category in
                     context.insert(category)
                 }
+                
+                Logger.logInfo("Default categories inserted.")
             }
             
             toDoItemsStore.currentToDoItems.forEach { toDoItem in
@@ -126,6 +125,8 @@ struct ToDoItemsList: View {
                 withAnimation {
                     toDoItemsStore.areCompletedShown.toggle()
                 }
+                
+                Logger.logDebug("Toggled completed items visibility to \(toDoItemsStore.areCompletedShown).")
             } label: {
                 Label(
                     "\(toDoItemsStore.areCompletedShown ? "Скрыть" : "Показать") выполненные",
@@ -143,6 +144,9 @@ struct ToDoItemsList: View {
                     }
                     
                 }
+                .onChange(of: toDoItemsStore.sortingOption) { oldValue, newValue in
+                    Logger.logDebug("Sorting option changed from \(oldValue) to \(newValue).")
+                }
                 
                 Divider()
                 
@@ -151,6 +155,9 @@ struct ToDoItemsList: View {
                         Text(order.rawValue)
                             .tag(order)
                     }
+                }
+                .onChange(of: toDoItemsStore.sortingOrder) { oldValue, newValue in
+                    Logger.logDebug("Sorting order changed from \(oldValue) to \(newValue).")
                 }
             }
         }
@@ -269,11 +276,13 @@ struct ToDoItemsList: View {
             toDoItemsStore.addOrUpdate(toDoItem)
         }
         
-        discardDetailView()
+        onDismiss()
     }
     
     private func onDismiss() {
         discardDetailView()
+        
+        Logger.logInfo("ToDoItemDetail dismissed.")
     }
     
     private func onDelete() {

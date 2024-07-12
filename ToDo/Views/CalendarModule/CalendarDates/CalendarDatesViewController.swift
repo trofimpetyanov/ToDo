@@ -27,6 +27,8 @@ class CalendarDatesViewController: UICollectionViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        Logger.logInfo("CalendarDatesViewController did appear.")
+        
         if case .date(let date) = viewModel.rows.first {
             selectDate(date)
         } else {
@@ -49,6 +51,8 @@ class CalendarDatesViewController: UICollectionViewController {
         
         let indexPath = IndexPath(row: rowIndex, section: 0)
         collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .left)
+        
+        Logger.logVerbose("Date selected: \(date.debugDescription).")
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -76,6 +80,8 @@ class CalendarDatesViewController: UICollectionViewController {
         collectionView.isScrollEnabled = false
         
         updateSnapshot()
+        
+        Logger.logVerbose("CalendarDatesViewController setup completed.")
     }
     
     private func cellRegistrationHandler(cell: DateLabelCell, indexPath: IndexPath, row: Row) {

@@ -55,5 +55,5 @@ struct ListRow: View {
 }
 
 #Preview {
-    ListRow(toDoItem: .constant(FileCache.mock[1]), onComplete: {})
+    ListRow(toDoItem: .constant(ToDoItemsStore.mock[0]), onComplete: {})
 }

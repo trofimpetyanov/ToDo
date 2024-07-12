@@ -12,6 +12,15 @@ class Category: Hashable, Identifiable {
         self.name = name
         self.color = color
     }
-    
+}
+
+extension Category {
     static let other = Category(id: "0", name: "Другое", color: "00000000")
+    
+    static let template = [
+        Category(id: "1", name: "Работа", color: "FC2B2D"),
+        Category(id: "2", name: "Учеба", color: "106BFF"),
+        Category(id: "3", name: "Хобби", color: "30D33B"),
+        Category(id: "0", name: "Другое", color: "00000000")
+    ]
 }

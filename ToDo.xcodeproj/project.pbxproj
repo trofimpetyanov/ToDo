@@ -17,6 +17,8 @@
 		AC2087462C41822D009B0ECF /* CocoaLumberjack in Frameworks */ = {isa = PBXBuildFile; productRef = AC2087452C41822D009B0ECF /* CocoaLumberjack */; };
 		AC2087482C41822D009B0ECF /* CocoaLumberjackSwift in Frameworks */ = {isa = PBXBuildFile; productRef = AC2087472C41822D009B0ECF /* CocoaLumberjackSwift */; };
 		AC20874A2C41822D009B0ECF /* CocoaLumberjackSwiftLogBackend in Frameworks */ = {isa = PBXBuildFile; productRef = AC2087492C41822D009B0ECF /* CocoaLumberjackSwiftLogBackend */; };
+		AC20874F2C41874A009B0ECF /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC20874E2C41874A009B0ECF /* Logger.swift */; };
+		AC2087532C418C1D009B0ECF /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2087522C418C1D009B0ECF /* LogFormatter.swift */; };
 		AC9BF5A12C3819DF008C6C58 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5A02C3819DF008C6C58 /* CalendarView.swift */; };
 		AC9BF5A32C38308D008C6C58 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5A22C38308D008C6C58 /* Date+Format.swift */; };
 		AC9BF5A62C3840C2008C6C58 /* DateLabelContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5A52C3840C2008C6C58 /* DateLabelContentView.swift */; };
@@ -68,6 +70,8 @@
 		AC1C1BA22C2374920094D57C /* ToDoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItem.swift; sourceTree = "<group>"; };
 		AC1C1BA42C2374E60094D57C /* Importance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Importance.swift; sourceTree = "<group>"; };
 		AC1C1BA62C2375B00094D57C /* ToDoItem+Parsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+Parsing.swift"; sourceTree = "<group>"; };
+		AC20874E2C41874A009B0ECF /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		AC2087522C418C1D009B0ECF /* LogFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogFormatter.swift; sourceTree = "<group>"; };
 		AC9BF5A02C3819DF008C6C58 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		AC9BF5A22C38308D008C6C58 /* Date+Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
 		AC9BF5A52C3840C2008C6C58 /* DateLabelContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateLabelContentView.swift; sourceTree = "<group>"; };
@@ -201,6 +205,51 @@
 			path = ToDoItem;
 			sourceTree = "<group>";
 		};
+		AC20874B2C418729009B0ECF /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				ACA0D20D2C24ACE4003659A2 /* FileCache.swift */,
+				ACDA31CF2C2F49DB00C5FDCE /* ToDoItemsStore.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		AC20874C2C418735009B0ECF /* Appearance */ = {
+			isa = PBXGroup;
+			children = (
+				ACDA31CD2C2EFC5100C5FDCE /* AppColors.swift */,
+			);
+			path = Appearance;
+			sourceTree = "<group>";
+		};
+		AC20874D2C41873D009B0ECF /* Logger */ = {
+			isa = PBXGroup;
+			children = (
+				AC20874E2C41874A009B0ECF /* Logger.swift */,
+				AC2087522C418C1D009B0ECF /* LogFormatter.swift */,
+			);
+			path = Logger;
+			sourceTree = "<group>";
+		};
+		AC2087502C41894E009B0ECF /* Date */ = {
+			isa = PBXGroup;
+			children = (
+				ACF2A2982C25F4BC00C7D20E /* Date+.swift */,
+				AC9BF5A22C38308D008C6C58 /* Date+Format.swift */,
+			);
+			path = Date;
+			sourceTree = "<group>";
+		};
+		AC2087512C418954009B0ECF /* Color */ = {
+			isa = PBXGroup;
+			children = (
+				ACDA31CB2C2EF27900C5FDCE /* Color+.swift */,
+				ACDA31D82C2FC10F00C5FDCE /* Color+HEX.swift */,
+				ACE0757E2C31A8D400F0EA26 /* Color+IdealTextColor.swift */,
+			);
+			path = Color;
+			sourceTree = "<group>";
+		};
 		AC9BF5A42C3840A3008C6C58 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -306,9 +355,9 @@
 		ACF2A2862C25C17F00C7D20E /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				ACDA31CD2C2EFC5100C5FDCE /* AppColors.swift */,
-				ACA0D20D2C24ACE4003659A2 /* FileCache.swift */,
-				ACDA31CF2C2F49DB00C5FDCE /* ToDoItemsStore.swift */,
+				AC20874C2C418735009B0ECF /* Appearance */,
+				AC20874B2C418729009B0ECF /* Data */,
+				AC20874D2C41873D009B0ECF /* Logger */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -324,11 +373,8 @@
 		ACF2A29A2C25FC7900C7D20E /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				ACF2A2982C25F4BC00C7D20E /* Date+.swift */,
-				AC9BF5A22C38308D008C6C58 /* Date+Format.swift */,
-				ACDA31CB2C2EF27900C5FDCE /* Color+.swift */,
-				ACDA31D82C2FC10F00C5FDCE /* Color+HEX.swift */,
-				ACE0757E2C31A8D400F0EA26 /* Color+IdealTextColor.swift */,
+				AC2087502C41894E009B0ECF /* Date */,
+				AC2087512C418954009B0ECF /* Color */,
 				ACE0757C2C319B0200F0EA26 /* Image+.swift */,
 			);
 			path = Extensions;
@@ -468,11 +514,13 @@
 				ACCA505B2C358B17007669BB /* CalendarListViewController.swift in Sources */,
 				AC9BF5AA2C3873ED008C6C58 /* CalendarListViewController+ViewModel.swift in Sources */,
 				ACE0757D2C319B0200F0EA26 /* Image+.swift in Sources */,
+				AC20874F2C41874A009B0ECF /* Logger.swift in Sources */,
 				ACDA31C42C2D7A8100C5FDCE /* ListHeader.swift in Sources */,
 				ACDA31CC2C2EF27900C5FDCE /* Color+.swift in Sources */,
 				ACDA31CE2C2EFC5100C5FDCE /* AppColors.swift in Sources */,
 				AC9BF5A82C384454008C6C58 /* DateLabelCell.swift in Sources */,
 				AC1C1BA72C2375B00094D57C /* ToDoItem+Parsing.swift in Sources */,
+				AC2087532C418C1D009B0ECF /* LogFormatter.swift in Sources */,
 				ACDA31D92C2FC10F00C5FDCE /* Color+HEX.swift in Sources */,
 				ACDA31D22C2F9CC200C5FDCE /* ColorWheel.swift in Sources */,
 				ACDA31C82C2DF7E900C5FDCE /* CheckmarkView.swift in Sources */,

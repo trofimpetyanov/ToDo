@@ -23,6 +23,9 @@ struct CategoryDetail: View {
         .background(AppColors.backPrimary)
         .scrollContentBackground(.hidden)
         .environment(\.defaultMinListRowHeight, 56)
+        .onAppear {
+            Logger.logInfo("CategoryDetail appeared.")
+        }
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 saveButton
@@ -52,6 +55,9 @@ struct CategoryDetail: View {
                 .onTapGesture {
                     isColorPickerPresented = true
                 }
+                .onChange(of: isColorPickerPresented) { _, newValue in
+                    Logger.logInfo("Color picker \(newValue ? "appeared" : "disappeared").")
+                }
         }
         .sheet(isPresented: $isColorPickerPresented) {
             ColorWheelPicker(color: $color)
@@ -70,6 +76,8 @@ struct CategoryDetail: View {
             
             onSave(category)
             onDismiss()
+            
+            Logger.logDebug("Category saved: \(category.id).")
         }
         .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
     }
@@ -77,12 +85,16 @@ struct CategoryDetail: View {
     private var cancelButton: some View {
         Button("Отменить") {
             onDismiss()
+            
+            Logger.logInfo("CategoryDetail dismissed.")
         }
     }
     
     private var hideButton: some View {
         Button("Скрыть", systemImage: "keyboard.chevron.compact.down") {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            
+            Logger.logDebug("Hiding keyboard.")
         }
     }
 }

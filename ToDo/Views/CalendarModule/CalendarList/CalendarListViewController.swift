@@ -31,6 +31,8 @@ class CalendarListViewController: UICollectionViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        Logger.logInfo("CalendarListViewController did appear.")
+        
         scrollToDate(dataSource.snapshot().itemIdentifiers.first?.dueDate, animated: false)
         displayedSectionIndices = collectionView.indexPathsForVisibleItems.sorted().map { $0.section }
     }
@@ -58,6 +60,8 @@ class CalendarListViewController: UICollectionViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.isScrolling = false
         }
+        
+        Logger.logVerbose("Scrolled to date: \(date.debugDescription), animated: \(animated ? "true" : "false").")
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -73,8 +77,12 @@ class CalendarListViewController: UICollectionViewController {
                 switch section {
                 case .toDoItems(for: let date):
                     delegate?.didScrollThroughDateSection(self, date: date)
+                    
+                    Logger.logVerbose("Scrolled through section with date: \(date.debugDescription).")
                 case .other:
                     delegate?.didScrollThroughDateSection(self, date: nil)
+                    
+                    Logger.logVerbose("Scrolled through 'Other' section.")
                 }
             }
         }
@@ -106,6 +114,8 @@ class CalendarListViewController: UICollectionViewController {
         navigationItem.largeTitleDisplayMode = .never
         
         updateSnapshot()
+        
+        Logger.logVerbose("CalendarListViewController setup completed.")
     }
     
     private func swipeAction(for indexPath: IndexPath, isCompleted: Bool) -> UISwipeActionsConfiguration {

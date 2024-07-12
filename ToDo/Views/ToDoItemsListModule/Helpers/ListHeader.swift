@@ -20,5 +20,5 @@ struct ListHeader: View {
 }
 
 #Preview {
-    ListHeader(toDoItems: .constant(FileCache.mock), isExpanded: .constant(true))
+    ListHeader(toDoItems: .constant(ToDoItemsStore.mock), isExpanded: .constant(true))
 }
