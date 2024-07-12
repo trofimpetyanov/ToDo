@@ -1,9 +1,11 @@
 import Foundation
-import CocoaLumberjackSwift
+import CocoaLumberjack
 
-class LogFormatter: NSObject, DDLogFormatter {
+/// A custom log formatter for formatting log messages with CocoaLumberjack.
+public class LogFormatter: NSObject, DDLogFormatter {
     private let dateFormatter: DateFormatter
     
+    /// Initializes a new instance of `LogFormatter`./
     override init() {
         dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
@@ -11,7 +13,11 @@ class LogFormatter: NSObject, DDLogFormatter {
         super.init()
     }
     
-    func format(message logMessage: DDLogMessage) -> String? {
+    /// Formats the provided log message into a readable string.
+    ///
+    /// - Parameter logMessage: The log message object containing the message and metadata.
+    /// - Returns: A formatted string representation of the log message.
+    public func format(message logMessage: DDLogMessage) -> String? {
         let dateAndTime = dateFormatter.string(from: logMessage.timestamp)
         let logLevel: String
         

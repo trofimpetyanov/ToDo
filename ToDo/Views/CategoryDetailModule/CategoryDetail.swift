@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import LoggerPackage
 
 struct CategoryDetail: View {
     @Environment(\.modelContext) private var context

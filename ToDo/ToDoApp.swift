@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import LoggerPackage
 
 @main
 struct ToDoApp: App {
