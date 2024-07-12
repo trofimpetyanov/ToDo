@@ -7,17 +7,6 @@ struct FileCache {
         case json, csv
     }
     
-    static let mock: [ToDoItem] = [
-//        ToDoItem(text: "Buy groceries", isCompleted: true),
-//        ToDoItem(text: "Walk the dog named \"Daisy\"", importance: .important, dueDate: Date(timeIntervalSinceNow: 3600)),
-//        ToDoItem(text: "Read a book", dateCreated: Date(timeIntervalSinceNow: -86400)),
-//        ToDoItem(text: "Write a blog post", importance: .unimportant),
-//        ToDoItem(text: "Workout", dueDate: Date(timeIntervalSinceNow: 7200), isCompleted: false),
-//        ToDoItem(text: "Plan vacation", isCompleted: true, dateEdited: Date(timeIntervalSinceNow: -3600)),
-//        ToDoItem(text: "Clean the house", importance: .important),
-//        ToDoItem(text: "Call mom", importance: .ordinary, dueDate: Date(timeIntervalSinceNow: 1800), isCompleted: false)
-    ]
-    
     private(set) var toDoItems: [ToDoItem] = []
     
     private var documentsDirectory: URL {
@@ -26,31 +15,20 @@ struct FileCache {
         return paths[0]
     }
     
-    var isFirstLaunch: Bool {
-        let path = documentsDirectory
-            .appending(path: "hasLaunched")
-            .path()
-        
-        if !FileManager.default.fileExists(atPath: path) {
-            let path = documentsDirectory
-                .appending(path: "hasLaunched")
-            
-            try? "true".data(using: .utf8)?.write(to: path)
-            
-            return true
-        }
-        
-        return false
-    }
-    
     /// Adds a new `ToDoItem` to the cache.
     ///
     /// - Parameter toDoItem: The `ToDoItem` to be added.
     /// - Note: If an item with the same `id` already exists in the cache, it will not be added.
     mutating func add(_ toDoItem: ToDoItem) {
-        guard !toDoItems.contains(where: { toDoItem.id == $0.id }) else { return }
+        guard !toDoItems.contains(where: { toDoItem.id == $0.id }) else {
+            Logger.logDebug("Item with ID \(toDoItem.id) already exists. Not adding.")
+            
+            return
+        }
         
         toDoItems.append(toDoItem)
+        
+        Logger.logDebug("Added ToDoItem with ID \(toDoItem.id) to cache.")
     }
     
     /// Updates an existing `ToDoItem` in the cache or adds a new one if it does not exist.
@@ -60,6 +38,8 @@ struct FileCache {
     mutating func addOrUpdate(_ toDoItem: ToDoItem) {
         if let index = toDoItems.firstIndex(where: { toDoItem.id == $0.id }) {
             toDoItems[index] = toDoItem
+            
+            Logger.logDebug("Updated ToDoItem: \(toDoItem.id).")
         } else {
             toDoItems.append(toDoItem)
         }
@@ -71,7 +51,13 @@ struct FileCache {
     /// - Returns: The removed`ToDoItem` object.
     @discardableResult
     mutating func delete(with id: String) -> ToDoItem? {
-        guard let index = toDoItems.firstIndex(where: { id == $0.id }) else { return nil }
+        guard let index = toDoItems.firstIndex(where: { id == $0.id }) else {
+            Logger.logDebug("ToDoItem with ID \(id) not found. Delete operation failed.")
+            
+            return nil
+        }
+        
+        Logger.logDebug("Deleted ToDoItem with ID \(id) from cache.")
         
         return toDoItems.remove(at: index)
     }
@@ -94,6 +80,8 @@ struct FileCache {
         case .csv:
             try saveToCSV(at: path)
         }
+        
+        Logger.logDebug("Saved ToDoItems to file: \(file).\(format.rawValue)")
     }
     
     /// Loads `ToDoItem` objects from a file in the specified format.
@@ -115,6 +103,8 @@ struct FileCache {
         case .csv:
             toDoItems = try loadFromCSV(at: path)
         }
+        
+        Logger.logDebug("Loaded ToDoItems from file: \(file).\(format.rawValue)")
     }
 }
 

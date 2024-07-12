@@ -23,6 +23,17 @@ class ToDoItemsStore: ObservableObject {
         case descending = "По убыванию"
     }
     
+    static let mock: [ToDoItem] = [
+        ToDoItem(text: "Buy groceries", isCompleted: true),
+        ToDoItem(text: "Walk the dog named \"Daisy\"", importance: .important, dueDate: Date(timeIntervalSinceNow: 3600)),
+        ToDoItem(text: "Read a book", dateCreated: Date(timeIntervalSinceNow: -86400)),
+        ToDoItem(text: "Write a blog post", importance: .unimportant),
+        ToDoItem(text: "Workout", dueDate: Date(timeIntervalSinceNow: 7200), isCompleted: false),
+        ToDoItem(text: "Plan vacation", isCompleted: true, dateEdited: Date(timeIntervalSinceNow: -3600)),
+        ToDoItem(text: "Clean the house", importance: .important),
+        ToDoItem(text: "Call mom", importance: .ordinary, dueDate: Date(timeIntervalSinceNow: 1800), isCompleted: false)
+    ]
+    
     private var fileCache: FileCache
     private var toDoItems: [ToDoItem]
     
@@ -57,11 +68,21 @@ class ToDoItemsStore: ObservableObject {
             .count
     }
     
-    var isFirstLaunch: Bool {
-        fileCache.isFirstLaunch
-    }
+    /// The flag signalizing the first launch of the app.
+    var isFirstLaunch: Bool = {
+        let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
+        
+        if launchedBefore {
+            return false
+        } else {
+            UserDefaults.standard.set(true, forKey: "launchedBefore")
+            
+            return true
+        }
+    }()
     
     /// Initializes a new instance of `ToDoItemsStore`.
+    /// - Note: `ToDoItemsStore` initializes with mock items if there are no todos in the storage.
     init() {
         fileCache = FileCache()
         toDoItems = []
@@ -70,7 +91,17 @@ class ToDoItemsStore: ObservableObject {
             try fileCache.load(from: "toDoItems")
             toDoItems = fileCache.toDoItems
         } catch {
-            print("ToDoItemsStore: Failure while loading toDoItems from the file. It is normal if it is the first launch.")
+            if isFirstLaunch {
+                Logger.logInfo("First launch detected. Initializing with mock data.")
+                
+                Self.mock.forEach { toDoItem in
+                    fileCache.add(toDoItem)
+                }
+                
+                toDoItems = Self.mock
+            } else {
+                Logger.logError("Failed to load ToDoItems from file: toDoItems. Error: \(error.localizedDescription)")
+            }
         }
         
         toDoItems = fileCache.toDoItems
@@ -124,7 +155,7 @@ class ToDoItemsStore: ObservableObject {
         do {
             try fileCache.save(to: "toDoItems")
         } catch {
-            print("ToDoItemsStore: Error saving toDoItems to the file.")
+            Logger.logError("Failed to save ToDoItems to file: toDoItems. Error: \(error.localizedDescription)")
         }
     }
     
