@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import LoggerPackage
 
 struct ToDoItemsList: View {
     @Query(sort: \Category.id) private var categories: [Category]
@@ -87,21 +88,23 @@ struct ToDoItemsList: View {
             }
         }
         .onAppear {
+            Logger.logInfo("ToDoItemsList appeared.")
+            
             if toDoItemsStore.isFirstLaunch {
-                let categories = [
-                    "1": Category(id: "1", name: "Работа", color: "FC2B2D"),
-                    "2": Category(id: "2", name: "Учеба", color: "106BFF"),
-                    "3": Category(id: "3", name: "Хобби", color: "30D33B"),
-                    "0": Category(id: "0", name: "Другое", color: "00000000")
-                ]
+                toDoItemsStore.isFirstLaunch = false
                 
-                categories.values.forEach { category in
+                Category.template.forEach { category in
                     context.insert(category)
                 }
+                
+                Logger.logInfo("Default categories inserted.")
             }
             
             toDoItemsStore.currentToDoItems.forEach { toDoItem in
-                if let categoryId = toDoItem.categoryId, let category = categories.first(where: { $0.id == categoryId }) {
+                if let categoryId = toDoItem.categoryId,
+                   let category = categories.first(where: {
+                       $0.id == categoryId
+                   }) {
                     let toDoItem = ToDoItem(
                         id: toDoItem.id,
                         text: toDoItem.text,
@@ -126,6 +129,8 @@ struct ToDoItemsList: View {
                 withAnimation {
                     toDoItemsStore.areCompletedShown.toggle()
                 }
+                
+                Logger.logDebug("Toggled completed items visibility to \(toDoItemsStore.areCompletedShown).")
             } label: {
                 Label(
                     "\(toDoItemsStore.areCompletedShown ? "Скрыть" : "Показать") выполненные",
@@ -143,6 +148,9 @@ struct ToDoItemsList: View {
                     }
                     
                 }
+                .onChange(of: toDoItemsStore.sortingOption) { oldValue, newValue in
+                    Logger.logDebug("Sorting option changed from \(oldValue) to \(newValue).")
+                }
                 
                 Divider()
                 
@@ -151,6 +159,9 @@ struct ToDoItemsList: View {
                         Text(order.rawValue)
                             .tag(order)
                     }
+                }
+                .onChange(of: toDoItemsStore.sortingOrder) { oldValue, newValue in
+                    Logger.logDebug("Sorting order changed from \(oldValue) to \(newValue).")
                 }
             }
         }
@@ -247,7 +258,10 @@ struct ToDoItemsList: View {
             Image(systemName: "info.circle.fill")
         }
     }
-    
+}
+
+// MARK: – Methods
+extension ToDoItemsList {
     private func presentDetailView(for toDoItem: ToDoItem) {
         if UIDevice.current.userInterfaceIdiom == .pad {
             isDetailViewPresenting = true
@@ -269,11 +283,13 @@ struct ToDoItemsList: View {
             toDoItemsStore.addOrUpdate(toDoItem)
         }
         
-        discardDetailView()
+        onDismiss()
     }
     
     private func onDismiss() {
         discardDetailView()
+        
+        Logger.logInfo("ToDoItemDetail dismissed.")
     }
     
     private func onDelete() {

@@ -1,6 +1,8 @@
 import SwiftUI
 import SwiftData
+import LoggerPackage
 
+@MainActor
 struct ToDoItemDetail: View {
     @Query(sort: \Category.id) private var categories: [Category]
     
@@ -57,7 +59,9 @@ struct ToDoItemDetail: View {
         .onChange(of: editingToDoItem) {
             setupEditingToDoItem()
         }
-        .onAppear() {
+        .onAppear {
+            Logger.logInfo("ToDoItemDetail appeared.")
+            
             setupEditingToDoItem()
         }
     }
@@ -121,11 +125,19 @@ struct ToDoItemDetail: View {
                 ForEach(Importance.allCases, id: \.self) { importance in
                     switch importance {
                     case .unimportant:
-                        Image.systemImage("arrow.down", for: .boldSystemFont(ofSize: UIFont.buttonFontSize), tint: .gray)
+                        Image.systemImage(
+                            "arrow.down",
+                            for: .boldSystemFont(ofSize: UIFont.buttonFontSize),
+                            tint: .gray
+                        )
                     case .ordinary:
                         Text("нет")
                     case .important:
-                        Image.systemImage("exclamationmark.2", for: .boldSystemFont(ofSize: UIFont.buttonFontSize), tint: .red)
+                        Image.systemImage(
+                            "exclamationmark.2",
+                            for: .boldSystemFont(ofSize: UIFont.buttonFontSize),
+                            tint: .red
+                        )
                     }
                 }
             }
@@ -241,7 +253,10 @@ struct ToDoItemDetail: View {
             }
         }
     }
-    
+}
+
+// MARK: – Buttons
+extension ToDoItemDetail {
     private var saveButton: some View {
         Button("Сохранить") {
             let plainText = text.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -255,29 +270,31 @@ struct ToDoItemDetail: View {
             }
             
             if let toDoItem = editingToDoItem {
-                onSave(
-                    ToDoItem(
-                        id: toDoItem.id,
-                        text: plainText,
-                        importance: importance,
-                        dueDate: newDueDate,
-                        category: category,
-                        categoryId: category.id,
-                        isCompleted: toDoItem.isCompleted,
-                        dateCreated: toDoItem.dateCreated,
-                        dateEdited: Date()
-                    )
+                let newToDoItem = ToDoItem(
+                    id: toDoItem.id,
+                    text: plainText,
+                    importance: importance,
+                    dueDate: newDueDate,
+                    category: category,
+                    categoryId: category.id,
+                    isCompleted: toDoItem.isCompleted,
+                    dateCreated: toDoItem.dateCreated,
+                    dateEdited: Date()
                 )
+                
+                onSave(newToDoItem)
             } else {
-                onSave(
-                    ToDoItem(
-                        text: plainText,
-                        importance: importance,
-                        dueDate: newDueDate,
-                        category: category,
-                        categoryId: category.id
-                    )
+                let newToDoItem = ToDoItem(
+                    text: plainText,
+                    importance: importance,
+                    dueDate: newDueDate,
+                    category: category,
+                    categoryId: category.id
                 )
+                
+                Logger.logDebug("Saving new ToDoItem: \(newToDoItem.id).")
+                
+                onSave(newToDoItem)
             }
         }
         .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
@@ -294,9 +311,14 @@ struct ToDoItemDetail: View {
             isEditing = false
             
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            
+            Logger.logInfo("Hiding keyboard.")
         }
     }
-    
+}
+
+// MARK: – Methods
+extension ToDoItemDetail {
     private func setupEditingToDoItem() {
         if let editingToDoItem = editingToDoItem {
             text = editingToDoItem.text
@@ -304,11 +326,16 @@ struct ToDoItemDetail: View {
             isDueDateToggled = editingToDoItem.dueDate != nil
             dueDate = editingToDoItem.dueDate ?? Date(timeIntervalSinceNow: 86400)
             
-            if let category = editingToDoItem.category, let neededCategory = categories.first(where: { $0.id == category.id }) {
+            if let category = editingToDoItem.category,
+               let neededCategory = categories.first(where: {
+                   $0.id == category.id
+               }) {
                 self.category = neededCategory
             } else {
                 category = categories.first ?? .other
             }
+            
+            Logger.logDebug("Editing ToDoItem: \(editingToDoItem.id).")
         } else {
             text = ""
             importance = .ordinary
@@ -322,7 +349,7 @@ struct ToDoItemDetail: View {
 
 #Preview {
     ToDoItemDetail(
-        editingToDoItem: .constant(FileCache.mock[0]),
+        editingToDoItem: .constant(ToDoItemsStore.mock[0]),
         onSave: { _ in },
         onDismiss: {},
         onDelete: {}

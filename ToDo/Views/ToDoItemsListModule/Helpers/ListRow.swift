@@ -36,7 +36,7 @@ struct ListRow: View {
                     .foregroundStyle(.secondary)
                 }
             }
-            .alignmentGuide(.listRowSeparatorLeading, computeValue: { dimension in
+            .alignmentGuide(.listRowSeparatorLeading, computeValue: { _ in
                 return 0
             })
             .padding(.leading, 8)
@@ -55,5 +55,5 @@ struct ListRow: View {
 }
 
 #Preview {
-    ListRow(toDoItem: .constant(FileCache.mock[1]), onComplete: {})
+    ListRow(toDoItem: .constant(ToDoItemsStore.mock[0]), onComplete: {})
 }

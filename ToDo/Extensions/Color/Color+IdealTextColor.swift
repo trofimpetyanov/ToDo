@@ -6,12 +6,12 @@ extension Color {
     ///   Uses the relative luminance formula: 0.2126 * red + 0.7152 * green + 0.0722 * blue.
     func luminance() -> CGFloat {
         let components = UIColor(self).cgColor.components ?? [0, 0, 0, 0]
-        let r = components[0]
-        let g = components[1]
-        let b = components[2]
+        let red = components[0]
+        let green = components[1]
+        let blue = components[2]
         
         // Use the relative luminance formula.
-        let luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b
+        let luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue
         
         return luminance
     }

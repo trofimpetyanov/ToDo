@@ -71,7 +71,7 @@ class DateLabelContentView: UIView, UIContentView {
             label.topAnchor.constraint(equalTo: topAnchor, constant: 4),
             label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
             label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4),
-            label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4),
+            label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4)
         ])
     }
     

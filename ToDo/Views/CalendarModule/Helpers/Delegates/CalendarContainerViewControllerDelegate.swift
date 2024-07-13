@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 protocol CalendarContainerViewControllerDelegate: AnyObject {
     func didSelectDate(_ viewController: CalendarDatesViewController, date: Date?)
     

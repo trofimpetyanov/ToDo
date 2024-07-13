@@ -52,5 +52,5 @@ struct CheckmarkView: View {
 }
 
 #Preview {
-    CheckmarkView(toDoItem: .constant(FileCache.mock[1]), onComplete: {})
+    CheckmarkView(toDoItem: .constant(ToDoItemsStore.mock[0]), onComplete: {})
 }
