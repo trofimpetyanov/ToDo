@@ -24,9 +24,14 @@ class URLSessionDataTaskTests: XCTestCase {
         let task = Task {
             do {
                 let (_, _) = try await URLSession.shared.dataTask(for: urlRequest)
+                
+                // Then
+                XCTFail("Request should have been cancelled.")
             } catch is CancellationError {
+                // Then
                 XCTAssert(true)
             } catch {
+                // Then
                 XCTFail("Request should have been cancelled.")
             }
         }
