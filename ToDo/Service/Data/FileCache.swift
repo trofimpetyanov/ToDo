@@ -2,6 +2,7 @@ import Foundation
 import LoggerPackage
 
 /// A structure for managing `ToDoItem` objects in cache, providing methods to add, delete, save, and load items.
+@MainActor
 struct FileCache {
     
     enum FileFormat: String {

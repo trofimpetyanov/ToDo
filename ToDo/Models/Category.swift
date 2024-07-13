@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 @Model
-class Category: Hashable, Identifiable {
+final class Category: Hashable, Identifiable, @unchecked Sendable {
     let id: String
     let name: String
     let color: String

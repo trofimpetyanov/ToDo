@@ -4,6 +4,7 @@ import LoggerPackage
 
 /// A class that manages a collection of `ToDoItem` objects 
 /// and provides functionality for adding, updating, deleting, and sorting these items.
+@MainActor
 class ToDoItemsStore: ObservableObject {
     /// Sorting options for the to-do items.
     enum SortingOption: String, Identifiable, CaseIterable {

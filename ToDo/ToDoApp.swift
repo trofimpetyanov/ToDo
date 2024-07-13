@@ -4,9 +4,10 @@ import LoggerPackage
 
 @main
 struct ToDoApp: App {
-    @State private var toDoItemsStore = ToDoItemsStore()
-    
+    @State private var toDoItemsStore: ToDoItemsStore
+
     init() {
+        self._toDoItemsStore = State(initialValue: ToDoItemsStore())
         Logger.setup()
     }
     

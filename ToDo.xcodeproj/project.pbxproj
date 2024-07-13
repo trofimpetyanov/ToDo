@@ -18,6 +18,8 @@
 		AC2087462C41822D009B0ECF /* CocoaLumberjack in Frameworks */ = {isa = PBXBuildFile; productRef = AC2087452C41822D009B0ECF /* CocoaLumberjack */; };
 		AC2087482C41822D009B0ECF /* CocoaLumberjackSwift in Frameworks */ = {isa = PBXBuildFile; productRef = AC2087472C41822D009B0ECF /* CocoaLumberjackSwift */; };
 		AC20874A2C41822D009B0ECF /* CocoaLumberjackSwiftLogBackend in Frameworks */ = {isa = PBXBuildFile; productRef = AC2087492C41822D009B0ECF /* CocoaLumberjackSwiftLogBackend */; };
+		AC5630AE2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5630AD2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift */; };
+		AC5630B02C41DCFA00FB5835 /* URLSessionAsyncDataTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5630AF2C41DCFA00FB5835 /* URLSessionAsyncDataTaskTests.swift */; };
 		AC6A96972C41C8D8008659C5 /* LoggerPackage in Frameworks */ = {isa = PBXBuildFile; productRef = AC6A96962C41C8D8008659C5 /* LoggerPackage */; };
 		AC9BF5A12C3819DF008C6C58 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5A02C3819DF008C6C58 /* CalendarView.swift */; };
 		AC9BF5A32C38308D008C6C58 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5A22C38308D008C6C58 /* Date+Format.swift */; };
@@ -77,6 +79,8 @@
 		AC1C1BA22C2374920094D57C /* ToDoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItem.swift; sourceTree = "<group>"; };
 		AC1C1BA42C2374E60094D57C /* Importance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Importance.swift; sourceTree = "<group>"; };
 		AC1C1BA62C2375B00094D57C /* ToDoItem+Parsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+Parsing.swift"; sourceTree = "<group>"; };
+		AC5630AD2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+AsyncDataTask.swift"; sourceTree = "<group>"; };
+		AC5630AF2C41DCFA00FB5835 /* URLSessionAsyncDataTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionAsyncDataTaskTests.swift; sourceTree = "<group>"; };
 		AC9BF5A02C3819DF008C6C58 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		AC9BF5A22C38308D008C6C58 /* Date+Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
 		AC9BF5A52C3840C2008C6C58 /* DateLabelContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateLabelContentView.swift; sourceTree = "<group>"; };
@@ -386,6 +390,7 @@
 			isa = PBXGroup;
 			children = (
 				ACF2A2942C25C58200C7D20E /* ToDoItemTests.swift */,
+				AC5630AF2C41DCFA00FB5835 /* URLSessionAsyncDataTaskTests.swift */,
 			);
 			path = ToDoTests;
 			sourceTree = "<group>";
@@ -396,6 +401,7 @@
 				AC2087502C41894E009B0ECF /* Date */,
 				AC2087512C418954009B0ECF /* Color */,
 				ACE0757C2C319B0200F0EA26 /* Image+.swift */,
+				AC5630AD2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -600,6 +606,7 @@
 				AC9BF5C92C38E56A008C6C58 /* CategoryAccessoryView.swift in Sources */,
 				ACDA31CA2C2EE38E00C5FDCE /* ToDoItemDetail.swift in Sources */,
 				ACA0D20E2C24ACE4003659A2 /* FileCache.swift in Sources */,
+				AC5630AE2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift in Sources */,
 				AC9BF5B82C3897F6008C6C58 /* CalendarContainerViewControllerDelegate.swift in Sources */,
 				AC9BF5B12C388A52008C6C58 /* CalendarDatesViewController+ViewModel.swift in Sources */,
 				ACCA505B2C358B17007669BB /* CalendarListViewController.swift in Sources */,
@@ -620,6 +627,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC5630B02C41DCFA00FB5835 /* URLSessionAsyncDataTaskTests.swift in Sources */,
 				ACF2A2952C25C58200C7D20E /* ToDoItemTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -787,6 +795,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -828,6 +837,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

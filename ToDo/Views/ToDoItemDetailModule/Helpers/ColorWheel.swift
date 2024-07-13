@@ -1,11 +1,12 @@
 import SwiftUI
 
+@MainActor
 struct ColorWheel: View {
     @Binding var hue: Double
     @Binding var saturation: Double
     
     @State private var location: CGPoint?
-    @State private var center: CGPoint = CGPoint(
+    @State @MainActor private var center: CGPoint = CGPoint(
         x: UIScreen.main.bounds.size.width * 0.5,
         y: UIScreen.main.bounds.size.height * 0.5
     )

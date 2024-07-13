@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 import LoggerPackage
 
+@MainActor
 struct ToDoItemDetail: View {
     @Query(sort: \Category.id) private var categories: [Category]
     
