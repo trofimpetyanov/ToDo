@@ -155,10 +155,9 @@ final class ToDoItemTests: XCTestCase {
         let csv = item.csv
         
         // Then
-        // swiftlint: disable line_length
-        let expectedCSV = "\"123\",\"Test Task\",\"important\",\"1609459200.0\",\"\",\"true\",\"1609455600.0\",\"1609462800.0\"\n" // NOLINT
+        // swiftlint:disable:next line_length
+        let expectedCSV = "\"123\",\"Test Task\",\"important\",\"1609459200.0\",\"\",\"true\",\"1609455600.0\",\"1609462800.0\"\n"
         XCTAssertEqual(csv, expectedCSV)
-        // swiftlint: enable line_length
     }
     
     func testParseInvalidCSV() {

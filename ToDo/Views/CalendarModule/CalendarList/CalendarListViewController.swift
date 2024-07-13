@@ -175,7 +175,8 @@ class CalendarListViewController: UICollectionViewController {
     ) {
         let section = dataSource.sectionIdentifier(for: indexPath.section) ?? .other
         
-        let text: String? = switch section {
+        let text: String? =
+        switch section {
         case .toDoItems(let date):
             date.dayMonthFormatted
         case .other:
