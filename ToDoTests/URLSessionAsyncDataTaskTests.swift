@@ -1,7 +1,7 @@
 import XCTest
 @testable import ToDo
 
-class URLSessionDataTaskTests: XCTestCase {
+class URLSessionAsyncDataTaskTests: XCTestCase {
     func testSuccessfulRequest() async throws {
         // Given
         let url = URL(string: "https://catfact.ninja/fact")!
