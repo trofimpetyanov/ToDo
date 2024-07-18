@@ -71,8 +71,10 @@ struct ToDoItemsList: View {
         .background(AppColors.backPrimary)
         .scrollContentBackground(.hidden)
         .environment(\.defaultMinListRowHeight, 56)
-        .overlay(addNewItemButton, alignment: .bottom)
         .animation(.default, value: toDoItemsStore.currentToDoItems)
+        .safeAreaInset(edge: .bottom) {
+            addNewItemButton
+        }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 NavigationLink {
@@ -190,8 +192,7 @@ struct ToDoItemsList: View {
                         editingToDoItem: $editingToDoItem,
                         onSave: { toDoItem in onSave(toDoItem) },
                         onDismiss: { onDismiss() },
-                        onDelete: { onDelete() }
-                    )
+                        onDelete: { toDoItem in onDelete(toDoItem) })
                 } else {
                     ContentUnavailableView("Выберите задачу", systemImage: "filemenu.and.selection")
                 }
@@ -200,7 +201,7 @@ struct ToDoItemsList: View {
                     editingToDoItem: $editingToDoItem,
                     onSave: { toDoItem in onSave(toDoItem) },
                     onDismiss: { onDismiss() },
-                    onDelete: { onDelete() }
+                    onDelete: { toDoItem in onDelete(toDoItem) }
                 )
             }
         }
@@ -244,8 +245,7 @@ struct ToDoItemsList: View {
     
     private func deleteAction(for toDoItem: ToDoItem) -> some View {
         Button(role: .destructive) {
-            editingToDoItem = toDoItem
-            onDelete()
+            onDelete(toDoItem)
         } label: {
             Image(systemName: "trash.fill")
         }
@@ -292,12 +292,8 @@ extension ToDoItemsList {
         Logger.logInfo("ToDoItemDetail dismissed.")
     }
     
-    private func onDelete() {
-        withAnimation {
-            if let editingToDoItem = editingToDoItem {
-                toDoItemsStore.delete(editingToDoItem)
-            }
-        }
+    private func onDelete(_ toDoItem: ToDoItem) {
+        toDoItemsStore.delete(toDoItem)
         
         discardDetailView()
     }

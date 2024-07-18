@@ -38,33 +38,6 @@ class CalendarListViewController: UICollectionViewController {
         displayedSectionIndices = collectionView.indexPathsForVisibleItems.sorted().map { $0.section }
     }
     
-    func scrollToDate(_ date: Date?, animated: Bool = true) {
-        var sectionIndex = viewModel.sections.count - 1
-        var rowsNumber = 0
-        
-        for (index, (section, rows)) in viewModel.sections.sorted(by: { $0.key < $1.key }).enumerated() {
-            if case .toDoItems(for: let toDoItemDate) = section, date == toDoItemDate {
-                sectionIndex = index
-                rowsNumber = rows.count
-                
-                break
-            }
-        }
-        
-        guard rowsNumber > 0 else { return }
-        let indexPath = IndexPath(row: 0, section: sectionIndex)
-        
-        isScrolling = true
-        collectionView.scrollToItem(at: indexPath, at: .top, animated: animated)
-        
-        // So it does not deselects the selected date while scrolling in `scrollViewDidScroll`.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            self?.isScrolling = false
-        }
-        
-        Logger.logVerbose("Scrolled to date: \(date.debugDescription), animated: \(animated ? "true" : "false").")
-    }
-    
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let visibleIndexPaths = collectionView.indexPathsForVisibleItems.sorted()
         
@@ -92,6 +65,8 @@ class CalendarListViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        delegate?.didSelectToDoItem(self, at: indexPath)
+        
         collectionView.deselectItem(at: indexPath, animated: true)
     }
     
@@ -106,12 +81,36 @@ class CalendarListViewController: UICollectionViewController {
         dataSource.apply(snapshot)
     }
     
+    func scrollToDate(_ date: Date?, animated: Bool = true) {
+        var sectionIndex = viewModel.sections.count - 1
+        
+        for (index, (section, _)) in viewModel.sections.sorted(by: { $0.key < $1.key }).enumerated() {
+            if case .toDoItems(for: let toDoItemDate) = section, date == toDoItemDate {
+                sectionIndex = index
+                
+                break
+            }
+        }
+        
+        let indexPath = IndexPath(row: 0, section: sectionIndex)
+        
+        isScrolling = true
+        collectionView.scrollToItem(at: indexPath, at: .top, animated: animated)
+        
+        // So it does not deselects the selected date while scrolling in `scrollViewDidScroll`.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.isScrolling = false
+        }
+        
+        Logger.logVerbose("Scrolled to date: \(date.debugDescription), animated: \(animated ? "true" : "false").")
+    }
+    
     private func setup() {
         dataSource = createDataSource()
         collectionView.dataSource = dataSource
         
         collectionView.collectionViewLayout = createLayout()
-        collectionView.contentInset = UIEdgeInsets(top: 32, left: 0, bottom: 0, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 32, left: 0, bottom: 64, right: 0)
         
         title = "Мои дела"
         navigationItem.largeTitleDisplayMode = .never
@@ -122,10 +121,12 @@ class CalendarListViewController: UICollectionViewController {
     }
     
     private func swipeAction(for indexPath: IndexPath, isCompleted: Bool) -> UISwipeActionsConfiguration {
-        guard let toDoItem = self.dataSource.itemIdentifier(for: indexPath)
+        guard let toDoItem = dataSource.itemIdentifier(for: indexPath)
         else { return UISwipeActionsConfiguration() }
         
-        let actionHandler: UIContextualAction.Handler = { _, _, completion in
+        let actionHandler: UIContextualAction.Handler = { [weak self] _, _, completion in
+            guard let self = self else { return }
+            
             self.delegate?.didCompleteToDoItem(self, toDoItem: toDoItem, isCompleted: isCompleted)
             
             completion(true)
@@ -189,12 +190,18 @@ class CalendarListViewController: UICollectionViewController {
     }
     
     private func createDataSource() -> DataSource {
-        let cellRegistration = UICollectionView.CellRegistration(handler: cellRegistrationHandler)
+        let cellRegistration = UICollectionView
+            .CellRegistration<UICollectionViewListCell, Row> { [weak self] cell, indexPath, row in
+                self?.cellRegistrationHandler(cell: cell, indexPath: indexPath, row: row)
+            }
         
         let headerRegistration = UICollectionView.SupplementaryRegistration<UICollectionViewListCell>(
             elementKind: UICollectionView.elementKindSectionHeader,
-            handler: headerRegistrationHandler
-        )
+            handler: { [weak self] supplementaryView, elementKind, indexPath in
+                self?.headerRegistrationHandler(supplementaryView: supplementaryView,
+                                                elementKind: elementKind,
+                                                indexPath: indexPath)
+            })
         
         let dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
             return collectionView.dequeueConfiguredReusableCell(
