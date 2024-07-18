@@ -136,6 +136,9 @@ class CalendarContainerViewController: UIViewController {
         toDoItemsStore.addOrUpdate(toDoItem)
         updateData()
         
+        listViewController.scrollToDate(toDoItem.dueDate)
+        datesViewController.selectDate(toDoItem.dueDate)
+        
         onDismiss()
     }
     

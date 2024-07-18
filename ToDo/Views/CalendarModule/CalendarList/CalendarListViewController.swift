@@ -83,18 +83,15 @@ class CalendarListViewController: UICollectionViewController {
     
     func scrollToDate(_ date: Date?, animated: Bool = true) {
         var sectionIndex = viewModel.sections.count - 1
-        var rowsNumber = 0
         
         for (index, (section, rows)) in viewModel.sections.sorted(by: { $0.key < $1.key }).enumerated() {
             if case .toDoItems(for: let toDoItemDate) = section, date == toDoItemDate {
                 sectionIndex = index
-                rowsNumber = rows.count
                 
                 break
             }
         }
         
-        guard rowsNumber > 0 else { return }
         let indexPath = IndexPath(row: 0, section: sectionIndex)
         
         isScrolling = true
