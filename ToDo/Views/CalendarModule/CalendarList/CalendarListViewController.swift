@@ -65,9 +65,9 @@ class CalendarListViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
-        
         delegate?.didSelectToDoItem(self, at: indexPath)
+        
+        collectionView.deselectItem(at: indexPath, animated: true)
     }
     
     func updateSnapshot() {
@@ -84,7 +84,7 @@ class CalendarListViewController: UICollectionViewController {
     func scrollToDate(_ date: Date?, animated: Bool = true) {
         var sectionIndex = viewModel.sections.count - 1
         
-        for (index, (section, rows)) in viewModel.sections.sorted(by: { $0.key < $1.key }).enumerated() {
+        for (index, (section, _)) in viewModel.sections.sorted(by: { $0.key < $1.key }).enumerated() {
             if case .toDoItems(for: let toDoItemDate) = section, date == toDoItemDate {
                 sectionIndex = index
                 
@@ -121,10 +121,12 @@ class CalendarListViewController: UICollectionViewController {
     }
     
     private func swipeAction(for indexPath: IndexPath, isCompleted: Bool) -> UISwipeActionsConfiguration {
-        guard let toDoItem = self.dataSource.itemIdentifier(for: indexPath)
+        guard let toDoItem = dataSource.itemIdentifier(for: indexPath)
         else { return UISwipeActionsConfiguration() }
         
-        let actionHandler: UIContextualAction.Handler = { _, _, completion in
+        let actionHandler: UIContextualAction.Handler = { [weak self] _, _, completion in
+            guard let self = self else { return }
+            
             self.delegate?.didCompleteToDoItem(self, toDoItem: toDoItem, isCompleted: isCompleted)
             
             completion(true)
@@ -188,12 +190,18 @@ class CalendarListViewController: UICollectionViewController {
     }
     
     private func createDataSource() -> DataSource {
-        let cellRegistration = UICollectionView.CellRegistration(handler: cellRegistrationHandler)
+        let cellRegistration = UICollectionView
+            .CellRegistration<UICollectionViewListCell, Row> { [weak self] cell, indexPath, row in
+                self?.cellRegistrationHandler(cell: cell, indexPath: indexPath, row: row)
+            }
         
         let headerRegistration = UICollectionView.SupplementaryRegistration<UICollectionViewListCell>(
             elementKind: UICollectionView.elementKindSectionHeader,
-            handler: headerRegistrationHandler
-        )
+            handler: { [weak self] supplementaryView, elementKind, indexPath in
+                self?.headerRegistrationHandler(supplementaryView: supplementaryView,
+                                                elementKind: elementKind,
+                                                indexPath: indexPath)
+            })
         
         let dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
             return collectionView.dequeueConfiguredReusableCell(

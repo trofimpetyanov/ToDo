@@ -97,15 +97,16 @@ class CalendarDatesViewController: UICollectionViewController {
     }
     
     private func createDataSource() -> DataSource {
-        let cellRegistration = UICollectionView.CellRegistration(handler: cellRegistrationHandler)
+        let cellRegistration = UICollectionView
+            .CellRegistration<DateLabelCell, Row> { [weak self] cell, indexPath, row in
+                self?.cellRegistrationHandler(cell: cell, indexPath: indexPath, row: row)
+            }
         
         let dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
-            
             return collectionView.dequeueConfiguredReusableCell(
                 using: cellRegistration,
                 for: indexPath,
-                item: itemIdentifier
-            )
+                item: itemIdentifier)
         }
         
         return dataSource

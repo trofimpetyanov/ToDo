@@ -50,8 +50,6 @@ class CalendarContainerViewController: UIViewController {
         button.layer.shadowOffset = CGSize(width: 0, height: 4)
         button.layer.shadowOpacity = 0.4
         
-        button.addTarget(self, action: #selector(showDetailView), for: .touchUpInside)
-        
         return button
     }()
     
@@ -70,6 +68,12 @@ class CalendarContainerViewController: UIViewController {
         super.viewDidLoad()
         
         layoutViews()
+        
+        let action = UIAction { [weak self] _ in
+            self?.showDetailView(forItemAt: nil)
+        }
+        
+        newButton.addAction(action, for: .touchUpInside)
     }
     
     private func updateData() {
@@ -116,8 +120,13 @@ class CalendarContainerViewController: UIViewController {
     }
     
     @objc
-    private func showDetailView(forItemAt indexPath: IndexPath) {
-        guard let toDoItem = listViewController.dataSource.itemIdentifier(for: indexPath) else { return}
+    private func showDetailView(forItemAt indexPath: IndexPath?) {
+        let toDoItem: ToDoItem?
+        if let indexPath = indexPath {
+            toDoItem = listViewController.dataSource.itemIdentifier(for: indexPath)
+        } else {
+            toDoItem = nil
+        }
         
         let viewController = UIHostingController(
             rootView: ToDoItemDetail(

@@ -245,8 +245,6 @@ struct ToDoItemsList: View {
     
     private func deleteAction(for toDoItem: ToDoItem) -> some View {
         Button(role: .destructive) {
-            #warning("What is editingToDoItem for?")
-//            editingToDoItem = toDoItem
             onDelete(toDoItem)
         } label: {
             Image(systemName: "trash.fill")
