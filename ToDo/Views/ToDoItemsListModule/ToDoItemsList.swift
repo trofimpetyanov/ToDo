@@ -71,8 +71,10 @@ struct ToDoItemsList: View {
         .background(AppColors.backPrimary)
         .scrollContentBackground(.hidden)
         .environment(\.defaultMinListRowHeight, 56)
-        .overlay(addNewItemButton, alignment: .bottom)
         .animation(.default, value: toDoItemsStore.currentToDoItems)
+        .safeAreaInset(edge: .bottom) {
+            addNewItemButton
+        }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 NavigationLink {

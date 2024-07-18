@@ -111,7 +111,7 @@ class CalendarListViewController: UICollectionViewController {
         collectionView.dataSource = dataSource
         
         collectionView.collectionViewLayout = createLayout()
-        collectionView.contentInset = UIEdgeInsets(top: 32, left: 0, bottom: 0, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 32, left: 0, bottom: 64, right: 0)
         
         title = "Мои дела"
         navigationItem.largeTitleDisplayMode = .never
