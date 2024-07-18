@@ -50,7 +50,7 @@ class CalendarContainerViewController: UIViewController {
         button.layer.shadowOffset = CGSize(width: 0, height: 4)
         button.layer.shadowOpacity = 0.4
         
-        button.addTarget(self, action: #selector(didTapNewButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(showDetailView), for: .touchUpInside)
         
         return button
     }()
@@ -100,7 +100,7 @@ class CalendarContainerViewController: UIViewController {
             stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
         // Button.
@@ -116,13 +116,15 @@ class CalendarContainerViewController: UIViewController {
     }
     
     @objc
-    private func didTapNewButton() {
+    private func showDetailView(forItemAt indexPath: IndexPath) {
+        guard let toDoItem = listViewController.dataSource.itemIdentifier(for: indexPath) else { return}
+        
         let viewController = UIHostingController(
             rootView: ToDoItemDetail(
-                editingToDoItem: .constant(nil),
+                editingToDoItem: .constant(toDoItem),
                 onSave: onSave,
                 onDismiss: onDismiss,
-                onDelete: { }
+                onDelete: onDelete
             )
             .modelContainer(for: Category.self)
         )
@@ -134,17 +136,28 @@ class CalendarContainerViewController: UIViewController {
         toDoItemsStore.addOrUpdate(toDoItem)
         updateData()
         
-        dismiss(animated: true)
+        onDismiss()
     }
     
     private func onDismiss() {
         dismiss(animated: true)
+    }
+    
+    private func onDelete(_ toDoItem: ToDoItem) {
+        toDoItemsStore.delete(toDoItem)
+        updateData()
+        
+        onDismiss()
     }
 }
 
 extension CalendarContainerViewController: CalendarContainerViewControllerDelegate {
     func didSelectDate(_ viewController: CalendarDatesViewController, date: Date?) {
         listViewController.scrollToDate(date)
+    }
+    
+    func didSelectToDoItem(_ viewController: CalendarListViewController, at indexPath: IndexPath) {
+        showDetailView(forItemAt: indexPath)
     }
     
     func didScrollThroughDateSection(_ viewController: CalendarListViewController, date: Date?) {

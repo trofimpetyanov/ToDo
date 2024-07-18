@@ -38,33 +38,6 @@ class CalendarListViewController: UICollectionViewController {
         displayedSectionIndices = collectionView.indexPathsForVisibleItems.sorted().map { $0.section }
     }
     
-    func scrollToDate(_ date: Date?, animated: Bool = true) {
-        var sectionIndex = viewModel.sections.count - 1
-        var rowsNumber = 0
-        
-        for (index, (section, rows)) in viewModel.sections.sorted(by: { $0.key < $1.key }).enumerated() {
-            if case .toDoItems(for: let toDoItemDate) = section, date == toDoItemDate {
-                sectionIndex = index
-                rowsNumber = rows.count
-                
-                break
-            }
-        }
-        
-        guard rowsNumber > 0 else { return }
-        let indexPath = IndexPath(row: 0, section: sectionIndex)
-        
-        isScrolling = true
-        collectionView.scrollToItem(at: indexPath, at: .top, animated: animated)
-        
-        // So it does not deselects the selected date while scrolling in `scrollViewDidScroll`.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            self?.isScrolling = false
-        }
-        
-        Logger.logVerbose("Scrolled to date: \(date.debugDescription), animated: \(animated ? "true" : "false").")
-    }
-    
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let visibleIndexPaths = collectionView.indexPathsForVisibleItems.sorted()
         
@@ -93,6 +66,8 @@ class CalendarListViewController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        
+        delegate?.didSelectToDoItem(self, at: indexPath)
     }
     
     func updateSnapshot() {
@@ -104,6 +79,33 @@ class CalendarListViewController: UICollectionViewController {
         }
         
         dataSource.apply(snapshot)
+    }
+    
+    func scrollToDate(_ date: Date?, animated: Bool = true) {
+        var sectionIndex = viewModel.sections.count - 1
+        var rowsNumber = 0
+        
+        for (index, (section, rows)) in viewModel.sections.sorted(by: { $0.key < $1.key }).enumerated() {
+            if case .toDoItems(for: let toDoItemDate) = section, date == toDoItemDate {
+                sectionIndex = index
+                rowsNumber = rows.count
+                
+                break
+            }
+        }
+        
+        guard rowsNumber > 0 else { return }
+        let indexPath = IndexPath(row: 0, section: sectionIndex)
+        
+        isScrolling = true
+        collectionView.scrollToItem(at: indexPath, at: .top, animated: animated)
+        
+        // So it does not deselects the selected date while scrolling in `scrollViewDidScroll`.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.isScrolling = false
+        }
+        
+        Logger.logVerbose("Scrolled to date: \(date.debugDescription), animated: \(animated ? "true" : "false").")
     }
     
     private func setup() {

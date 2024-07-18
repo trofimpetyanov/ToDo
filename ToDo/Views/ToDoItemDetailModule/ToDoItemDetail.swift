@@ -13,7 +13,7 @@ struct ToDoItemDetail: View {
     
     let onSave: (ToDoItem) -> Void
     let onDismiss: () -> Void
-    let onDelete: () -> Void
+    let onDelete: (ToDoItem) -> Void
     
     @State private var text: String = ""
     @State private var importance: Importance = .ordinary
@@ -238,10 +238,10 @@ struct ToDoItemDetail: View {
     
     private var deleteSection: some View {
         Group {
-            if editingToDoItem != nil {
+            if let editingToDoItem = editingToDoItem {
                 Section {
                     Button(role: .destructive) {
-                        onDelete()
+                        onDelete(editingToDoItem)
                     } label: {
                         HStack {
                             Spacer()
@@ -352,7 +352,7 @@ extension ToDoItemDetail {
         editingToDoItem: .constant(ToDoItemsStore.mock[0]),
         onSave: { _ in },
         onDismiss: {},
-        onDelete: {}
+        onDelete: { _ in }
     )
     .modelContainer(for: Category.self)
 }
