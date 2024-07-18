@@ -121,8 +121,8 @@ class CalendarDatesViewController: UICollectionViewController {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             
             let groupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(0.16),
-                heightDimension: .fractionalWidth(0.16))
+                widthDimension: .absolute(64),
+                heightDimension: .absolute(64))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 1)
             
             let section = NSCollectionLayoutSection(group: group)

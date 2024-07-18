@@ -94,7 +94,7 @@ class CalendarContainerViewController: UIViewController {
         view.addSubview(stackView)
         
         NSLayoutConstraint.activate([
-            datesView.heightAnchor.constraint(equalTo: listView.heightAnchor, multiplier: 0.12),
+            datesView.heightAnchor.constraint(equalToConstant: 80),
             separatorView.heightAnchor.constraint(equalToConstant: 1),
             
             stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
