@@ -3,9 +3,6 @@ import SwiftData
 import LoggerPackage
 
 struct ToDoItemsList: View {
-    @Query(sort: \Category.id) private var categories: [Category]
-    @Environment(\.modelContext) private var context
-    
     @ObservedObject var toDoItemsStore: ToDoItemsStore
     
     @State private var newToDoItemText: String = ""
@@ -91,37 +88,6 @@ struct ToDoItemsList: View {
         }
         .onAppear {
             Logger.logInfo("ToDoItemsList appeared.")
-            
-            if toDoItemsStore.isFirstLaunch {
-                toDoItemsStore.isFirstLaunch = false
-                
-                Category.template.forEach { category in
-                    context.insert(category)
-                }
-                
-                Logger.logInfo("Default categories inserted.")
-            }
-            
-            toDoItemsStore.currentToDoItems.forEach { toDoItem in
-                if let categoryId = toDoItem.categoryId,
-                   let category = categories.first(where: {
-                       $0.id == categoryId
-                   }) {
-                    let toDoItem = ToDoItem(
-                        id: toDoItem.id,
-                        text: toDoItem.text,
-                        importance: toDoItem.importance,
-                        dueDate: toDoItem.dueDate,
-                        category: category,
-                        categoryId: categoryId,
-                        isCompleted: toDoItem.isCompleted,
-                        dateCreated: toDoItem.dateCreated,
-                        dateEdited: toDoItem.dateEdited
-                    )
-                    
-                    toDoItemsStore.addOrUpdate(toDoItem)
-                }
-            }
         }
     }
     
@@ -230,9 +196,8 @@ struct ToDoItemsList: View {
                     text: toDoItem.text,
                     importance: toDoItem.importance,
                     dueDate: toDoItem.dueDate,
-                    category: toDoItem.category, 
-                    categoryId: toDoItem.categoryId,
                     isCompleted: !toDoItem.isCompleted,
+                    color: toDoItem.color,
                     dateCreated: toDoItem.dateCreated,
                     dateEdited: toDoItem.dateEdited
                 )

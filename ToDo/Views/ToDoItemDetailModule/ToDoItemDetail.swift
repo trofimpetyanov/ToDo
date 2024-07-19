@@ -4,9 +4,6 @@ import LoggerPackage
 
 @MainActor
 struct ToDoItemDetail: View {
-    @Query(sort: \Category.id) private var categories: [Category]
-    
-    @Environment(\.modelContext) private var context
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @Binding var editingToDoItem: ToDoItem?
@@ -17,13 +14,16 @@ struct ToDoItemDetail: View {
     
     @State private var text: String = ""
     @State private var importance: Importance = .ordinary
-    @State private var category: Category = .other
+    
+    @State private var color: Color = .red
+    @State private var isColorToggled = false
+    @State private var isColorPickerPresented: Bool = false
+    
     @State private var dueDate = Date(timeIntervalSinceNow: 86400)
     @State private var isDueDateToggled = false
     @State private var isDatePickerShown = false
     
     @State private var isEditing = false
-    @State private var isCategoryDetailPresenting = false
     
     var body: some View {
         NavigationStack {
@@ -33,13 +33,6 @@ struct ToDoItemDetail: View {
                 .background(AppColors.backPrimary)
                 .scrollContentBackground(.hidden)
                 .environment(\.defaultMinListRowHeight, 56)
-                .sheet(isPresented: $isCategoryDetailPresenting) {
-                    NavigationStack {
-                        CategoryDetail(
-                            onSave: { category in self.category = category },
-                            onDismiss: { isCategoryDetailPresenting = false })
-                    }
-                }
                 .toolbarBackground(horizontalSizeClass == .regular ? .visible : .automatic, for: .navigationBar)
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
@@ -146,52 +139,32 @@ struct ToDoItemDetail: View {
         }
     }
     
-    private var categoryRow: some View {
+    private var colorPickerRow: some View {
         HStack {
-            Text("Категория")
+            Text("Цвет")
             
-            Spacer()
+            Circle()
+                .fill(color)
+                .frame(width: isColorToggled ? 24 : 0, alignment: .center)
+                .offset(x: isColorToggled ? -12 : 0)
+                .padding(.leading, 16)
+                .animation(.bouncy(duration: 0.2), value: isColorToggled)
+                .onTapGesture {
+                    isColorPickerPresented = true
+                }
             
-            Menu {
-                Picker("Категория", selection: $category) {
-                    ForEach(categories) { category in
-                        Label(
-                            title: {
-                                Text(category.name)
-                            },
-                            icon: {
-                                Image.systemImage(
-                                    "circle.fill",
-                                    for: .systemFont(ofSize: 16),
-                                    tint: UIColor(Color(hex: category.color))
-                                )
-                            }
-                        )
-                        .tag(category)
-                    }
-                }
-                
-                Button {
-                    isCategoryDetailPresenting = true
-                } label: {
-                    Label(
-                        title: { Text("Новая категория") },
-                        icon: { Image(uiImage: .add) }
-                    )
-                }
-                .buttonStyle(PlainButtonStyle())
-            } label: {
-                HStack {
-                    Circle()
-                        .fill(Color(hex: category.color))
-                        .frame(width: 24, height: 24)
-                    
-                    Text(category.name)
-                }
-            }
+            Toggle("", isOn: $isColorToggled)
+            
         }
-    }
+        .sheet(isPresented: $isColorPickerPresented) {
+            ColorWheelPicker(color: $color)
+                .presentationDetents([.fraction(3/5)])
+                .presentationDragIndicator(.visible)
+                .background(AppColors.backPrimary)
+        }
         
+    }
+    
     private var toggleRow: some View {
         Toggle(isOn: $isDueDateToggled) {
             VStack(alignment: .leading) {
@@ -227,7 +200,7 @@ struct ToDoItemDetail: View {
     private var detailsSection: some View {
         Section {
             importanceRow
-            categoryRow
+            colorPickerRow
             toggleRow
             
             if isDatePickerShown && isDueDateToggled {
@@ -275,12 +248,10 @@ extension ToDoItemDetail {
                     text: plainText,
                     importance: importance,
                     dueDate: newDueDate,
-                    category: category,
-                    categoryId: category.id,
                     isCompleted: toDoItem.isCompleted,
+                    color: isColorToggled ? color.hex : nil,
                     dateCreated: toDoItem.dateCreated,
-                    dateEdited: Date()
-                )
+                    dateEdited: Date())
                 
                 onSave(newToDoItem)
             } else {
@@ -288,9 +259,7 @@ extension ToDoItemDetail {
                     text: plainText,
                     importance: importance,
                     dueDate: newDueDate,
-                    category: category,
-                    categoryId: category.id
-                )
+                    color: isColorToggled ? color.hex : nil)
                 
                 Logger.logDebug("Saving new ToDoItem: \(newToDoItem.id).")
                 
@@ -323,26 +292,20 @@ extension ToDoItemDetail {
         if let editingToDoItem = editingToDoItem {
             text = editingToDoItem.text
             importance = editingToDoItem.importance
+            isColorToggled = editingToDoItem.color != nil
             isDueDateToggled = editingToDoItem.dueDate != nil
             dueDate = editingToDoItem.dueDate ?? Date(timeIntervalSinceNow: 86400)
             
-            if let category = editingToDoItem.category,
-               let neededCategory = categories.first(where: {
-                   $0.id == category.id
-               }) {
-                self.category = neededCategory
-            } else {
-                category = categories.first ?? .other
+            if let hex = editingToDoItem.color {
+                color = Color(hex: hex)
             }
-            
-            Logger.logDebug("Editing ToDoItem: \(editingToDoItem.id).")
         } else {
             text = ""
             importance = .ordinary
             dueDate = Date(timeIntervalSinceNow: 86400)
             isDueDateToggled = false
             isDatePickerShown = false
-            category = categories.first ?? .other
+            isColorToggled = false
         }
     }
 }
@@ -354,5 +317,4 @@ extension ToDoItemDetail {
         onDismiss: {},
         onDelete: { _ in }
     )
-    .modelContainer(for: Category.self)
 }

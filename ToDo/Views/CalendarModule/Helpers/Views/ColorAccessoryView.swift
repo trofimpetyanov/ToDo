@@ -1,6 +1,6 @@
 import UIKit
 
-class CategoryAccessoryView: UIView {
+class ColorAccessoryView: UIView {
     
     var color: UIColor
     

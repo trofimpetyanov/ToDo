@@ -29,9 +29,7 @@
 		AC9BF5B12C388A52008C6C58 /* CalendarDatesViewController+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5B02C388A52008C6C58 /* CalendarDatesViewController+ViewModel.swift */; };
 		AC9BF5B42C388FB7008C6C58 /* CalendarContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5B32C388FB7008C6C58 /* CalendarContainerViewController.swift */; };
 		AC9BF5B82C3897F6008C6C58 /* CalendarContainerViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5B72C3897F6008C6C58 /* CalendarContainerViewControllerDelegate.swift */; };
-		AC9BF5BF2C38C5EE008C6C58 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5BE2C38C5EE008C6C58 /* Category.swift */; };
-		AC9BF5C22C38C7AC008C6C58 /* CategoryDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5C12C38C7AC008C6C58 /* CategoryDetail.swift */; };
-		AC9BF5C92C38E56A008C6C58 /* CategoryAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5C82C38E56A008C6C58 /* CategoryAccessoryView.swift */; };
+		AC9BF5C92C38E56A008C6C58 /* ColorAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF5C82C38E56A008C6C58 /* ColorAccessoryView.swift */; };
 		ACA0D20E2C24ACE4003659A2 /* FileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA0D20D2C24ACE4003659A2 /* FileCache.swift */; };
 		ACCA505B2C358B17007669BB /* CalendarListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCA505A2C358B17007669BB /* CalendarListViewController.swift */; };
 		ACDA31C22C2C885B00C5FDCE /* ToDoItem+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31C12C2C885B00C5FDCE /* ToDoItem+Properties.swift */; };
@@ -82,9 +80,7 @@
 		AC9BF5B02C388A52008C6C58 /* CalendarDatesViewController+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CalendarDatesViewController+ViewModel.swift"; sourceTree = "<group>"; };
 		AC9BF5B32C388FB7008C6C58 /* CalendarContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarContainerViewController.swift; sourceTree = "<group>"; };
 		AC9BF5B72C3897F6008C6C58 /* CalendarContainerViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarContainerViewControllerDelegate.swift; sourceTree = "<group>"; };
-		AC9BF5BE2C38C5EE008C6C58 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
-		AC9BF5C12C38C7AC008C6C58 /* CategoryDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetail.swift; sourceTree = "<group>"; };
-		AC9BF5C82C38E56A008C6C58 /* CategoryAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryAccessoryView.swift; sourceTree = "<group>"; };
+		AC9BF5C82C38E56A008C6C58 /* ColorAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorAccessoryView.swift; sourceTree = "<group>"; };
 		ACA0D20D2C24ACE4003659A2 /* FileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCache.swift; sourceTree = "<group>"; };
 		ACCA505A2C358B17007669BB /* CalendarListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarListViewController.swift; sourceTree = "<group>"; };
 		ACDA31C12C2C885B00C5FDCE /* ToDoItem+Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+Properties.swift"; sourceTree = "<group>"; };
@@ -172,7 +168,6 @@
 			isa = PBXGroup;
 			children = (
 				AC1C1BA42C2374E60094D57C /* Importance.swift */,
-				AC9BF5BE2C38C5EE008C6C58 /* Category.swift */,
 				AC1C1BA82C2375B30094D57C /* ToDoItem */,
 			);
 			path = Models;
@@ -183,7 +178,6 @@
 			children = (
 				ACDA31DA2C2FC64A00C5FDCE /* ToDoItemsListModule */,
 				ACCA50592C358AD5007669BB /* ToDoItemDetailModule */,
-				AC9BF5C02C38C78F008C6C58 /* CategoryDetailModule */,
 				ACCA50582C358AA9007669BB /* CalendarModule */,
 			);
 			path = Views;
@@ -275,7 +269,7 @@
 			children = (
 				AC9BF5A72C384454008C6C58 /* DateLabelCell.swift */,
 				AC9BF5A52C3840C2008C6C58 /* DateLabelContentView.swift */,
-				AC9BF5C82C38E56A008C6C58 /* CategoryAccessoryView.swift */,
+				AC9BF5C82C38E56A008C6C58 /* ColorAccessoryView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -286,14 +280,6 @@
 				AC9BF5B72C3897F6008C6C58 /* CalendarContainerViewControllerDelegate.swift */,
 			);
 			path = Delegates;
-			sourceTree = "<group>";
-		};
-		AC9BF5C02C38C78F008C6C58 /* CategoryDetailModule */ = {
-			isa = PBXGroup;
-			children = (
-				AC9BF5C12C38C7AC008C6C58 /* CategoryDetail.swift */,
-			);
-			path = CategoryDetailModule;
 			sourceTree = "<group>";
 		};
 		ACCA50582C358AA9007669BB /* CalendarModule */ = {
@@ -509,11 +495,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AC9BF5C22C38C7AC008C6C58 /* CategoryDetail.swift in Sources */,
 				AC1C1B932C2374560094D57C /* ToDoItemsList.swift in Sources */,
 				AC9BF5A62C3840C2008C6C58 /* DateLabelContentView.swift in Sources */,
 				AC9BF5AE2C388A2E008C6C58 /* CalendarDatesViewController.swift in Sources */,
-				AC9BF5BF2C38C5EE008C6C58 /* Category.swift in Sources */,
 				ACDA31C22C2C885B00C5FDCE /* ToDoItem+Properties.swift in Sources */,
 				AC1C1BA52C2374E60094D57C /* Importance.swift in Sources */,
 				ACF2A2992C25F4BC00C7D20E /* Date+.swift in Sources */,
@@ -526,7 +510,7 @@
 				AC9BF5A32C38308D008C6C58 /* Date+Format.swift in Sources */,
 				ACE0757F2C31A8D400F0EA26 /* Color+IdealTextColor.swift in Sources */,
 				AC9BF5B42C388FB7008C6C58 /* CalendarContainerViewController.swift in Sources */,
-				AC9BF5C92C38E56A008C6C58 /* CategoryAccessoryView.swift in Sources */,
+				AC9BF5C92C38E56A008C6C58 /* ColorAccessoryView.swift in Sources */,
 				ACDA31CA2C2EE38E00C5FDCE /* ToDoItemDetail.swift in Sources */,
 				ACA0D20E2C24ACE4003659A2 /* FileCache.swift in Sources */,
 				AC5630AE2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift in Sources */,

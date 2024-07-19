@@ -27,13 +27,13 @@ class ToDoItemsStore: ObservableObject {
     }
     
     static let mock: [ToDoItem] = [
-        ToDoItem(text: "Buy groceries", isCompleted: true),
+        ToDoItem(text: "Buy groceries", isCompleted: true, color: "00FF44"),
         ToDoItem(text: "Walk \"Daisy\"", importance: .important, dueDate: Date(timeIntervalSinceNow: 3600)),
         ToDoItem(text: "Read a book", dateCreated: Date(timeIntervalSinceNow: -86400)),
         ToDoItem(text: "Write a blog post", importance: .unimportant),
-        ToDoItem(text: "Workout", dueDate: Date(timeIntervalSinceNow: 7200), isCompleted: false),
+        ToDoItem(text: "Workout", dueDate: Date(timeIntervalSinceNow: 7200), isCompleted: false, color: "00DDFF"),
         ToDoItem(text: "Plan vacation", isCompleted: true, dateEdited: Date(timeIntervalSinceNow: -3600)),
-        ToDoItem(text: "Clean the house", importance: .important),
+        ToDoItem(text: "Clean the house", importance: .important, color: "FF0077"),
         ToDoItem(text: "Call mom", importance: .ordinary, dueDate: Date(timeIntervalSinceNow: 1800), isCompleted: false)
     ]
     

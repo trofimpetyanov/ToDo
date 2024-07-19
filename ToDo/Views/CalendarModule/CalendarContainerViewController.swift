@@ -135,7 +135,6 @@ class CalendarContainerViewController: UIViewController {
                 onDismiss: onDismiss,
                 onDelete: onDelete
             )
-            .modelContainer(for: Category.self)
         )
         
         present(viewController, animated: true)
@@ -182,9 +181,8 @@ extension CalendarContainerViewController: CalendarContainerViewControllerDelega
             text: toDoItem.text,
             importance: toDoItem.importance,
             dueDate: toDoItem.dueDate,
-            category: toDoItem.category,
-            categoryId: toDoItem.categoryId,
             isCompleted: isCompleted,
+            color: toDoItem.color,
             dateCreated: toDoItem.dateCreated,
             dateEdited: toDoItem.dateEdited
         )

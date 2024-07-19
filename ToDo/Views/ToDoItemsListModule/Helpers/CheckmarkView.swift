@@ -40,9 +40,8 @@ struct CheckmarkView: View {
             text: toDoItem.text,
             importance: toDoItem.importance,
             dueDate: toDoItem.dueDate,
-            category: toDoItem.category, 
-            categoryId: toDoItem.categoryId,
             isCompleted: !toDoItem.isCompleted,
+            color: toDoItem.color,
             dateCreated: toDoItem.dateCreated,
             dateEdited: toDoItem.dateEdited
         )

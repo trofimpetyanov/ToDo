@@ -26,17 +26,17 @@ extension ToDoItem {
         let dateCreated = Date(anyTimeIntervalSince1970: dateCreatedTimeInterval) ?? Date()
         let dateEdited = Date(anyTimeIntervalSince1970: dictionary[Properties.dateEdited.rawValue])
         
+        let color = dictionary[Properties.color.rawValue] as? String
+        
         return ToDoItem(
             id: id,
             text: text,
             importance: importance,
             dueDate: dueDate,
-            category: nil,
-            categoryId: dictionary[Properties.categoryId.rawValue] as? String,
             isCompleted: isCompleted,
+            color: color,
             dateCreated: dateCreated,
-            dateEdited: dateEdited
-        )
+            dateEdited: dateEdited)
     }
     
     /// Parses a CSV string into a `ToDoItem` instance.
@@ -53,8 +53,8 @@ extension ToDoItem {
         let text = values[1]
         let importance = Importance(rawValue: values[2]) ?? .ordinary
         let dueDate = Date(anyTimeIntervalSince1970: values[3])
-        let categoryId = values[4]
-        let isCompleted = Bool(values[5]) ?? false
+        let isCompleted = Bool(values[4]) ?? false
+        let color = values[5]
         let dateCreated = Date(anyTimeIntervalSince1970: values[6]) ?? Date()
         let dateEdited = Date(anyTimeIntervalSince1970: "\(values[7].dropLast())")
         
@@ -63,9 +63,8 @@ extension ToDoItem {
             text: text,
             importance: importance,
             dueDate: dueDate,
-            category: nil,
-            categoryId: categoryId,
             isCompleted: isCompleted,
+            color: color,
             dateCreated: dateCreated,
             dateEdited: dateEdited
         )
@@ -92,8 +91,8 @@ extension ToDoItem {
             dictionary[Properties.dateEdited.rawValue] = dateEdited.timeIntervalSince1970
         }
         
-        if let category = category {
-            dictionary[Properties.categoryId.rawValue] = category.id
+        if let color = color {
+            dictionary[Properties.color.rawValue] = color
         }
         
         return dictionary

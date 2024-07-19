@@ -8,10 +8,8 @@ struct ToDoItem: Identifiable, Equatable, Hashable {
     let importance: Importance
     let dueDate: Date?
     
-    let category: Category?
-    let categoryId: String?
-    
     let isCompleted: Bool
+    let color: String?
 
     let dateCreated: Date
     let dateEdited: Date?
@@ -30,18 +28,16 @@ struct ToDoItem: Identifiable, Equatable, Hashable {
          text: String,
          importance: Importance = .ordinary,
          dueDate: Date? = nil,
-         category: Category? = nil,
-         categoryId: String? = nil,
          isCompleted: Bool = false,
+         color: String? = nil,
          dateCreated: Date = Date(),
          dateEdited: Date? = nil) {
         self.id = id
         self.text = text
         self.importance = importance
-        self.category = category
-        self.categoryId = categoryId
         self.dueDate = dueDate
         self.isCompleted = isCompleted
+        self.color = color
         self.dateCreated = dateCreated
         self.dateEdited = dateEdited
     }
