@@ -1,7 +1,7 @@
 import Foundation
 
 /// A structure representing a todo item.
-struct ToDoItem: Identifiable, Equatable, Hashable {
+struct ToDoItem: Identifiable {
     let id: String
     let text: String
     
@@ -26,7 +26,7 @@ struct ToDoItem: Identifiable, Equatable, Hashable {
     ///   - dateEdited: The date the todo item was last edited. Defaults to `nil`.
     init(id: String = UUID().uuidString,
          text: String,
-         importance: Importance = .ordinary,
+         importance: Importance = .basic,
          dueDate: Date? = nil,
          isCompleted: Bool = false,
          color: String? = nil,
@@ -40,5 +40,20 @@ struct ToDoItem: Identifiable, Equatable, Hashable {
         self.color = color
         self.dateCreated = dateCreated
         self.dateEdited = dateEdited
+    }
+}
+
+extension ToDoItem: Equatable, Hashable { }
+
+extension ToDoItem: Codable { 
+    enum CodingKeys: String, CodingKey {
+        case id
+        case text
+        case importance
+        case dueDate = "deadline"
+        case isCompleted = "done"
+        case color
+        case dateCreated = "created_at"
+        case dateEdited = "changed_at"
     }
 }

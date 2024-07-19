@@ -13,7 +13,7 @@ struct ToDoItemDetail: View {
     let onDelete: (ToDoItem) -> Void
     
     @State private var text: String = ""
-    @State private var importance: Importance = .ordinary
+    @State private var importance: Importance = .basic
     
     @State private var color: Color = .red
     @State private var isColorToggled = false
@@ -117,13 +117,13 @@ struct ToDoItemDetail: View {
             Picker("Важность", selection: $importance) {
                 ForEach(Importance.allCases, id: \.self) { importance in
                     switch importance {
-                    case .unimportant:
+                    case .low:
                         Image.systemImage(
                             "arrow.down",
                             for: .boldSystemFont(ofSize: UIFont.buttonFontSize),
                             tint: .gray
                         )
-                    case .ordinary:
+                    case .basic:
                         Text("нет")
                     case .important:
                         Image.systemImage(
@@ -301,7 +301,7 @@ extension ToDoItemDetail {
             }
         } else {
             text = ""
-            importance = .ordinary
+            importance = .basic
             dueDate = Date(timeIntervalSinceNow: 86400)
             isDueDateToggled = false
             isDatePickerShown = false

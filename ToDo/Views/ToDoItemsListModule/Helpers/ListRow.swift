@@ -15,7 +15,7 @@ struct ListRow: View {
                         Image(systemName: "exclamationmark.2")
                             .fontWeight(.bold)
                             .foregroundStyle(toDoItem.isCompleted ? Color.secondary : .red)
-                    } else if toDoItem.importance == .unimportant {
+                    } else if toDoItem.importance == .low {
                         Image(systemName: "arrow.down")
                             .fontWeight(.semibold)
                             .foregroundStyle(.secondary)

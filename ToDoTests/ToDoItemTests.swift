@@ -45,7 +45,7 @@ final class ToDoItemTests: XCTestCase {
         
         // Then
         XCTAssertEqual(toDoItem.text, text)
-        XCTAssertEqual(toDoItem.importance, .ordinary)
+        XCTAssertEqual(toDoItem.importance, .basic)
         XCTAssertNil(toDoItem.dueDate)
         XCTAssertEqual(toDoItem.isCompleted, false)
         XCTAssertNil(toDoItem.color)

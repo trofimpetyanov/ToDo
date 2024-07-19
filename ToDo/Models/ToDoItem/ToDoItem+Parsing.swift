@@ -17,9 +17,9 @@ extension ToDoItem {
         
         let importance: Importance
         if let importanceRaw = dictionary[Properties.importance.rawValue] as? String {
-            importance = Importance(rawValue: importanceRaw) ?? .ordinary
+            importance = Importance(rawValue: importanceRaw) ?? .basic
         } else {
-            importance = .ordinary
+            importance = .basic
         }
         
         let dueDate = Date(anyTimeIntervalSince1970: dictionary[Properties.dueDate.rawValue])
@@ -51,7 +51,7 @@ extension ToDoItem {
         
         let id = "\(values[0].dropFirst())"
         let text = values[1]
-        let importance = Importance(rawValue: values[2]) ?? .ordinary
+        let importance = Importance(rawValue: values[2]) ?? .basic
         let dueDate = Date(anyTimeIntervalSince1970: values[3])
         let isCompleted = Bool(values[4]) ?? false
         let color = values[5]
@@ -79,7 +79,7 @@ extension ToDoItem {
             Properties.dateCreated.rawValue: dateCreated.timeIntervalSince1970
         ]
         
-        if importance != .ordinary {
+        if importance != .basic {
             dictionary[Properties.importance.rawValue] = importance.rawValue
         }
         
