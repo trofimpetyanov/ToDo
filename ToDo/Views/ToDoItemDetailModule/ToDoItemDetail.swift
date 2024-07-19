@@ -236,8 +236,7 @@ extension ToDoItemDetail {
             
             let newDueDate: Date?
             if isDueDateToggled {
-                let dateComponents = Calendar.current.dateComponents([.year, .month, .day], from: dueDate)
-                newDueDate = Calendar.current.date(from: dateComponents)
+                newDueDate = dueDate.clean
             } else {
                 newDueDate = nil
             }

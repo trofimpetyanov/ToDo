@@ -34,6 +34,7 @@ struct CheckmarkView: View {
         .buttonStyle(PlainButtonStyle())
     }
     
+    @MainActor 
     private func updateToDoItem() {
         toDoItem = ToDoItem(
             id: toDoItem.id,

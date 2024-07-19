@@ -7,4 +7,3 @@ enum APIRequestError: Int, Error {
     case serverError = 500
     case requestFailed = -1
 }
-

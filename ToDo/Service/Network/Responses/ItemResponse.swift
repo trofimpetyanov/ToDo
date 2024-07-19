@@ -1,12 +1,12 @@
 import Foundation
 
-struct ItemResponse<Item: Decodable>: @unchecked Sendable {
+struct ItemResponse<Item: Codable>: @unchecked Sendable {
     let status: String
     let item: Item
     let revision: UInt32
 }
 
-extension ItemResponse: Decodable {
+extension ItemResponse: Codable {
     enum CodingKeys: String, CodingKey {
         case status
         case item = "element"

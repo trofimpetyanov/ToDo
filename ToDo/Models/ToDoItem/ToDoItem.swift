@@ -1,6 +1,7 @@
-import Foundation
+import UIKit
 
 /// A structure representing a todo item.
+@MainActor
 struct ToDoItem: Identifiable {
     let id: String
     let text: String
@@ -13,6 +14,7 @@ struct ToDoItem: Identifiable {
 
     let dateCreated: Date
     let dateEdited: Date?
+    let lastUpdatedBy: String?
     
     /// Initializes a new todo item with the provided values.
     ///
@@ -31,15 +33,17 @@ struct ToDoItem: Identifiable {
          isCompleted: Bool = false,
          color: String? = nil,
          dateCreated: Date = Date(),
-         dateEdited: Date? = nil) {
+         dateEdited: Date? = Date(),
+         lastUpdatedBy: String? = nil) {
         self.id = id
         self.text = text
         self.importance = importance
-        self.dueDate = dueDate
+        self.dueDate = dueDate.clean
         self.isCompleted = isCompleted
         self.color = color
-        self.dateCreated = dateCreated
-        self.dateEdited = dateEdited
+        self.dateCreated = dateCreated.clean
+        self.dateEdited = dateEdited.clean
+        self.lastUpdatedBy = lastUpdatedBy ?? UIDevice.current.identifierForVendor!.uuidString
     }
 }
 
@@ -55,5 +59,6 @@ extension ToDoItem: Codable {
         case color
         case dateCreated = "created_at"
         case dateEdited = "changed_at"
+        case lastUpdatedBy = "last_updated_by"
     }
 }
