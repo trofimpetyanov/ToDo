@@ -1,6 +1,6 @@
 import Foundation
 
-protocol APIRequest {
+protocol APIRequest: Sendable {
     associatedtype Response
     
     var path: String { get }

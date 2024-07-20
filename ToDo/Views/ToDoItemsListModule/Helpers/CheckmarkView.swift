@@ -4,7 +4,7 @@ struct CheckmarkView: View {
     @Binding var toDoItem: ToDoItem
     
     let size: CGFloat = 24
-    let onComplete: () -> Void
+    let onComplete: () async -> Void
     
     var body: some View {
         Button {
@@ -47,7 +47,9 @@ struct CheckmarkView: View {
             dateEdited: toDoItem.dateEdited
         )
         
-        onComplete()
+        Task {
+            await onComplete()
+        }
     }
 }
 

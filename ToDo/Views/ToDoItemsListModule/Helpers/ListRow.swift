@@ -3,7 +3,7 @@ import SwiftUI
 struct ListRow: View {
     @Binding var toDoItem: ToDoItem
     
-    let onComplete: () -> Void
+    let onComplete: () async -> Void
     
     var body: some View {
         HStack {
