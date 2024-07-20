@@ -14,7 +14,6 @@ struct ToDoApp: App {
     var body: some Scene {
         WindowGroup {
             ToDoItemsList(toDoItemsStore: toDoItemsStore)
-                .modelContainer(for: Category.self)
         }
     }
 }

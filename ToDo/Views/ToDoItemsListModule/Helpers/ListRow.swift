@@ -3,7 +3,7 @@ import SwiftUI
 struct ListRow: View {
     @Binding var toDoItem: ToDoItem
     
-    let onComplete: () -> Void
+    let onComplete: () async -> Void
     
     var body: some View {
         HStack {
@@ -15,7 +15,7 @@ struct ListRow: View {
                         Image(systemName: "exclamationmark.2")
                             .fontWeight(.bold)
                             .foregroundStyle(toDoItem.isCompleted ? Color.secondary : .red)
-                    } else if toDoItem.importance == .unimportant {
+                    } else if toDoItem.importance == .low {
                         Image(systemName: "arrow.down")
                             .fontWeight(.semibold)
                             .foregroundStyle(.secondary)
@@ -41,11 +41,11 @@ struct ListRow: View {
             })
             .padding(.leading, 8)
             
-            if let category = toDoItem.category {
+            if let color = toDoItem.color {
                 Spacer()
                 
                 Rectangle()
-                    .fill(Color(hex: category.color))
+                    .fill(Color(hex: color))
                     .clipShape(.capsule)
                     .frame(width: 5)
                     .padding(.vertical, 8)

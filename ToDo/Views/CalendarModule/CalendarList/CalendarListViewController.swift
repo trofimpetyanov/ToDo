@@ -156,12 +156,11 @@ class CalendarListViewController: UICollectionViewController {
         contentConfiguration.textProperties.numberOfLines = 3
         cell.contentConfiguration = contentConfiguration
         
-        if let category = row.category {
+        if let color = row.color {
             cell.accessories = [.customView(
                 configuration: UICellAccessory.CustomViewConfiguration(
-                    customView: CategoryAccessoryView(color: UIColor(Color(hex: category.color))),
-                    placement: .trailing(displayed: .always, at: { _ in 0 }),
-                    isHidden: category.color == "00000000"
+                    customView: ColorAccessoryView(color: UIColor(Color(hex: color))),
+                    placement: .trailing(displayed: .always, at: { _ in 0 })
                 )
             )]
         } else {

@@ -1,20 +1,20 @@
-import Foundation
+import UIKit
 
 /// A structure representing a todo item.
-struct ToDoItem: Identifiable, Equatable, Hashable {
+@MainActor
+struct ToDoItem: Identifiable {
     let id: String
     let text: String
     
     let importance: Importance
     let dueDate: Date?
     
-    let category: Category?
-    let categoryId: String?
-    
     let isCompleted: Bool
+    let color: String?
 
     let dateCreated: Date
     let dateEdited: Date?
+    let lastUpdatedBy: String?
     
     /// Initializes a new todo item with the provided values.
     ///
@@ -28,21 +28,37 @@ struct ToDoItem: Identifiable, Equatable, Hashable {
     ///   - dateEdited: The date the todo item was last edited. Defaults to `nil`.
     init(id: String = UUID().uuidString,
          text: String,
-         importance: Importance = .ordinary,
+         importance: Importance = .basic,
          dueDate: Date? = nil,
-         category: Category? = nil,
-         categoryId: String? = nil,
          isCompleted: Bool = false,
+         color: String? = nil,
          dateCreated: Date = Date(),
-         dateEdited: Date? = nil) {
+         dateEdited: Date? = Date(),
+         lastUpdatedBy: String? = nil) {
         self.id = id
         self.text = text
         self.importance = importance
-        self.category = category
-        self.categoryId = categoryId
-        self.dueDate = dueDate
+        self.dueDate = dueDate.clean
         self.isCompleted = isCompleted
-        self.dateCreated = dateCreated
-        self.dateEdited = dateEdited
+        self.color = color
+        self.dateCreated = dateCreated.clean
+        self.dateEdited = dateEdited.clean
+        self.lastUpdatedBy = lastUpdatedBy ?? UIDevice.current.identifierForVendor!.uuidString
+    }
+}
+
+extension ToDoItem: Equatable, Hashable { }
+
+extension ToDoItem: Codable { 
+    enum CodingKeys: String, CodingKey {
+        case id
+        case text
+        case importance
+        case dueDate = "deadline"
+        case isCompleted = "done"
+        case color
+        case dateCreated = "created_at"
+        case dateEdited = "changed_at"
+        case lastUpdatedBy = "last_updated_by"
     }
 }

@@ -3,15 +3,17 @@ import XCTest
 
 final class ToDoItemTests: XCTestCase {
     
+    @MainActor
     func testInitializationWithAllProperties() {
         // Given
         let id = "1"
         let text = "Test"
         let importance = Importance.important
-        let dueDate = Date(timeIntervalSinceNow: 86400)
+        let dueDate = Date(timeIntervalSinceNow: 86400).clean
         let isCompleted = false
-        let dateCreated = Date()
-        let dateEdited = Date()
+        let color = "ED3ED3"
+        let dateCreated = Date().clean
+        let dateEdited = Date().clean
         
         // When
         let toDoItem = ToDoItem(
@@ -20,6 +22,7 @@ final class ToDoItemTests: XCTestCase {
             importance: importance,
             dueDate: dueDate,
             isCompleted: isCompleted,
+            color: color,
             dateCreated: dateCreated,
             dateEdited: dateEdited
         )
@@ -34,6 +37,7 @@ final class ToDoItemTests: XCTestCase {
         XCTAssertEqual(toDoItem.dateEdited, dateEdited)
     }
     
+    @MainActor
     func testToDoItemInitializationWithRequiredProperties() {
         // Given
         let text = "Test"
@@ -43,21 +47,23 @@ final class ToDoItemTests: XCTestCase {
         
         // Then
         XCTAssertEqual(toDoItem.text, text)
-        XCTAssertEqual(toDoItem.importance, .ordinary)
+        XCTAssertEqual(toDoItem.importance, .basic)
         XCTAssertNil(toDoItem.dueDate)
         XCTAssertEqual(toDoItem.isCompleted, false)
-        XCTAssertNil(toDoItem.dateEdited)
+        XCTAssertNil(toDoItem.color)
     }
     
+    @MainActor
     func testJSONConversion() {
         // Given
         let id = "1"
         let text = "Test"
         let importance = Importance.important
-        let dueDate = Date(timeIntervalSinceNow: 86400)
+        let dueDate = Date(timeIntervalSinceNow: 86400).clean
         let isCompleted = false
-        let dateCreated = Date()
-        let dateEdited = Date()
+        let color = "ED3ED3"
+        let dateCreated = Date().clean
+        let dateEdited = Date().clean
         
         let toDoItem = ToDoItem(
             id: id,
@@ -65,6 +71,7 @@ final class ToDoItemTests: XCTestCase {
             importance: importance,
             dueDate: dueDate,
             isCompleted: isCompleted,
+            color: color,
             dateCreated: dateCreated,
             dateEdited: dateEdited
         )
@@ -83,20 +90,23 @@ final class ToDoItemTests: XCTestCase {
         XCTAssertEqual(jsonDictionary["importance"] as? String, importance.rawValue)
         XCTAssertEqual(jsonDictionary["dueDate"] as? TimeInterval, dueDate.timeIntervalSince1970)
         XCTAssertEqual(jsonDictionary["isCompleted"] as? Bool, isCompleted)
+        XCTAssertEqual(jsonDictionary["color"] as? String, color)
         XCTAssertEqual(jsonDictionary["dateCreated"] as? TimeInterval, dateCreated.timeIntervalSince1970)
         XCTAssertEqual(jsonDictionary["dateEdited"] as? TimeInterval, dateEdited.timeIntervalSince1970)
     }
     
+    @MainActor
     func testJSONParsing() {
         // Given
         let json: [String: Any] = [
             "id": "1",
             "text": "Test",
             "importance": "important",
-            "dueDate": 1719066998.1372972,
+            "dueDate": 1719000000,
             "isCompleted": false,
-            "dateCreated": 1719065998.1372972,
-            "dateEdited": 1719065998.1372972
+            "color": "ED3ED3",
+            "dateCreated": 1719000000.0,
+            "dateEdited": 1719000000.0
         ]
         
         // When
@@ -111,13 +121,15 @@ final class ToDoItemTests: XCTestCase {
         XCTAssertEqual(toDoItem.importance.rawValue, json["importance"] as? String)
         XCTAssertEqual(toDoItem.dueDate?.timeIntervalSince1970, json["dueDate"] as? TimeInterval)
         XCTAssertEqual(toDoItem.isCompleted, json["isCompleted"] as? Bool)
+        XCTAssertEqual(toDoItem.color, json["color"] as? String)
         XCTAssertEqual(toDoItem.dateCreated.timeIntervalSince1970, json["dateCreated"] as? TimeInterval)
         XCTAssertEqual(toDoItem.dateEdited?.timeIntervalSince1970, json["dateEdited"] as? TimeInterval)
     }
     
+    @MainActor
     func testCSVParsing() {
         // Given
-        let csv = "\"123\",\"Test Task\",\"important\",\"1609459200\",\"\",\"true\",\"1609455600\",\"1609462800\""
+        let csv = "\"123\",\"Test Task\",\"important\",\"1719000000\",\"true\",\"ED3ED3\",\"1719000000\",\"1719000000\""
         
         // When
         guard let item = ToDoItem.parse(csv: csv) else {
@@ -129,17 +141,19 @@ final class ToDoItemTests: XCTestCase {
         XCTAssertEqual(item.id, "123")
         XCTAssertEqual(item.text, "Test Task")
         XCTAssertEqual(item.importance, .important)
-        XCTAssertEqual(item.dueDate?.timeIntervalSince1970, 1609459200)
+        XCTAssertEqual(item.dueDate?.timeIntervalSince1970, 1719000000)
         XCTAssertEqual(item.isCompleted, true)
-        XCTAssertEqual(item.dateCreated.timeIntervalSince1970, 1609455600)
-        XCTAssertEqual(item.dateEdited?.timeIntervalSince1970, 1609462800)
+        XCTAssertEqual(item.color, "ED3ED3")
+        XCTAssertEqual(item.dateCreated.timeIntervalSince1970, 1719000000)
+        XCTAssertEqual(item.dateEdited?.timeIntervalSince1970, 1719000000)
     }
     
+    @MainActor
     func testCSVConversion() {
         // Given
-        let dateCreated = Date(timeIntervalSince1970: 1609455600)
-        let dueDate = Date(timeIntervalSince1970: 1609459200)
-        let dateEdited = Date(timeIntervalSince1970: 1609462800)
+        let dateCreated = Date(timeIntervalSince1970: 1719000000)
+        let dueDate = Date(timeIntervalSince1970: 1719000000)
+        let dateEdited = Date(timeIntervalSince1970: 1719000000)
         
         let item = ToDoItem(
             id: "123",
@@ -147,6 +161,7 @@ final class ToDoItemTests: XCTestCase {
             importance: .important,
             dueDate: dueDate,
             isCompleted: true,
+            color: "ED3ED3",
             dateCreated: dateCreated,
             dateEdited: dateEdited
         )
@@ -156,13 +171,14 @@ final class ToDoItemTests: XCTestCase {
         
         // Then
         // swiftlint:disable:next line_length
-        let expectedCSV = "\"123\",\"Test Task\",\"important\",\"1609459200.0\",\"\",\"true\",\"1609455600.0\",\"1609462800.0\"\n"
+        let expectedCSV = "\"123\",\"Test Task\",\"important\",\"1719000000.0\",\"true\",\"ED3ED3\",\"1719000000.0\",\"1719000000.0\"\n"
         XCTAssertEqual(csv, expectedCSV)
     }
     
+    @MainActor 
     func testParseInvalidCSV() {
         // Given
-        let invalidCSV = "\"123\",\"Test Task\",\"high\",\"1609459200\",\"true\",\"1609455600\""
+        let invalidCSV = "\"123\",\"Test Task\",\"high\",\"1719000000\",\"true\",\"1719000000\""
         
         // When
         let item = ToDoItem.parse(csv: invalidCSV)

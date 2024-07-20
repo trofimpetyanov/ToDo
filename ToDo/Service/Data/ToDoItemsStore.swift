@@ -27,18 +27,28 @@ class ToDoItemsStore: ObservableObject {
     }
     
     static let mock: [ToDoItem] = [
-        ToDoItem(text: "Buy groceries", isCompleted: true),
+        ToDoItem(text: "Buy groceries", isCompleted: true, color: "00FF44"),
         ToDoItem(text: "Walk \"Daisy\"", importance: .important, dueDate: Date(timeIntervalSinceNow: 3600)),
         ToDoItem(text: "Read a book", dateCreated: Date(timeIntervalSinceNow: -86400)),
-        ToDoItem(text: "Write a blog post", importance: .unimportant),
-        ToDoItem(text: "Workout", dueDate: Date(timeIntervalSinceNow: 7200), isCompleted: false),
+        ToDoItem(text: "Write a blog post", importance: .low),
+        ToDoItem(text: "Workout", dueDate: Date(timeIntervalSinceNow: 7200), isCompleted: false, color: "00DDFF"),
         ToDoItem(text: "Plan vacation", isCompleted: true, dateEdited: Date(timeIntervalSinceNow: -3600)),
-        ToDoItem(text: "Clean the house", importance: .important),
-        ToDoItem(text: "Call mom", importance: .ordinary, dueDate: Date(timeIntervalSinceNow: 1800), isCompleted: false)
+        ToDoItem(text: "Clean the house", importance: .important, color: "FF0077"),
+        ToDoItem(text: "Call mom", importance: .basic, dueDate: Date(timeIntervalSinceNow: 1800), isCompleted: false)
     ]
     
-    private var fileCache: FileCache
+    private var isDirty: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: "isDirty")
+        } set {
+            UserDefaults.standard.setValue(newValue, forKey: "isDirty")
+        }
+    }
+
     private var toDoItems: [ToDoItem]
+    private var fileCache: FileCache
+    
+    var networkManager: ToDoItemsNetworkManager
     
     /// The current list of to-do items, sorted and filtered based on the current settings.
     @Published var currentToDoItems: [ToDoItem] = []
@@ -71,70 +81,77 @@ class ToDoItemsStore: ObservableObject {
             .count
     }
     
-    /// The flag signalizing the first launch of the app.
-    var isFirstLaunch: Bool = {
-        let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
-        
-        if launchedBefore {
-            return false
-        } else {
-            UserDefaults.standard.set(true, forKey: "launchedBefore")
-            
-            return true
-        }
-    }()
-    
     /// Initializes a new instance of `ToDoItemsStore`.
-    /// - Note: `ToDoItemsStore` initializes with mock items if there are no todos in the storage.
     init() {
         fileCache = FileCache()
         toDoItems = []
         
-        do {
-            try fileCache.load(from: "toDoItems")
-            toDoItems = fileCache.toDoItems
-        } catch {
-            if isFirstLaunch {
-                Logger.logInfo("First launch detected. Initializing with mock data.")
-                
-                Self.mock.forEach { toDoItem in
+        let networkService = NetworkService()
+        networkManager = ToDoItemsNetworkManager(networkService: networkService)
+        
+        Task {
+            if let toDoItems = await networkManager.loadItems() {
+                self.toDoItems = toDoItems
+                toDoItems.forEach { toDoItem in
                     fileCache.add(toDoItem)
                 }
                 
-                toDoItems = Self.mock
+                save()
             } else {
-                Logger.logError("Failed to load ToDoItems from file: toDoItems. Error: \(error.localizedDescription)")
+                Logger.logError(
+                    "Failed to load ToDoItems from the server. Loading from cache.")
+                
+                do {
+                    try fileCache.load(from: "toDoItems")
+                    toDoItems = fileCache.toDoItems
+                    
+                    isDirty = true
+                    await patch()
+                } catch {
+                    Logger.logError(
+                        "Failed to load ToDoItems from the file \"toDoItems\". Error: \(error.localizedDescription)")
+                }
             }
+
+            updateCurrentToDoItems()
         }
-        
-        toDoItems = fileCache.toDoItems
-        updateCurrentToDoItems()
     }
     
     /// Adds a new to-do item to the store.
     /// - Parameter toDoItem: The to-do item to add.
-    func add(_ toDoItem: ToDoItem) {
+    func add(_ toDoItem: ToDoItem) async {
+        await patch()
+        
         guard !toDoItems.contains(where: { $0.id == toDoItem.id }) else { return }
         
         toDoItems.append(toDoItem)
         fileCache.add(toDoItem)
         
         updateCurrentToDoItems()
+        
+        isDirty = await !networkManager.add(toDoItem)
+        
         save()
     }
     
     /// Adds a new to-do item to the store or updates an existing item if it already exists.
     /// - Parameter toDoItem: The to-do item to add or update.
-    func addOrUpdate(_ toDoItem: ToDoItem) {
-        if let index = toDoItems.firstIndex(where: { toDoItem.id == $0.id }) {
-            toDoItems[index] = toDoItem
-        } else {
-            toDoItems.append(toDoItem)
-        }
-        
+    func addOrUpdate(_ toDoItem: ToDoItem) async {
+        await patch()
         fileCache.addOrUpdate(toDoItem)
         
-        updateCurrentToDoItems()
+        if let index = toDoItems.firstIndex(where: { toDoItem.id == $0.id }) {
+            toDoItems[index] = toDoItem
+            updateCurrentToDoItems()
+            
+            isDirty = await !networkManager.update(toDoItem)
+        } else {
+            toDoItems.append(toDoItem)
+            updateCurrentToDoItems()
+            
+            isDirty = await !networkManager.add(toDoItem)
+        }
+        
         save()
     }
     
@@ -142,13 +159,18 @@ class ToDoItemsStore: ObservableObject {
     /// - Parameter toDoItem: The to-do item to delete.
     /// - Returns: The deleted to-do item, or `nil` if the item was not found.
     @discardableResult
-    func delete(_ toDoItem: ToDoItem) -> ToDoItem? {
+    func delete(_ toDoItem: ToDoItem) async -> ToDoItem? {
+        await patch()
+        
         guard let index = toDoItems.firstIndex(where: { $0.id == toDoItem.id }) else { return nil }
         
         let removedToDoItem = toDoItems.remove(at: index)
         fileCache.delete(with: toDoItem.id)
         
         updateCurrentToDoItems()
+        
+        isDirty = await !networkManager.delete(toDoItem)
+        
         save()
         
         return removedToDoItem
@@ -159,6 +181,13 @@ class ToDoItemsStore: ObservableObject {
             try fileCache.save(to: "toDoItems")
         } catch {
             Logger.logError("Failed to save ToDoItems to file: toDoItems. Error: \(error.localizedDescription)")
+        }
+    }
+    
+    private func patch() async {
+        if isDirty, let toDoItems = await networkManager.patchItems(toDoItems) {
+            self.toDoItems = toDoItems
+            isDirty = false
         }
     }
     

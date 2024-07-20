@@ -9,8 +9,8 @@ extension ToDoItem {
         case text
         case importance
         case dueDate
-        case categoryId
         case isCompleted
+        case color
         case dateCreated
         case dateEdited
     }

@@ -3,9 +3,6 @@ import SwiftData
 import LoggerPackage
 
 struct ToDoItemsList: View {
-    @Query(sort: \Category.id) private var categories: [Category]
-    @Environment(\.modelContext) private var context
-    
     @ObservedObject var toDoItemsStore: ToDoItemsStore
     
     @State private var newToDoItemText: String = ""
@@ -13,6 +10,8 @@ struct ToDoItemsList: View {
     
     @State private var isDetailPresented: Bool = false
     @State private var isDetailViewPresenting: Bool = false
+    
+    @State private var isLoading: Bool = true
     
     var body: some View {
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -48,7 +47,10 @@ struct ToDoItemsList: View {
                         
                         if !plainText.isEmpty {
                             let toDoItem = ToDoItem(text: newToDoItemText)
-                            toDoItemsStore.add(toDoItem)
+                            
+                            Task {
+                                await toDoItemsStore.add(toDoItem)
+                            }
                         }
                         
                         newToDoItemText = ""
@@ -76,6 +78,13 @@ struct ToDoItemsList: View {
             addNewItemButton
         }
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                if isLoading {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                }
+            }
+            
             ToolbarItem(placement: .primaryAction) {
                 NavigationLink {
                     CalendarView(toDoItemsStore: toDoItemsStore)
@@ -92,34 +101,10 @@ struct ToDoItemsList: View {
         .onAppear {
             Logger.logInfo("ToDoItemsList appeared.")
             
-            if toDoItemsStore.isFirstLaunch {
-                toDoItemsStore.isFirstLaunch = false
-                
-                Category.template.forEach { category in
-                    context.insert(category)
-                }
-                
-                Logger.logInfo("Default categories inserted.")
-            }
-            
-            toDoItemsStore.currentToDoItems.forEach { toDoItem in
-                if let categoryId = toDoItem.categoryId,
-                   let category = categories.first(where: {
-                       $0.id == categoryId
-                   }) {
-                    let toDoItem = ToDoItem(
-                        id: toDoItem.id,
-                        text: toDoItem.text,
-                        importance: toDoItem.importance,
-                        dueDate: toDoItem.dueDate,
-                        category: category,
-                        categoryId: categoryId,
-                        isCompleted: toDoItem.isCompleted,
-                        dateCreated: toDoItem.dateCreated,
-                        dateEdited: toDoItem.dateEdited
-                    )
-                    
-                    toDoItemsStore.addOrUpdate(toDoItem)
+            Task {
+                while true {
+                    isLoading = await toDoItemsStore.networkManager.isLoading
+                    try await Task.sleep(for: .seconds(1))
                 }
             }
         }
@@ -209,7 +194,7 @@ struct ToDoItemsList: View {
     
     private func listRow(for toDoItem: Binding<ToDoItem>) -> some View {
         ListRow(toDoItem: toDoItem,
-                onComplete: { toDoItemsStore.addOrUpdate(toDoItem.wrappedValue) })
+                onComplete: { await toDoItemsStore.addOrUpdate(toDoItem.wrappedValue) })
         .onTapGesture {
             presentDetailView(for: toDoItem.wrappedValue)
         }
@@ -224,19 +209,20 @@ struct ToDoItemsList: View {
     
     private func completeAction(for toDoItem: ToDoItem) -> some View {
         Button {
-            toDoItemsStore.addOrUpdate(
-                ToDoItem(
-                    id: toDoItem.id,
-                    text: toDoItem.text,
-                    importance: toDoItem.importance,
-                    dueDate: toDoItem.dueDate,
-                    category: toDoItem.category, 
-                    categoryId: toDoItem.categoryId,
-                    isCompleted: !toDoItem.isCompleted,
-                    dateCreated: toDoItem.dateCreated,
-                    dateEdited: toDoItem.dateEdited
+            Task {
+                await toDoItemsStore.addOrUpdate(
+                    ToDoItem(
+                        id: toDoItem.id,
+                        text: toDoItem.text,
+                        importance: toDoItem.importance,
+                        dueDate: toDoItem.dueDate,
+                        isCompleted: !toDoItem.isCompleted,
+                        color: toDoItem.color,
+                        dateCreated: toDoItem.dateCreated,
+                        dateEdited: toDoItem.dateEdited
+                    )
                 )
-            )
+            }
         } label: {
             Image(systemName: toDoItem.isCompleted ? "circle" : "checkmark.circle.fill")
         }
@@ -279,8 +265,8 @@ extension ToDoItemsList {
     }
     
     private func onSave(_ toDoItem: ToDoItem) {
-        withAnimation {
-            toDoItemsStore.addOrUpdate(toDoItem)
+        Task {
+            await toDoItemsStore.addOrUpdate(toDoItem)
         }
         
         onDismiss()
@@ -293,7 +279,9 @@ extension ToDoItemsList {
     }
     
     private func onDelete(_ toDoItem: ToDoItem) {
-        toDoItemsStore.delete(toDoItem)
+        Task {
+            await toDoItemsStore.delete(toDoItem)
+        }
         
         discardDetailView()
     }

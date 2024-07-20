@@ -21,7 +21,7 @@ struct FileCache {
     ///
     /// - Parameter toDoItem: The `ToDoItem` to be added.
     /// - Note: If an item with the same `id` already exists in the cache, it will not be added.
-    mutating func add(_ toDoItem: ToDoItem) {
+    mutating func add(_ toDoItem: ToDoItem, ignoreLog: Bool = false) {
         guard !toDoItems.contains(where: { toDoItem.id == $0.id }) else {
             Logger.logDebug("Item with ID \(toDoItem.id) already exists. Not adding.")
             
@@ -30,7 +30,9 @@ struct FileCache {
         
         toDoItems.append(toDoItem)
         
-        Logger.logDebug("Added ToDoItem with ID \(toDoItem.id) to cache.")
+        if !ignoreLog {
+            Logger.logDebug("Added ToDoItem with ID \(toDoItem.id) to cache.")
+        }
     }
     
     /// Updates an existing `ToDoItem` in the cache or adds a new one if it does not exist.

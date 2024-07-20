@@ -135,15 +135,16 @@ class CalendarContainerViewController: UIViewController {
                 onDismiss: onDismiss,
                 onDelete: onDelete
             )
-            .modelContainer(for: Category.self)
         )
         
         present(viewController, animated: true)
     }
     
     private func onSave(_ toDoItem: ToDoItem) {
-        toDoItemsStore.addOrUpdate(toDoItem)
-        updateData()
+        Task {
+            await toDoItemsStore.addOrUpdate(toDoItem)
+            updateData()
+        }
         
         listViewController.scrollToDate(toDoItem.dueDate)
         datesViewController.selectDate(toDoItem.dueDate)
@@ -156,8 +157,10 @@ class CalendarContainerViewController: UIViewController {
     }
     
     private func onDelete(_ toDoItem: ToDoItem) {
-        toDoItemsStore.delete(toDoItem)
-        updateData()
+        Task {
+            await toDoItemsStore.delete(toDoItem)
+            updateData()
+        }
         
         onDismiss()
     }
@@ -182,15 +185,15 @@ extension CalendarContainerViewController: CalendarContainerViewControllerDelega
             text: toDoItem.text,
             importance: toDoItem.importance,
             dueDate: toDoItem.dueDate,
-            category: toDoItem.category,
-            categoryId: toDoItem.categoryId,
             isCompleted: isCompleted,
+            color: toDoItem.color,
             dateCreated: toDoItem.dateCreated,
             dateEdited: toDoItem.dateEdited
         )
         
-        toDoItemsStore.addOrUpdate(updatedToDoItem)
-        
-        updateData()
+        Task {
+            await toDoItemsStore.addOrUpdate(updatedToDoItem)
+            updateData()
+        }
     }
 }
