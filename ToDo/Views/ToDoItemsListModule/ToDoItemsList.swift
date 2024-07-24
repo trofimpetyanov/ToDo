@@ -11,6 +11,8 @@ struct ToDoItemsList: View {
     @State private var isDetailPresented: Bool = false
     @State private var isDetailViewPresenting: Bool = false
     
+    @State private var isCalendarViewPresenting: Bool = false
+    
     @State private var isLoading: Bool = true
     
     var body: some View {
@@ -36,6 +38,12 @@ struct ToDoItemsList: View {
     
     private var listSection: some View {
         List {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                Button("Каледнарь", systemImage: "calendar") {
+                    isCalendarViewPresenting = true
+                }
+            }
+            
             Section {
                 ForEach($toDoItemsStore.currentToDoItems) { toDoItem in
                     listRow(for: toDoItem)
@@ -61,6 +69,7 @@ struct ToDoItemsList: View {
                 HStack {
                     Text("Выполнено – \(toDoItemsStore.completedCount)")
                         .contentTransition(.numericText())
+                        .animation(.default, value: toDoItemsStore.completedCount)
                     
                     Spacer()
                     
@@ -80,21 +89,32 @@ struct ToDoItemsList: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 if isLoading {
-                    ProgressView()
-                        .progressViewStyle(.circular)
+                    HStack(spacing: 8) {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                        
+                        VStack(alignment: .leading) {
+                            Text("Не забудьте вставить")
+                            Text("свой токен.")
+                        }
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    }
                 }
             }
             
-            ToolbarItem(placement: .primaryAction) {
-                NavigationLink {
-                    CalendarView(toDoItemsStore: toDoItemsStore)
-                        .navigationTitle("Календарь")
-                        .toolbarTitleDisplayMode(.inline)
-                        .toolbarBackground(.visible, for: .navigationBar)
-                        .background(AppColors.backPrimary)
-                        .ignoresSafeArea(edges: .bottom)
-                } label: {
-                    Label("Календарь", systemImage: "calendar")
+            if UIDevice.current.userInterfaceIdiom != .pad {
+                ToolbarItem(placement: .primaryAction) {
+                    NavigationLink {
+                        CalendarView(toDoItemsStore: toDoItemsStore)
+                            .navigationTitle("Календарь")
+                            .toolbarTitleDisplayMode(.inline)
+                            .toolbarBackground(.visible, for: .navigationBar)
+                            .background(AppColors.backPrimary)
+                            .ignoresSafeArea(edges: .bottom)
+                    } label: {
+                        Label("Календарь", systemImage: "calendar")
+                    }
                 }
             }
         }
@@ -172,7 +192,14 @@ struct ToDoItemsList: View {
     private var detailView: some View {
         Group {
             if UIDevice.current.userInterfaceIdiom == .pad {
-                if isDetailViewPresenting {
+                if isCalendarViewPresenting {
+                    CalendarView(toDoItemsStore: toDoItemsStore)
+                        .navigationTitle("Календарь")
+                        .toolbarTitleDisplayMode(.inline)
+                        .toolbarBackground(.visible, for: .navigationBar)
+                        .background(AppColors.backPrimary)
+                        .ignoresSafeArea(edges: .bottom)
+                } else if isDetailViewPresenting {
                     ToDoItemDetail(
                         editingToDoItem: $editingToDoItem,
                         onSave: { toDoItem in onSave(toDoItem) },
@@ -196,6 +223,7 @@ struct ToDoItemsList: View {
         ListRow(toDoItem: toDoItem,
                 onComplete: { await toDoItemsStore.addOrUpdate(toDoItem.wrappedValue) })
         .onTapGesture {
+            isCalendarViewPresenting = false
             presentDetailView(for: toDoItem.wrappedValue)
         }
         .swipeActions(edge: .leading) {

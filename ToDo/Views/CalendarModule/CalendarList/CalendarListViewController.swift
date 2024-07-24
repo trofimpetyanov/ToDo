@@ -34,7 +34,9 @@ class CalendarListViewController: UICollectionViewController {
         
         Logger.logInfo("CalendarListViewController did appear.")
         
-        scrollToDate(dataSource.snapshot().itemIdentifiers.first?.dueDate, animated: false)
+        if let first = dataSource.snapshot().itemIdentifiers.first {
+            scrollToDate(first.dueDate, animated: false)
+        }
         displayedSectionIndices = collectionView.indexPathsForVisibleItems.sorted().map { $0.section }
     }
     
@@ -95,6 +97,7 @@ class CalendarListViewController: UICollectionViewController {
         let indexPath = IndexPath(row: 0, section: sectionIndex)
         
         isScrolling = true
+        
         collectionView.scrollToItem(at: indexPath, at: .top, animated: animated)
         
         // So it does not deselects the selected date while scrolling in `scrollViewDidScroll`.
