@@ -1,11 +1,40 @@
 import Foundation
 import SwiftData
 
-extension ToDoItem {
+extension ToDoItem: JSONRepresentable {
+    
+    /// A computed property that converts the `ToDoItem` into a JSON-compatible dictionary.
+    var json: Any {
+        var dictionary: [String: Any] = [
+            Properties.id.rawValue: id,
+            Properties.text.rawValue: text,
+            Properties.isCompleted.rawValue: isCompleted,
+            Properties.dateCreated.rawValue: dateCreated.timeIntervalSince1970
+        ]
+        
+        if importance != .basic {
+            dictionary[Properties.importance.rawValue] = importance.rawValue
+        }
+        
+        if let dueDate = dueDate {
+            dictionary[Properties.dueDate.rawValue] = dueDate.timeIntervalSince1970
+        }
+        
+        if let dateEdited = dateEdited {
+            dictionary[Properties.dateEdited.rawValue] = dateEdited.timeIntervalSince1970
+        }
+        
+        if let color = color {
+            dictionary[Properties.color.rawValue] = color
+        }
+        
+        return dictionary
+    }
+    
     /// Parses a JSON-compatible dictionary into a `ToDoItem` instance.
     ///
     /// - Parameter json: The JSON-compatible dictionary to parse.
-    /// - Returns: An optional `ToDoItem` if the parsing is successful, 
+    /// - Returns: An optional `ToDoItem` if the parsing is successful,
     ///            or `nil` if any required fields are missing or invalid.
     static func parse(json: Any) -> ToDoItem? {
         guard let dictionary = json as? [String: Any],
@@ -38,6 +67,25 @@ extension ToDoItem {
             dateCreated: dateCreated,
             dateEdited: dateEdited)
     }
+}
+
+extension ToDoItem: CSVRepresentable {
+    
+    /// A computed property that converts the `ToDoItem` into a CSV string.
+    var csv: String {
+        guard
+            let json = json as? [String: Any],
+            let lastField = Properties.allCases.last else { return "" }
+        var csv = ""
+        
+        Properties.allCases.forEach { field in
+            let value = "\"\(json[field.rawValue] ?? "")\""
+            let separator = field != lastField ? "," : "\n"
+            csv += value + separator
+        }
+        
+        return csv
+    }
     
     /// Parses a CSV string into a `ToDoItem` instance.
     ///
@@ -68,49 +116,5 @@ extension ToDoItem {
             dateCreated: dateCreated,
             dateEdited: dateEdited
         )
-    }
-    
-    /// A computed property that converts the `ToDoItem` into a JSON-compatible dictionary.
-    var json: Any {
-        var dictionary: [String: Any] = [
-            Properties.id.rawValue: id,
-            Properties.text.rawValue: text,
-            Properties.isCompleted.rawValue: isCompleted,
-            Properties.dateCreated.rawValue: dateCreated.timeIntervalSince1970
-        ]
-        
-        if importance != .basic {
-            dictionary[Properties.importance.rawValue] = importance.rawValue
-        }
-        
-        if let dueDate = dueDate {
-            dictionary[Properties.dueDate.rawValue] = dueDate.timeIntervalSince1970
-        }
-        
-        if let dateEdited = dateEdited {
-            dictionary[Properties.dateEdited.rawValue] = dateEdited.timeIntervalSince1970
-        }
-        
-        if let color = color {
-            dictionary[Properties.color.rawValue] = color
-        }
-        
-        return dictionary
-    }
-    
-    /// A computed property that converts the `ToDoItem` into a CSV string.
-    var csv: String {
-        guard
-            let json = json as? [String: Any],
-            let lastField = Properties.allCases.last else { return "" }
-        var csv = ""
-        
-        Properties.allCases.forEach { field in
-            let value = "\"\(json[field.rawValue] ?? "")\""
-            let separator = field != lastField ? "," : "\n"
-            csv += value + separator
-        }
-        
-        return csv
     }
 }

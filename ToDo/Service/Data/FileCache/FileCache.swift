@@ -1,15 +1,15 @@
 import Foundation
 import LoggerPackage
 
-/// A structure for managing `ToDoItem` objects in cache, providing methods to add, delete, save, and load items.
+/// A structure for managing `Item` objects in cache, providing methods to add, delete, save, and load items.
 @MainActor
-struct FileCache {
+struct FileCache<Item: Identifiable & JSONRepresentable & CSVRepresentable> where Item.ID == String {
     
     enum FileFormat: String {
         case json, csv
     }
     
-    private(set) var toDoItems: [ToDoItem] = []
+    private(set) var items: [Item] = []
     
     private var documentsDirectory: URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -17,57 +17,57 @@ struct FileCache {
         return paths[0]
     }
     
-    /// Adds a new `ToDoItem` to the cache.
+    /// Adds a new `Item` to the cache.
     ///
-    /// - Parameter toDoItem: The `ToDoItem` to be added.
+    /// - Parameter item: The `Item` to be added.
     /// - Note: If an item with the same `id` already exists in the cache, it will not be added.
-    mutating func add(_ toDoItem: ToDoItem, ignoreLog: Bool = false) {
-        guard !toDoItems.contains(where: { toDoItem.id == $0.id }) else {
-            Logger.logDebug("Item with ID \(toDoItem.id) already exists. Not adding.")
+    mutating func add(_ item: Item, ignoreLog: Bool = false) {
+        guard !items.contains(where: { item.id == $0.id }) else {
+            Logger.logDebug("Item with ID \(item.id) already exists. Not adding.")
             
             return
         }
         
-        toDoItems.append(toDoItem)
+        items.append(item)
         
         if !ignoreLog {
-            Logger.logDebug("Added ToDoItem with ID \(toDoItem.id) to cache.")
+            Logger.logDebug("Added Item with ID \(item.id) to cache.")
         }
     }
     
-    /// Updates an existing `ToDoItem` in the cache or adds a new one if it does not exist.
+    /// Updates an existing `Item` in the cache or adds a new one if it does not exist.
     ///
-    /// - Parameter toDoItem: The `ToDoItem` to be updated or added.
+    /// - Parameter item: The `Item` to be updated or added.
     /// - Note: If an item with the same `id` already exists in the cache, it will be updated. 
     ///         Otherwise, the item will be added to the beginning of the list.
-    mutating func addOrUpdate(_ toDoItem: ToDoItem) {
-        if let index = toDoItems.firstIndex(where: { toDoItem.id == $0.id }) {
-            toDoItems[index] = toDoItem
+    mutating func addOrUpdate(_ item: Item) {
+        if let index = items.firstIndex(where: { item.id == $0.id }) {
+            items[index] = item
             
-            Logger.logDebug("Updated ToDoItem: \(toDoItem.id).")
+            Logger.logDebug("Updated Item: \(item.id).")
         } else {
-            toDoItems.append(toDoItem)
+            items.append(item)
         }
     }
     
-    /// Deletes a `ToDoItem` from the cache by its `id`.
+    /// Deletes a `Item` from the cache by its `id`.
     ///
-    /// - Parameter id: The `id` of the `ToDoItem` to be deleted.
-    /// - Returns: The removed`ToDoItem` object.
+    /// - Parameter id: The `id` of the `Item` to be deleted.
+    /// - Returns: The removed`Item` object.
     @discardableResult
-    mutating func delete(with id: String) -> ToDoItem? {
-        guard let index = toDoItems.firstIndex(where: { id == $0.id }) else {
-            Logger.logDebug("ToDoItem with ID \(id) not found. Delete operation failed.")
+    mutating func delete(with id: String) -> Item? {
+        guard let index = items.firstIndex(where: { id == $0.id }) else {
+            Logger.logDebug("Item with ID \(id) not found. Delete operation failed.")
             
             return nil
         }
         
-        Logger.logDebug("Deleted ToDoItem with ID \(id) from cache.")
+        Logger.logDebug("Deleted Item with ID \(id) from cache.")
         
-        return toDoItems.remove(at: index)
+        return items.remove(at: index)
     }
     
-    /// Saves the current list of `ToDoItem` objects to a file in the specified format.
+    /// Saves the current list of `Item` objects to a file in the specified format.
     ///
     /// - Parameters:
     ///   - file: The name of the file to save the items to.
@@ -87,15 +87,15 @@ struct FileCache {
             try saveToCSV(at: path)
         }
         
-        Logger.logDebug("Saved ToDoItems to file: \(file).\(format.rawValue)")
+        Logger.logDebug("Saved Items to file: \(file).\(format.rawValue)")
     }
     
-    /// Loads `ToDoItem` objects from a file in the specified format.
+    /// Loads `Item` objects from a file in the specified format.
     ///
     /// - Parameters:
     ///   - file: The name of the file to load the items from.
     ///   - format: The format of the file (`.json` or `.csv`). Defaults to `.json`.
-    /// - Returns: An array of `ToDoItem` objects loaded from the specified file.
+    /// - Returns: An array of `Item` objects loaded from the specified file.
     /// - Throws: An error if the load operation fails. 
     ///           Possible errors include file read errors or deserialization errors.
     /// - Note: If there is an error reading from the file, an empty array is returned.
@@ -106,16 +106,16 @@ struct FileCache {
         
         switch format {
         case .json:
-            toDoItems = try loadFromJSON(at: path)
+            items = try loadFromJSON(at: path)
         case .csv:
-            toDoItems = try loadFromCSV(at: path)
+            items = try loadFromCSV(at: path)
         }
         
-        Logger.logDebug("Loaded ToDoItems from file: \(file).\(format.rawValue)")
+        Logger.logDebug("Loaded Items from file: \(file).\(format.rawValue)")
     }
     
     mutating func clear() {
-        toDoItems = []
+        items = []
     }
 }
 
@@ -124,20 +124,20 @@ extension FileCache {
     
     // JSON
     private func saveToJSON(at path: URL) throws {
-        let items = toDoItems
+        let items = items
             .map { $0.json }
         
         let data = try JSONSerialization.data(withJSONObject: items, options: .prettyPrinted)
         try data.write(to: path)
     }
     
-    private func loadFromJSON(at path: URL) throws -> [ToDoItem] {
+    private func loadFromJSON(at path: URL) throws -> [Item] {
         let data = try Data(contentsOf: path)
         
-        guard let items = try JSONSerialization.jsonObject(with: data) as? [Any] else { return [] }
-        let toDoItems = items.compactMap { ToDoItem.parse(json: $0) }
+        guard let object = try JSONSerialization.jsonObject(with: data) as? [Any] else { return [] }
+        let items = object.compactMap { Item.parse(json: $0) }
         
-        return toDoItems
+        return items
     }
     
     // CSV
@@ -145,20 +145,20 @@ extension FileCache {
         let fields = ["id", "text", "importance", "dueDate", "isCompleted", "dateCreated", "dateEdited"]
         var data = "\"" + fields.joined(separator: "\",\"") + "\"\n"
         
-        data += toDoItems
-            .reduce("", { partialResult, toDoItem in
-                return partialResult + toDoItem.csv
+        data += items
+            .reduce("", { partialResult, item in
+                return partialResult + item.csv
             })
         
         try data.write(to: path, atomically: true, encoding: .utf8)
     }
     
-    private func loadFromCSV(at path: URL) throws -> [ToDoItem] {
+    private func loadFromCSV(at path: URL) throws -> [Item] {
         let data = try String(contentsOf: path)
         
         let lines = data.components(separatedBy: .newlines).dropFirst()
-        let toDoItems: [ToDoItem] = lines.compactMap { ToDoItem.parse(csv: $0) }
+        let items: [Item] = lines.compactMap { Item.parse(csv: $0) }
         
-        return toDoItems
+        return items
     }
 }
