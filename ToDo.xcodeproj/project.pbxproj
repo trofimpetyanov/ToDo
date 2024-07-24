@@ -17,6 +17,8 @@
 		AC2087462C41822D009B0ECF /* CocoaLumberjack in Frameworks */ = {isa = PBXBuildFile; productRef = AC2087452C41822D009B0ECF /* CocoaLumberjack */; };
 		AC2087482C41822D009B0ECF /* CocoaLumberjackSwift in Frameworks */ = {isa = PBXBuildFile; productRef = AC2087472C41822D009B0ECF /* CocoaLumberjackSwift */; };
 		AC20874A2C41822D009B0ECF /* CocoaLumberjackSwiftLogBackend in Frameworks */ = {isa = PBXBuildFile; productRef = AC2087492C41822D009B0ECF /* CocoaLumberjackSwiftLogBackend */; };
+		AC3BA79C2C5131D000642B24 /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3BA79B2C5131D000642B24 /* APIResponse.swift */; };
+		AC3BA79F2C513D0800642B24 /* Task+Retrying.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3BA79E2C513D0800642B24 /* Task+Retrying.swift */; };
 		AC5630AE2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5630AD2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift */; };
 		AC5630B02C41DCFA00FB5835 /* URLSessionAsyncDataTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5630AF2C41DCFA00FB5835 /* URLSessionAsyncDataTaskTests.swift */; };
 		AC6A96972C41C8D8008659C5 /* LoggerPackage in Frameworks */ = {isa = PBXBuildFile; productRef = AC6A96962C41C8D8008659C5 /* LoggerPackage */; };
@@ -47,16 +49,16 @@
 		ACDA31C62C2D7AA600C5FDCE /* ListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31C52C2D7AA600C5FDCE /* ListRow.swift */; };
 		ACDA31C82C2DF7E900C5FDCE /* CheckmarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31C72C2DF7E900C5FDCE /* CheckmarkView.swift */; };
 		ACDA31CA2C2EE38E00C5FDCE /* ToDoItemDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31C92C2EE38E00C5FDCE /* ToDoItemDetail.swift */; };
-		ACDA31CC2C2EF27900C5FDCE /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31CB2C2EF27900C5FDCE /* Color+.swift */; };
+		ACDA31CC2C2EF27900C5FDCE /* Color+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31CB2C2EF27900C5FDCE /* Color+Init.swift */; };
 		ACDA31CE2C2EFC5100C5FDCE /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31CD2C2EFC5100C5FDCE /* AppColors.swift */; };
 		ACDA31D02C2F49DB00C5FDCE /* ToDoItemsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31CF2C2F49DB00C5FDCE /* ToDoItemsStore.swift */; };
 		ACDA31D22C2F9CC200C5FDCE /* ColorWheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31D12C2F9CC200C5FDCE /* ColorWheel.swift */; };
 		ACDA31D72C2FADE200C5FDCE /* ColorWheelPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31D62C2FADE200C5FDCE /* ColorWheelPicker.swift */; };
 		ACDA31D92C2FC10F00C5FDCE /* Color+HEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDA31D82C2FC10F00C5FDCE /* Color+HEX.swift */; };
-		ACE0757D2C319B0200F0EA26 /* Image+.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE0757C2C319B0200F0EA26 /* Image+.swift */; };
+		ACE0757D2C319B0200F0EA26 /* Image+SystemImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE0757C2C319B0200F0EA26 /* Image+SystemImage.swift */; };
 		ACE0757F2C31A8D400F0EA26 /* Color+IdealTextColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE0757E2C31A8D400F0EA26 /* Color+IdealTextColor.swift */; };
 		ACF2A2952C25C58200C7D20E /* ToDoItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACF2A2942C25C58200C7D20E /* ToDoItemTests.swift */; };
-		ACF2A2992C25F4BC00C7D20E /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACF2A2982C25F4BC00C7D20E /* Date+.swift */; };
+		ACF2A2992C25F4BC00C7D20E /* Date+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACF2A2982C25F4BC00C7D20E /* Date+Init.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +81,8 @@
 		AC1C1BA22C2374920094D57C /* ToDoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItem.swift; sourceTree = "<group>"; };
 		AC1C1BA42C2374E60094D57C /* Importance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Importance.swift; sourceTree = "<group>"; };
 		AC1C1BA62C2375B00094D57C /* ToDoItem+Parsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+Parsing.swift"; sourceTree = "<group>"; };
+		AC3BA79B2C5131D000642B24 /* APIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponse.swift; sourceTree = "<group>"; };
+		AC3BA79E2C513D0800642B24 /* Task+Retrying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Retrying.swift"; sourceTree = "<group>"; };
 		AC5630AD2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+AsyncDataTask.swift"; sourceTree = "<group>"; };
 		AC5630AF2C41DCFA00FB5835 /* URLSessionAsyncDataTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionAsyncDataTaskTests.swift; sourceTree = "<group>"; };
 		AC99F67D2C4AB78000F07E49 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
@@ -108,17 +112,17 @@
 		ACDA31C52C2D7AA600C5FDCE /* ListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRow.swift; sourceTree = "<group>"; };
 		ACDA31C72C2DF7E900C5FDCE /* CheckmarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckmarkView.swift; sourceTree = "<group>"; };
 		ACDA31C92C2EE38E00C5FDCE /* ToDoItemDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemDetail.swift; sourceTree = "<group>"; };
-		ACDA31CB2C2EF27900C5FDCE /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
+		ACDA31CB2C2EF27900C5FDCE /* Color+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Init.swift"; sourceTree = "<group>"; };
 		ACDA31CD2C2EFC5100C5FDCE /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
 		ACDA31CF2C2F49DB00C5FDCE /* ToDoItemsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemsStore.swift; sourceTree = "<group>"; };
 		ACDA31D12C2F9CC200C5FDCE /* ColorWheel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWheel.swift; sourceTree = "<group>"; };
 		ACDA31D62C2FADE200C5FDCE /* ColorWheelPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWheelPicker.swift; sourceTree = "<group>"; };
 		ACDA31D82C2FC10F00C5FDCE /* Color+HEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+HEX.swift"; sourceTree = "<group>"; };
-		ACE0757C2C319B0200F0EA26 /* Image+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+.swift"; sourceTree = "<group>"; };
+		ACE0757C2C319B0200F0EA26 /* Image+SystemImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+SystemImage.swift"; sourceTree = "<group>"; };
 		ACE0757E2C31A8D400F0EA26 /* Color+IdealTextColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+IdealTextColor.swift"; sourceTree = "<group>"; };
 		ACF2A28B2C25C55F00C7D20E /* ToDoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ToDoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACF2A2942C25C58200C7D20E /* ToDoItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemTests.swift; sourceTree = "<group>"; };
-		ACF2A2982C25F4BC00C7D20E /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
+		ACF2A2982C25F4BC00C7D20E /* Date+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Init.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -242,7 +246,7 @@
 		AC2087502C41894E009B0ECF /* Date */ = {
 			isa = PBXGroup;
 			children = (
-				ACF2A2982C25F4BC00C7D20E /* Date+.swift */,
+				ACF2A2982C25F4BC00C7D20E /* Date+Init.swift */,
 				AC9BF5A22C38308D008C6C58 /* Date+Format.swift */,
 				AC99F6912C4AFCE600F07E49 /* Date+Clean.swift */,
 			);
@@ -252,11 +256,30 @@
 		AC2087512C418954009B0ECF /* Color */ = {
 			isa = PBXGroup;
 			children = (
-				ACDA31CB2C2EF27900C5FDCE /* Color+.swift */,
+				ACDA31CB2C2EF27900C5FDCE /* Color+Init.swift */,
 				ACDA31D82C2FC10F00C5FDCE /* Color+HEX.swift */,
 				ACE0757E2C31A8D400F0EA26 /* Color+IdealTextColor.swift */,
 			);
 			path = Color;
+			sourceTree = "<group>";
+		};
+		AC3BA79D2C513CF700642B24 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				AC5630AD2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift */,
+				AC3BA79E2C513D0800642B24 /* Task+Retrying.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		AC3BA7A02C513D3A00642B24 /* APIRequest */ = {
+			isa = PBXGroup;
+			children = (
+				AC99F6812C4AB7BC00F07E49 /* APIRequest.swift */,
+				AC99F68F2C4AE03600F07E49 /* APIRequest+Error.swift */,
+				AC99F68D2C4AE01900F07E49 /* APIRequest+Methods.swift */,
+			);
+			path = APIRequest;
 			sourceTree = "<group>";
 		};
 		AC99F67C2C4AB74400F07E49 /* Network */ = {
@@ -264,7 +287,6 @@
 			children = (
 				AC99F68A2C4ADD5400F07E49 /* NetworkService */,
 				AC99F68B2C4ADD6500F07E49 /* APIService */,
-				AC99F68C2C4ADD7000F07E49 /* Responses */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -282,9 +304,8 @@
 			isa = PBXGroup;
 			children = (
 				AC99F6832C4ABC7300F07E49 /* APIService.swift */,
-				AC99F6812C4AB7BC00F07E49 /* APIRequest.swift */,
-				AC99F68F2C4AE03600F07E49 /* APIRequest+Error.swift */,
-				AC99F68D2C4AE01900F07E49 /* APIRequest+Methods.swift */,
+				AC3BA7A02C513D3A00642B24 /* APIRequest */,
+				AC99F68C2C4ADD7000F07E49 /* Responses */,
 			);
 			path = APIService;
 			sourceTree = "<group>";
@@ -292,6 +313,7 @@
 		AC99F68C2C4ADD7000F07E49 /* Responses */ = {
 			isa = PBXGroup;
 			children = (
+				AC3BA79B2C5131D000642B24 /* APIResponse.swift */,
 				AC99F6852C4AC4E900F07E49 /* ItemResponse.swift */,
 				AC99F6872C4ACF7700F07E49 /* ListResponse.swift */,
 			);
@@ -416,8 +438,8 @@
 			children = (
 				AC2087502C41894E009B0ECF /* Date */,
 				AC2087512C418954009B0ECF /* Color */,
-				ACE0757C2C319B0200F0EA26 /* Image+.swift */,
-				AC5630AD2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift */,
+				AC3BA79D2C513CF700642B24 /* Network */,
+				ACE0757C2C319B0200F0EA26 /* Image+SystemImage.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -563,7 +585,7 @@
 				AC9BF5AE2C388A2E008C6C58 /* CalendarDatesViewController.swift in Sources */,
 				ACDA31C22C2C885B00C5FDCE /* ToDoItem+Properties.swift in Sources */,
 				AC1C1BA52C2374E60094D57C /* Importance.swift in Sources */,
-				ACF2A2992C25F4BC00C7D20E /* Date+.swift in Sources */,
+				ACF2A2992C25F4BC00C7D20E /* Date+Init.swift in Sources */,
 				ACDA31D02C2F49DB00C5FDCE /* ToDoItemsStore.swift in Sources */,
 				ACDA31D72C2FADE200C5FDCE /* ColorWheelPicker.swift in Sources */,
 				AC99F6982C4B16D500F07E49 /* ToDoItemsNetworkManager.swift in Sources */,
@@ -585,10 +607,11 @@
 				AC9BF5B12C388A52008C6C58 /* CalendarDatesViewController+ViewModel.swift in Sources */,
 				ACCA505B2C358B17007669BB /* CalendarListViewController.swift in Sources */,
 				AC9BF5AA2C3873ED008C6C58 /* CalendarListViewController+ViewModel.swift in Sources */,
-				ACE0757D2C319B0200F0EA26 /* Image+.swift in Sources */,
+				AC3BA79C2C5131D000642B24 /* APIResponse.swift in Sources */,
+				ACE0757D2C319B0200F0EA26 /* Image+SystemImage.swift in Sources */,
 				AC99F68E2C4AE01900F07E49 /* APIRequest+Methods.swift in Sources */,
 				ACDA31C42C2D7A8100C5FDCE /* ListHeader.swift in Sources */,
-				ACDA31CC2C2EF27900C5FDCE /* Color+.swift in Sources */,
+				ACDA31CC2C2EF27900C5FDCE /* Color+Init.swift in Sources */,
 				ACDA31CE2C2EFC5100C5FDCE /* AppColors.swift in Sources */,
 				AC9BF5A82C384454008C6C58 /* DateLabelCell.swift in Sources */,
 				AC1C1BA72C2375B00094D57C /* ToDoItem+Parsing.swift in Sources */,
@@ -596,6 +619,7 @@
 				AC99F6862C4AC4E900F07E49 /* ItemResponse.swift in Sources */,
 				ACDA31D92C2FC10F00C5FDCE /* Color+HEX.swift in Sources */,
 				AC99F67E2C4AB78000F07E49 /* NetworkService.swift in Sources */,
+				AC3BA79F2C513D0800642B24 /* Task+Retrying.swift in Sources */,
 				ACDA31D22C2F9CC200C5FDCE /* ColorWheel.swift in Sources */,
 				AC99F6842C4ABC7300F07E49 /* APIService.swift in Sources */,
 				ACDA31C82C2DF7E900C5FDCE /* CheckmarkView.swift in Sources */,

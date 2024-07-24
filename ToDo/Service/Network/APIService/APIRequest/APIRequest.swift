@@ -1,14 +1,14 @@
 import Foundation
 
 protocol APIRequest: Sendable {
-    associatedtype Response
+    associatedtype Response: APIResponse
     
     var path: String { get }
     var method: String { get }
     var request: URLRequest { get }
     
     var data: Data? { get }
-    var revision: UInt32 { get }
+    var revision: UInt32 { get set }
     
     var token: String { get }
 }

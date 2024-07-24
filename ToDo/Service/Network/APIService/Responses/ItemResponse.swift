@@ -1,6 +1,6 @@
 import Foundation
 
-struct ItemResponse<Item: Codable>: @unchecked Sendable {
+struct ItemResponse<Item: Codable>: APIResponse, @unchecked Sendable {
     let status: String
     let item: Item
     let revision: UInt32

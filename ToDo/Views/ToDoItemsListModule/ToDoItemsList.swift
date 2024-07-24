@@ -14,18 +14,19 @@ struct ToDoItemsList: View {
     @State private var isCalendarViewPresenting: Bool = false
     
     @State private var isLoading: Bool = true
+    @State private var isLoadingTask: Task<(), any Error>?
     
     var body: some View {
         if UIDevice.current.userInterfaceIdiom == .pad {
             NavigationSplitView {
-                listSection
+                list
                     .navigationTitle("Мои Дела")
             } detail: {
                 detailView
             }
         } else {
             NavigationStack {
-                listSection
+                list
             }
             .sheet(
                 isPresented: $isDetailPresented,
@@ -35,8 +36,11 @@ struct ToDoItemsList: View {
             )
         }
     }
-    
-    private var listSection: some View {
+}
+
+// MARK: – List
+extension ToDoItemsList {
+    private var list: some View {
         List {
             if UIDevice.current.userInterfaceIdiom == .pad {
                 Button("Каледнарь", systemImage: "calendar") {
@@ -44,39 +48,7 @@ struct ToDoItemsList: View {
                 }
             }
             
-            Section {
-                ForEach($toDoItemsStore.currentToDoItems) { toDoItem in
-                    listRow(for: toDoItem)
-                }
-                
-                TextField("Новое", text: $newToDoItemText)
-                    .onSubmit {
-                        let plainText = newToDoItemText.trimmingCharacters(in: .whitespacesAndNewlines)
-                        
-                        if !plainText.isEmpty {
-                            let toDoItem = ToDoItem(text: newToDoItemText)
-                            
-                            Task {
-                                await toDoItemsStore.add(toDoItem)
-                            }
-                        }
-                        
-                        newToDoItemText = ""
-                    }
-                    .submitLabel(.done)
-                    .padding(.leading, 40)
-            } header: {
-                HStack {
-                    Text("Выполнено – \(toDoItemsStore.completedCount)")
-                        .contentTransition(.numericText())
-                        .animation(.default, value: toDoItemsStore.completedCount)
-                    
-                    Spacer()
-                    
-                    settingsMenu
-                        .textCase(.none)
-                }
-            }
+            itemsSection
         }
         .navigationTitle("Мои Дела")
         .background(AppColors.backPrimary)
@@ -121,11 +93,55 @@ struct ToDoItemsList: View {
         .onAppear {
             Logger.logInfo("ToDoItemsList appeared.")
             
-            Task {
+            isLoadingTask = Task {
                 while true {
                     isLoading = await toDoItemsStore.networkManager.isLoading
                     try await Task.sleep(for: .seconds(1))
                 }
+            }
+        }
+        .onDisappear {
+            isLoadingTask?.cancel()
+        }
+        .refreshable {
+            Task {
+                await toDoItemsStore.load()
+            }
+        }
+    }
+    
+    private var itemsSection: some View {
+        Section {
+            ForEach($toDoItemsStore.currentToDoItems) { toDoItem in
+                listRow(for: toDoItem)
+            }
+            
+            TextField("Новое", text: $newToDoItemText)
+                .onSubmit {
+                    let plainText = newToDoItemText.trimmingCharacters(in: .whitespacesAndNewlines)
+                    
+                    if !plainText.isEmpty {
+                        let toDoItem = ToDoItem(text: newToDoItemText)
+                        
+                        Task {
+                            await toDoItemsStore.add(toDoItem)
+                        }
+                    }
+                    
+                    newToDoItemText = ""
+                }
+                .submitLabel(.done)
+                .padding(.leading, 40)
+        } header: {
+            HStack {
+                Text("Выполнено – \(toDoItemsStore.completedCount)")
+                    .contentTransition(.numericText())
+                    .animation(.default, value: toDoItemsStore.completedCount)
+                
+                Spacer()
+                
+                settingsMenu
+                    .textCase(.none)
             }
         }
     }
@@ -173,22 +189,10 @@ struct ToDoItemsList: View {
             }
         }
     }
-    
-    private var addNewItemButton: some View {
-        Button {
-            isDetailViewPresenting = true
-            editingToDoItem = nil
-            isDetailPresented = true
-        } label: {
-            Image(systemName: "plus.circle.fill")
-                .resizable()
-                .foregroundStyle(.white, .blue)
-                .frame(width: 44, height: 44)
-                .shadow(radius: 8, y: 4)
-        }
-        .padding(.bottom, 20)
-    }
-    
+}
+
+// MARK: – Detail View
+extension ToDoItemsList {
     private var detailView: some View {
         Group {
             if UIDevice.current.userInterfaceIdiom == .pad {
@@ -218,6 +222,24 @@ struct ToDoItemsList: View {
             }
         }
     }
+}
+
+// MARK: – Views
+extension ToDoItemsList {
+    private var addNewItemButton: some View {
+        Button {
+            isDetailViewPresenting = true
+            editingToDoItem = nil
+            isDetailPresented = true
+        } label: {
+            Image(systemName: "plus.circle.fill")
+                .resizable()
+                .foregroundStyle(.white, .blue)
+                .frame(width: 44, height: 44)
+                .shadow(radius: 8, y: 4)
+        }
+        .padding(.bottom, 20)
+    }
     
     private func listRow(for toDoItem: Binding<ToDoItem>) -> some View {
         ListRow(toDoItem: toDoItem,
@@ -227,15 +249,15 @@ struct ToDoItemsList: View {
             presentDetailView(for: toDoItem.wrappedValue)
         }
         .swipeActions(edge: .leading) {
-            completeAction(for: toDoItem.wrappedValue)
+            completeButton(for: toDoItem.wrappedValue)
         }
         .swipeActions(edge: .trailing) {
-            deleteAction(for: toDoItem.wrappedValue)
-            infoAction(for: toDoItem.wrappedValue)
+            deleteButton(for: toDoItem.wrappedValue)
+            infoButton(for: toDoItem.wrappedValue)
         }
     }
     
-    private func completeAction(for toDoItem: ToDoItem) -> some View {
+    private func completeButton(for toDoItem: ToDoItem) -> some View {
         Button {
             Task {
                 await toDoItemsStore.addOrUpdate(
@@ -257,7 +279,7 @@ struct ToDoItemsList: View {
         .tint(.green)
     }
     
-    private func deleteAction(for toDoItem: ToDoItem) -> some View {
+    private func deleteButton(for toDoItem: ToDoItem) -> some View {
         Button(role: .destructive) {
             onDelete(toDoItem)
         } label: {
@@ -265,7 +287,7 @@ struct ToDoItemsList: View {
         }
     }
     
-    private func infoAction(for toDoItem: ToDoItem) -> some View {
+    private func infoButton(for toDoItem: ToDoItem) -> some View {
         Button {
             presentDetailView(for: toDoItem)
         } label: {
@@ -315,10 +337,9 @@ extension ToDoItemsList {
     }
 }
 
-struct ToDoItemsList_Previews: PreviewProvider {
-    static var previews: some View {
-        let toDoItemsStore = ToDoItemsStore()
-        
-        return ToDoItemsList(toDoItemsStore: toDoItemsStore)
-    }
+// MARK: – Preview
+#Preview {
+    let toDoItemsStore = ToDoItemsStore()
+    
+    return ToDoItemsList(toDoItemsStore: toDoItemsStore)
 }

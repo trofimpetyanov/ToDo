@@ -1,11 +1,11 @@
 import Foundation
 
 protocol NetworkServiceProtocol: Sendable {
-    func getList<Item: Codable>() async throws -> [Item]
+    func getList<Item: Codable & Sendable>() async throws -> [Item]
     func patchList<Item: Codable & Sendable>(_ list: [Item]) async throws -> [Item]
     
     @discardableResult 
-    func getItem<Item: Codable>(_ id: String) async throws -> Item
+    func getItem<Item: Codable & Sendable>(_ id: String) async throws -> Item
     
     @discardableResult
     func postItem<Item: Codable & Identifiable & Sendable>(_ item: Item) async throws -> Item
