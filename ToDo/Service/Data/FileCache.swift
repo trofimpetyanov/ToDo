@@ -113,6 +113,10 @@ struct FileCache {
         
         Logger.logDebug("Loaded ToDoItems from file: \(file).\(format.rawValue)")
     }
+    
+    mutating func clear() {
+        toDoItems = []
+    }
 }
 
 // MARK: – Saving & Loading

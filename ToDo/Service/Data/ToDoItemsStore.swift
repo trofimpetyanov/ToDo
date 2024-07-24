@@ -37,18 +37,16 @@ class ToDoItemsStore: ObservableObject {
         ToDoItem(text: "Call mom", importance: .basic, dueDate: Date(timeIntervalSinceNow: 1800), isCompleted: false)
     ]
     
-    private var isDirty: Bool {
-        get {
-            UserDefaults.standard.bool(forKey: "isDirty")
-        } set {
-            UserDefaults.standard.setValue(newValue, forKey: "isDirty")
-        }
-    }
-
-    private var toDoItems: [ToDoItem]
-    private var fileCache: FileCache
+    var isPatchingEnabled = false
     
     var networkManager: ToDoItemsNetworkManager
+    
+    /// The number of completed to-do items.
+    var completedCount: Int {
+        toDoItems
+            .filter { $0.isCompleted }
+            .count
+    }
     
     /// The current list of to-do items, sorted and filtered based on the current settings.
     @Published var currentToDoItems: [ToDoItem] = []
@@ -74,12 +72,16 @@ class ToDoItemsStore: ObservableObject {
         }
     }
     
-    /// The number of completed to-do items.
-    var completedCount: Int {
-        toDoItems
-            .filter { $0.isCompleted }
-            .count
+    private var isDirty: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: "isDirty")
+        } set {
+            UserDefaults.standard.setValue(newValue, forKey: "isDirty")
+        }
     }
+
+    private var toDoItems: [ToDoItem]
+    private var fileCache: FileCache
     
     /// Initializes a new instance of `ToDoItemsStore`.
     init() {
@@ -90,37 +92,45 @@ class ToDoItemsStore: ObservableObject {
         networkManager = ToDoItemsNetworkManager(networkService: networkService)
         
         Task {
-            if let toDoItems = await networkManager.loadItems() {
-                self.toDoItems = toDoItems
+            await load()
+        }
+    }
+    
+    func load() async {
+        if let toDoItems = await networkManager.loadItems() {
+            self.toDoItems = toDoItems
+            
+            Task(priority: .utility) {
+                fileCache.clear()
                 toDoItems.forEach { toDoItem in
                     fileCache.add(toDoItem)
                 }
                 
                 save()
-            } else {
-                Logger.logError(
-                    "Failed to load ToDoItems from the server. Loading from cache.")
-                
-                do {
-                    try fileCache.load(from: "toDoItems")
-                    toDoItems = fileCache.toDoItems
-                    
-                    isDirty = true
-                    await patch()
-                } catch {
-                    Logger.logError(
-                        "Failed to load ToDoItems from the file \"toDoItems\". Error: \(error.localizedDescription)")
-                }
             }
-
-            updateCurrentToDoItems()
+        } else {
+            Logger.logError(
+                "Failed to load ToDoItems from the server. Loading from cache.")
+            
+            do {
+                try fileCache.load(from: "toDoItems")
+                toDoItems = fileCache.toDoItems
+                
+                isDirty = true
+                if isPatchingEnabled { await patch() }
+            } catch {
+                Logger.logError(
+                    "Failed to load ToDoItems from the file \"toDoItems\". Error: \(error.localizedDescription)")
+            }
         }
+        
+        updateCurrentToDoItems()
     }
     
     /// Adds a new to-do item to the store.
     /// - Parameter toDoItem: The to-do item to add.
     func add(_ toDoItem: ToDoItem) async {
-        await patch()
+        if isPatchingEnabled { await patch() }
         
         guard !toDoItems.contains(where: { $0.id == toDoItem.id }) else { return }
         
@@ -137,7 +147,7 @@ class ToDoItemsStore: ObservableObject {
     /// Adds a new to-do item to the store or updates an existing item if it already exists.
     /// - Parameter toDoItem: The to-do item to add or update.
     func addOrUpdate(_ toDoItem: ToDoItem) async {
-        await patch()
+        if isPatchingEnabled { await patch() }
         fileCache.addOrUpdate(toDoItem)
         
         if let index = toDoItems.firstIndex(where: { toDoItem.id == $0.id }) {
@@ -160,7 +170,7 @@ class ToDoItemsStore: ObservableObject {
     /// - Returns: The deleted to-do item, or `nil` if the item was not found.
     @discardableResult
     func delete(_ toDoItem: ToDoItem) async -> ToDoItem? {
-        await patch()
+        if isPatchingEnabled { await patch() }
         
         guard let index = toDoItems.firstIndex(where: { $0.id == toDoItem.id }) else { return nil }
         
