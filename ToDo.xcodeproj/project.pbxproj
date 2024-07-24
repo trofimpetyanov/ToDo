@@ -19,6 +19,8 @@
 		AC20874A2C41822D009B0ECF /* CocoaLumberjackSwiftLogBackend in Frameworks */ = {isa = PBXBuildFile; productRef = AC2087492C41822D009B0ECF /* CocoaLumberjackSwiftLogBackend */; };
 		AC3BA79C2C5131D000642B24 /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3BA79B2C5131D000642B24 /* APIResponse.swift */; };
 		AC3BA79F2C513D0800642B24 /* Task+Retrying.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3BA79E2C513D0800642B24 /* Task+Retrying.swift */; };
+		AC3BA7A22C514B3C00642B24 /* JSONRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3BA7A12C514B3C00642B24 /* JSONRepresentable.swift */; };
+		AC3BA7A42C514B4300642B24 /* CSVRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3BA7A32C514B4300642B24 /* CSVRepresentable.swift */; };
 		AC5630AE2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5630AD2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift */; };
 		AC5630B02C41DCFA00FB5835 /* URLSessionAsyncDataTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5630AF2C41DCFA00FB5835 /* URLSessionAsyncDataTaskTests.swift */; };
 		AC6A96972C41C8D8008659C5 /* LoggerPackage in Frameworks */ = {isa = PBXBuildFile; productRef = AC6A96962C41C8D8008659C5 /* LoggerPackage */; };
@@ -83,6 +85,8 @@
 		AC1C1BA62C2375B00094D57C /* ToDoItem+Parsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+Parsing.swift"; sourceTree = "<group>"; };
 		AC3BA79B2C5131D000642B24 /* APIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponse.swift; sourceTree = "<group>"; };
 		AC3BA79E2C513D0800642B24 /* Task+Retrying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Retrying.swift"; sourceTree = "<group>"; };
+		AC3BA7A12C514B3C00642B24 /* JSONRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONRepresentable.swift; sourceTree = "<group>"; };
+		AC3BA7A32C514B4300642B24 /* CSVRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVRepresentable.swift; sourceTree = "<group>"; };
 		AC5630AD2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+AsyncDataTask.swift"; sourceTree = "<group>"; };
 		AC5630AF2C41DCFA00FB5835 /* URLSessionAsyncDataTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionAsyncDataTaskTests.swift; sourceTree = "<group>"; };
 		AC99F67D2C4AB78000F07E49 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
@@ -228,9 +232,9 @@
 		AC20874B2C418729009B0ECF /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				ACA0D20D2C24ACE4003659A2 /* FileCache.swift */,
 				ACDA31CF2C2F49DB00C5FDCE /* ToDoItemsStore.swift */,
 				AC99F6972C4B16D500F07E49 /* ToDoItemsNetworkManager.swift */,
+				AC3BA7A52C514D8300642B24 /* FileCache */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -280,6 +284,24 @@
 				AC99F68D2C4AE01900F07E49 /* APIRequest+Methods.swift */,
 			);
 			path = APIRequest;
+			sourceTree = "<group>";
+		};
+		AC3BA7A52C514D8300642B24 /* FileCache */ = {
+			isa = PBXGroup;
+			children = (
+				ACA0D20D2C24ACE4003659A2 /* FileCache.swift */,
+				AC3BA7A62C514D9200642B24 /* Protocols */,
+			);
+			path = FileCache;
+			sourceTree = "<group>";
+		};
+		AC3BA7A62C514D9200642B24 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				AC3BA7A12C514B3C00642B24 /* JSONRepresentable.swift */,
+				AC3BA7A32C514B4300642B24 /* CSVRepresentable.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		AC99F67C2C4AB74400F07E49 /* Network */ = {
@@ -606,6 +628,7 @@
 				AC9BF5B82C3897F6008C6C58 /* CalendarContainerViewControllerDelegate.swift in Sources */,
 				AC9BF5B12C388A52008C6C58 /* CalendarDatesViewController+ViewModel.swift in Sources */,
 				ACCA505B2C358B17007669BB /* CalendarListViewController.swift in Sources */,
+				AC3BA7A22C514B3C00642B24 /* JSONRepresentable.swift in Sources */,
 				AC9BF5AA2C3873ED008C6C58 /* CalendarListViewController+ViewModel.swift in Sources */,
 				AC3BA79C2C5131D000642B24 /* APIResponse.swift in Sources */,
 				ACE0757D2C319B0200F0EA26 /* Image+SystemImage.swift in Sources */,
@@ -617,6 +640,7 @@
 				AC1C1BA72C2375B00094D57C /* ToDoItem+Parsing.swift in Sources */,
 				AC99F6922C4AFCE600F07E49 /* Date+Clean.swift in Sources */,
 				AC99F6862C4AC4E900F07E49 /* ItemResponse.swift in Sources */,
+				AC3BA7A42C514B4300642B24 /* CSVRepresentable.swift in Sources */,
 				ACDA31D92C2FC10F00C5FDCE /* Color+HEX.swift in Sources */,
 				AC99F67E2C4AB78000F07E49 /* NetworkService.swift in Sources */,
 				AC3BA79F2C513D0800642B24 /* Task+Retrying.swift in Sources */,

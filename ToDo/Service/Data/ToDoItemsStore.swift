@@ -81,7 +81,7 @@ class ToDoItemsStore: ObservableObject {
     }
 
     private var toDoItems: [ToDoItem]
-    private var fileCache: FileCache
+    private var fileCache: FileCache<ToDoItem>
     
     /// Initializes a new instance of `ToDoItemsStore`.
     init() {
@@ -114,7 +114,7 @@ class ToDoItemsStore: ObservableObject {
             
             do {
                 try fileCache.load(from: "toDoItems")
-                toDoItems = fileCache.toDoItems
+                toDoItems = fileCache.items
                 
                 isDirty = true
                 if isPatchingEnabled { await patch() }

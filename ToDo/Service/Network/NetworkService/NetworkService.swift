@@ -5,7 +5,7 @@ actor NetworkService: NetworkServiceProtocol {
     typealias ItemType = Codable & Sendable
     typealias IdentifiableItemType = ItemType & Identifiable
     
-    static let token = "Faenor"
+    static let token = "<token>"
     
     private var revision: UInt32 = 0
     
