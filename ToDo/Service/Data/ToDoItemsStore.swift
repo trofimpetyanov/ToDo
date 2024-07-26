@@ -113,7 +113,7 @@ class ToDoItemsStore: ObservableObject {
             Logger.logError("Failed to load ToDoItems from the server. Loading from FileCache.")
             
             do {
-                try fileCache.fetch()
+                try fileCache.fetch(sortBy: makeSortDescriptors())
                 toDoItems = fileCache.items
                 
                 isDirty = true
@@ -224,5 +224,19 @@ class ToDoItemsStore: ObservableObject {
                 !toDoItem.isCompleted
             }
         }
+    }
+    
+    private func makeSortDescriptors() -> [SortDescriptor<ToDoItem>] {
+        let order: SortOrder = sortingOrder == .ascending ? .forward : .reverse
+        var descriptors = [SortDescriptor(\ToDoItem.text)]
+        
+        switch sortingOption {
+        case .dateCreated:
+            descriptors.append(SortDescriptor(\ToDoItem.dateCreated, order: order))
+        case .importance:
+            descriptors.append(SortDescriptor(\ToDoItem.importance, order: order))
+        }
+        
+        return descriptors
     }
 }
