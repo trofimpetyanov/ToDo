@@ -31,12 +31,14 @@ struct FileCache<Item: Identifiable & JSONRepresentable & CSVRepresentable & Per
         self.modelContainer = modelContainer
     }
     
-    mutating func fetch(sortBy: [SortDescriptor<Item>] = []) throws {
+    mutating func fetch(predicate: Predicate<Item>? = nil, sortBy descriptors: [SortDescriptor<Item>] = []) throws {
         switch currentDataBase {
         case .file:
             try load(from: "storage")
         case .swiftData, .sqlite:
-            try load(sortBy: sortBy)
+            let fetchDescriptor = FetchDescriptor(predicate: predicate, sortBy: descriptors)
+            
+            try load(fetchDescriptor)
         }
     }
     
@@ -201,8 +203,8 @@ extension FileCache {
         // SwiftData updates models automatically.
     }
     
-    private mutating func load(sortBy: [SortDescriptor<Item>] = []) throws {
-        items = try context.fetch(FetchDescriptor<Item>(sortBy: sortBy))
+    private mutating func load(_ descriptor: FetchDescriptor<Item> = FetchDescriptor()) throws {
+        items = try context.fetch(descriptor)
         
         Logger.logVerbose("Loaded items from SwiftData storage.")
     }
