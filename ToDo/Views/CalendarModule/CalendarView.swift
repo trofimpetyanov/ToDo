@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct CalendarView: UIViewControllerRepresentable {
     typealias UIViewControllerType = CalendarContainerViewController
@@ -17,5 +18,5 @@ struct CalendarView: UIViewControllerRepresentable {
 }
 
 #Preview {
-    CalendarView(toDoItemsStore: ToDoItemsStore())
+    CalendarView(toDoItemsStore: ToDoItemsStore(modelContainer: ModelContainer.mock))
 }

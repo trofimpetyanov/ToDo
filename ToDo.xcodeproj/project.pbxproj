@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC04CE1C2C53E36300AC93DC /* ModelContainer+Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC04CE1B2C53E36300AC93DC /* ModelContainer+Mock.swift */; };
+		AC04CE1E2C53E6D600AC93DC /* ToDoItem+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC04CE1D2C53E6D600AC93DC /* ToDoItem+Codable.swift */; };
+		AC04CE242C53F11000AC93DC /* DataBaseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC04CE232C53F11000AC93DC /* DataBaseType.swift */; };
 		AC1C1B912C2374560094D57C /* ToDoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1C1B902C2374560094D57C /* ToDoApp.swift */; };
 		AC1C1B932C2374560094D57C /* ToDoItemsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1C1B922C2374560094D57C /* ToDoItemsList.swift */; };
 		AC1C1B952C2374570094D57C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC1C1B942C2374570094D57C /* Assets.xcassets */; };
@@ -74,6 +77,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AC04CE1B2C53E36300AC93DC /* ModelContainer+Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelContainer+Mock.swift"; sourceTree = "<group>"; };
+		AC04CE1D2C53E6D600AC93DC /* ToDoItem+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+Codable.swift"; sourceTree = "<group>"; };
+		AC04CE232C53F11000AC93DC /* DataBaseType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseType.swift; sourceTree = "<group>"; };
 		AC1C1B8D2C2374560094D57C /* ToDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC1C1B902C2374560094D57C /* ToDoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoApp.swift; sourceTree = "<group>"; };
 		AC1C1B922C2374560094D57C /* ToDoItemsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemsList.swift; sourceTree = "<group>"; };
@@ -223,6 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				AC1C1BA22C2374920094D57C /* ToDoItem.swift */,
+				AC04CE1D2C53E6D600AC93DC /* ToDoItem+Codable.swift */,
 				AC1C1BA62C2375B00094D57C /* ToDoItem+Parsing.swift */,
 				ACDA31C12C2C885B00C5FDCE /* ToDoItem+Properties.swift */,
 			);
@@ -290,6 +297,7 @@
 			isa = PBXGroup;
 			children = (
 				ACA0D20D2C24ACE4003659A2 /* FileCache.swift */,
+				AC04CE232C53F11000AC93DC /* DataBaseType.swift */,
 				AC3BA7A62C514D9200642B24 /* Protocols */,
 			);
 			path = FileCache;
@@ -462,6 +470,7 @@
 				AC2087512C418954009B0ECF /* Color */,
 				AC3BA79D2C513CF700642B24 /* Network */,
 				ACE0757C2C319B0200F0EA26 /* Image+SystemImage.swift */,
+				AC04CE1B2C53E36300AC93DC /* ModelContainer+Mock.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -615,6 +624,7 @@
 				AC99F6822C4AB7BC00F07E49 /* APIRequest.swift in Sources */,
 				AC9BF5A12C3819DF008C6C58 /* CalendarView.swift in Sources */,
 				ACDA31C62C2D7AA600C5FDCE /* ListRow.swift in Sources */,
+				AC04CE1C2C53E36300AC93DC /* ModelContainer+Mock.swift in Sources */,
 				AC1C1B912C2374560094D57C /* ToDoApp.swift in Sources */,
 				AC1C1BA32C2374920094D57C /* ToDoItem.swift in Sources */,
 				AC9BF5A32C38308D008C6C58 /* Date+Format.swift in Sources */,
@@ -624,6 +634,7 @@
 				ACDA31CA2C2EE38E00C5FDCE /* ToDoItemDetail.swift in Sources */,
 				AC99F6802C4AB79A00F07E49 /* NetworkServiceProtocol.swift in Sources */,
 				ACA0D20E2C24ACE4003659A2 /* FileCache.swift in Sources */,
+				AC04CE242C53F11000AC93DC /* DataBaseType.swift in Sources */,
 				AC5630AE2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift in Sources */,
 				AC9BF5B82C3897F6008C6C58 /* CalendarContainerViewControllerDelegate.swift in Sources */,
 				AC9BF5B12C388A52008C6C58 /* CalendarDatesViewController+ViewModel.swift in Sources */,
@@ -643,6 +654,7 @@
 				AC3BA7A42C514B4300642B24 /* CSVRepresentable.swift in Sources */,
 				ACDA31D92C2FC10F00C5FDCE /* Color+HEX.swift in Sources */,
 				AC99F67E2C4AB78000F07E49 /* NetworkService.swift in Sources */,
+				AC04CE1E2C53E6D600AC93DC /* ToDoItem+Codable.swift in Sources */,
 				AC3BA79F2C513D0800642B24 /* Task+Retrying.swift in Sources */,
 				ACDA31D22C2F9CC200C5FDCE /* ColorWheel.swift in Sources */,
 				AC99F6842C4ABC7300F07E49 /* APIService.swift in Sources */,

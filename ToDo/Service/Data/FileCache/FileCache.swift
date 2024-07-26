@@ -1,20 +1,53 @@
 import Foundation
+import SwiftData
 import LoggerPackage
 
 /// A structure for managing `Item` objects in cache, providing methods to add, delete, save, and load items.
 @MainActor
-struct FileCache<Item: Identifiable & JSONRepresentable & CSVRepresentable> where Item.ID == String {
+struct FileCache<Item: Identifiable & JSONRepresentable & CSVRepresentable & PersistentModel> where Item.ID == String {
     
     enum FileFormat: String {
         case json, csv
     }
     
-    private(set) var items: [Item] = []
+    var currentDataBase: DataBaseType = .swiftData
+    
+    private(set) var items: [Item]
+    
+    private(set) var modelContainer: ModelContainer
+    
+    private var context: ModelContext {
+        modelContainer.mainContext
+    }
     
     private var documentsDirectory: URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         
         return paths[0]
+    }
+    
+    init(items: [Item] = [], modelContainer: ModelContainer) {
+        self.items = items
+        self.modelContainer = modelContainer
+    }
+    
+    mutating func fetch() throws {
+        switch currentDataBase {
+        case .file:
+            try load(from: "storage")
+        case .swiftData, .sqlite:
+            print(2)
+            try load()
+        }
+    }
+    
+    func save() throws {
+        switch currentDataBase {
+        case .file:
+            try save(to: "storage")
+        case .swiftData, .sqlite:
+            try context.save()
+        }
     }
     
     /// Adds a new `Item` to the cache.
@@ -29,6 +62,7 @@ struct FileCache<Item: Identifiable & JSONRepresentable & CSVRepresentable> wher
         }
         
         items.append(item)
+        insert(item)
         
         if !ignoreLog {
             Logger.logDebug("Added Item with ID \(item.id) to cache.")
@@ -47,6 +81,7 @@ struct FileCache<Item: Identifiable & JSONRepresentable & CSVRepresentable> wher
             Logger.logDebug("Updated Item: \(item.id).")
         } else {
             items.append(item)
+            insert(item)
         }
     }
     
@@ -64,18 +99,20 @@ struct FileCache<Item: Identifiable & JSONRepresentable & CSVRepresentable> wher
         
         Logger.logDebug("Deleted Item with ID \(id) from cache.")
         
+        delete(items[index])
         return items.remove(at: index)
     }
     
-    /// Saves the current list of `Item` objects to a file in the specified format.
-    ///
-    /// - Parameters:
-    ///   - file: The name of the file to save the items to.
-    ///   - format: The format of the file (`.json` or `.csv`). Defaults to `.json`.
-    /// - Throws: An error if the save operation fails. 
-    ///           Possible errors include file write errors or serialization errors.
-    /// - Note: The items are saved in a pretty-printed format if the format is `.json`.
-    func save(to file: String, format: FileFormat = .json) throws {
+    mutating func clear() throws {
+        items = []
+        try context.delete(model: Item.self)
+    }
+}
+
+// MARK: – Saving & Loading
+extension FileCache {
+    
+    private func save(to file: String, format: FileFormat = .json) throws {
         let path = documentsDirectory
             .appending(path: file)
             .appendingPathExtension(format.rawValue)
@@ -90,16 +127,7 @@ struct FileCache<Item: Identifiable & JSONRepresentable & CSVRepresentable> wher
         Logger.logDebug("Saved Items to file: \(file).\(format.rawValue)")
     }
     
-    /// Loads `Item` objects from a file in the specified format.
-    ///
-    /// - Parameters:
-    ///   - file: The name of the file to load the items from.
-    ///   - format: The format of the file (`.json` or `.csv`). Defaults to `.json`.
-    /// - Returns: An array of `Item` objects loaded from the specified file.
-    /// - Throws: An error if the load operation fails. 
-    ///           Possible errors include file read errors or deserialization errors.
-    /// - Note: If there is an error reading from the file, an empty array is returned.
-    mutating func load(from file: String, format: FileFormat = .json) throws {
+    private mutating func load(from file: String, format: FileFormat = .json) throws {
         let path = documentsDirectory
             .appending(path: file)
             .appendingPathExtension(format.rawValue)
@@ -113,14 +141,6 @@ struct FileCache<Item: Identifiable & JSONRepresentable & CSVRepresentable> wher
         
         Logger.logDebug("Loaded Items from file: \(file).\(format.rawValue)")
     }
-    
-    mutating func clear() {
-        items = []
-    }
-}
-
-// MARK: – Saving & Loading
-extension FileCache {
     
     // JSON
     private func saveToJSON(at path: URL) throws {
@@ -160,5 +180,31 @@ extension FileCache {
         let items: [Item] = lines.compactMap { Item.parse(csv: $0) }
         
         return items
+    }
+}
+
+// MARK: – Data Base Methods
+extension FileCache {
+    
+    private func insert(_ item: Item) {
+        context.insert(item)
+        
+        Logger.logVerbose("Inserted item in SwiftData storage.")
+    }
+    
+    private func delete(_ item: Item) {
+        context.delete(item)
+        
+        Logger.logVerbose("Deleted item in SwiftData storage.")
+    }
+    
+    private func update(_ item: Item) {
+        // SwiftData updates models automatically.
+    }
+    
+    private mutating func load() throws {
+        items = try context.fetch(FetchDescriptor<Item>())
+        
+        Logger.logVerbose("Loaded items from SwiftData storage.")
     }
 }

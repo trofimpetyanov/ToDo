@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 import SwiftData
 
 extension ToDoItem: JSONRepresentable {
@@ -65,7 +66,9 @@ extension ToDoItem: JSONRepresentable {
             isCompleted: isCompleted,
             color: color,
             dateCreated: dateCreated,
-            dateEdited: dateEdited)
+            dateEdited: dateEdited,
+            lastUpdatedBy: UIDevice.current.identifierForVendor?.uuidString
+        )
     }
 }
 
@@ -114,7 +117,8 @@ extension ToDoItem: CSVRepresentable {
             isCompleted: isCompleted,
             color: color,
             dateCreated: dateCreated,
-            dateEdited: dateEdited
+            dateEdited: dateEdited,
+            lastUpdatedBy: UIDevice.current.identifierForVendor?.uuidString
         )
     }
 }

@@ -1,8 +1,9 @@
 import UIKit
+import SwiftData
 
 /// A structure representing a todo item.
-@MainActor
-struct ToDoItem: Identifiable {
+@Model
+final class ToDoItem: Identifiable, @unchecked Sendable {
     let id: String
     let text: String
     
@@ -43,22 +44,16 @@ struct ToDoItem: Identifiable {
         self.color = color
         self.dateCreated = dateCreated.clean
         self.dateEdited = dateEdited.clean
-        self.lastUpdatedBy = lastUpdatedBy ?? UIDevice.current.identifierForVendor!.uuidString
+        self.lastUpdatedBy = lastUpdatedBy
     }
 }
 
-extension ToDoItem: Equatable, Hashable { }
-
-extension ToDoItem: Codable { 
-    enum CodingKeys: String, CodingKey {
-        case id
-        case text
-        case importance
-        case dueDate = "deadline"
-        case isCompleted = "done"
-        case color
-        case dateCreated = "created_at"
-        case dateEdited = "changed_at"
-        case lastUpdatedBy = "last_updated_by"
+extension ToDoItem: Equatable, Hashable {
+    nonisolated static func == (lhs: ToDoItem, rhs: ToDoItem) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    nonisolated func hash(into hasher: inout Hasher) {
+        return hasher.combine(id)
     }
 }

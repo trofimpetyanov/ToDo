@@ -121,7 +121,10 @@ extension ToDoItemsList {
                     let plainText = newToDoItemText.trimmingCharacters(in: .whitespacesAndNewlines)
                     
                     if !plainText.isEmpty {
-                        let toDoItem = ToDoItem(text: newToDoItemText)
+                        let toDoItem = ToDoItem(
+                            text: newToDoItemText,
+                            lastUpdatedBy: UIDevice.current.identifierForVendor?.uuidString
+                        )
                         
                         Task {
                             await toDoItemsStore.add(toDoItem)
@@ -269,7 +272,8 @@ extension ToDoItemsList {
                         isCompleted: !toDoItem.isCompleted,
                         color: toDoItem.color,
                         dateCreated: toDoItem.dateCreated,
-                        dateEdited: toDoItem.dateEdited
+                        dateEdited: toDoItem.dateEdited,
+                        lastUpdatedBy: UIDevice.current.identifierForVendor?.uuidString
                     )
                 )
             }
@@ -339,7 +343,7 @@ extension ToDoItemsList {
 
 // MARK: – Preview
 #Preview {
-    let toDoItemsStore = ToDoItemsStore()
+    let toDoItemsStore = ToDoItemsStore(modelContainer: ModelContainer.mock)
     
     return ToDoItemsList(toDoItemsStore: toDoItemsStore)
 }

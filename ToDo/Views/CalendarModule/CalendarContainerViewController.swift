@@ -188,7 +188,8 @@ extension CalendarContainerViewController: CalendarContainerViewControllerDelega
             isCompleted: isCompleted,
             color: toDoItem.color,
             dateCreated: toDoItem.dateCreated,
-            dateEdited: toDoItem.dateEdited
+            dateEdited: toDoItem.dateEdited,
+            lastUpdatedBy: UIDevice.current.identifierForVendor?.uuidString
         )
         
         Task {

@@ -12,7 +12,7 @@ actor NetworkService: NetworkServiceProtocol {
     func getList<Item: ItemType>() async throws -> [Item] {
         let request = GetListRequest<Item>(revision: 0, token: Self.token)
         
-        let result = try await retryingRequest(request)
+        let result = try await request.send()
         revision = result.revision
         
         return result.list
