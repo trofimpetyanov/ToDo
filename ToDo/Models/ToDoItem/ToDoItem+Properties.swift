@@ -13,5 +13,6 @@ extension ToDoItem {
         case color
         case dateCreated
         case dateEdited
+        case lastUpdatedBy
     }
 }

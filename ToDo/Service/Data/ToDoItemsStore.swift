@@ -84,8 +84,11 @@ class ToDoItemsStore: ObservableObject {
     private var fileCache: FileCache<ToDoItem>
     
     /// Initializes a new instance of `ToDoItemsStore`.
-    init() {
-        fileCache = FileCache()
+    init(swiftDataModelContainer: ModelContainer, sqliteModelContainer: SQLiteToDoItems) {
+        fileCache = FileCache(
+            swiftDataModelContainer: swiftDataModelContainer,
+            sqliteModelContainer: sqliteModelContainer
+        )
         toDoItems = []
         
         let networkService = NetworkService()
@@ -101,26 +104,26 @@ class ToDoItemsStore: ObservableObject {
             self.toDoItems = toDoItems
             
             Task(priority: .utility) {
-                fileCache.clear()
+                try fileCache.clear()
+                
                 toDoItems.forEach { toDoItem in
-                    fileCache.add(toDoItem)
+                    fileCache.add(toDoItem, ignoreLog: true)
                 }
                 
                 save()
             }
         } else {
-            Logger.logError(
-                "Failed to load ToDoItems from the server. Loading from cache.")
+            Logger.logError("Failed to load ToDoItems from the server. Loading from FileCache.")
             
             do {
-                try fileCache.load(from: "toDoItems")
+                try fileCache.fetch(sortBy: makeSortDescriptors())
                 toDoItems = fileCache.items
                 
                 isDirty = true
                 if isPatchingEnabled { await patch() }
             } catch {
                 Logger.logError(
-                    "Failed to load ToDoItems from the file \"toDoItems\". Error: \(error.localizedDescription)")
+                    "Failed to load ToDoItems from FileCache. Error: \(error.localizedDescription)")
             }
         }
         
@@ -188,9 +191,9 @@ class ToDoItemsStore: ObservableObject {
     
     private func save() {
         do {
-            try fileCache.save(to: "toDoItems")
+            try fileCache.save()
         } catch {
-            Logger.logError("Failed to save ToDoItems to file: toDoItems. Error: \(error.localizedDescription)")
+            Logger.logError("Failed to save toDoItems in FileCache. Error: \(error.localizedDescription)")
         }
     }
     
@@ -224,5 +227,19 @@ class ToDoItemsStore: ObservableObject {
                 !toDoItem.isCompleted
             }
         }
+    }
+    
+    private func makeSortDescriptors() -> [SortDescriptor<ToDoItem>] {
+        let order: SortOrder = sortingOrder == .ascending ? .forward : .reverse
+        var descriptors = [SortDescriptor(\ToDoItem.text)]
+        
+        switch sortingOption {
+        case .dateCreated:
+            descriptors.append(SortDescriptor(\ToDoItem.dateCreated, order: order))
+        case .importance:
+            descriptors.append(SortDescriptor(\ToDoItem.importance, order: order))
+        }
+        
+        return descriptors
     }
 }

@@ -60,14 +60,14 @@ extension ToDoItemsList {
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                if isLoading {
+                if isLoading || SettingsManager.shared.token.isEmpty {
                     HStack(spacing: 8) {
                         ProgressView()
                             .progressViewStyle(.circular)
                         
                         VStack(alignment: .leading) {
-                            Text("Не забудьте вставить")
-                            Text("свой токен.")
+                            Text("Не забудьте указать")
+                            Text("токен в настройках.")
                         }
                         .font(.caption2)
                         .foregroundStyle(.secondary)
@@ -90,6 +90,11 @@ extension ToDoItemsList {
                 }
             }
         }
+        .onChange(of: SettingsManager.shared.token) {
+            Task {
+                await toDoItemsStore.load()
+            }
+        }
         .onAppear {
             Logger.logInfo("ToDoItemsList appeared.")
             
@@ -98,6 +103,10 @@ extension ToDoItemsList {
                     isLoading = await toDoItemsStore.networkManager.isLoading
                     try await Task.sleep(for: .seconds(1))
                 }
+            }
+            
+            Task {
+                await toDoItemsStore.load()
             }
         }
         .onDisappear {
@@ -121,7 +130,10 @@ extension ToDoItemsList {
                     let plainText = newToDoItemText.trimmingCharacters(in: .whitespacesAndNewlines)
                     
                     if !plainText.isEmpty {
-                        let toDoItem = ToDoItem(text: newToDoItemText)
+                        let toDoItem = ToDoItem(
+                            text: newToDoItemText,
+                            lastUpdatedBy: UIDevice.current.identifierForVendor?.uuidString
+                        )
                         
                         Task {
                             await toDoItemsStore.add(toDoItem)
@@ -269,7 +281,8 @@ extension ToDoItemsList {
                         isCompleted: !toDoItem.isCompleted,
                         color: toDoItem.color,
                         dateCreated: toDoItem.dateCreated,
-                        dateEdited: toDoItem.dateEdited
+                        dateEdited: toDoItem.dateEdited,
+                        lastUpdatedBy: UIDevice.current.identifierForVendor?.uuidString
                     )
                 )
             }
@@ -339,7 +352,10 @@ extension ToDoItemsList {
 
 // MARK: – Preview
 #Preview {
-    let toDoItemsStore = ToDoItemsStore()
+    let toDoItemsStore = ToDoItemsStore(
+        swiftDataModelContainer: ModelContainer.mock,
+        sqliteModelContainer: SQLiteToDoItems()
+    )
     
     return ToDoItemsList(toDoItemsStore: toDoItemsStore)
 }

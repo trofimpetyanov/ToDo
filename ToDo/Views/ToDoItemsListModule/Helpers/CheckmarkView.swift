@@ -44,7 +44,8 @@ struct CheckmarkView: View {
             isCompleted: !toDoItem.isCompleted,
             color: toDoItem.color,
             dateCreated: toDoItem.dateCreated,
-            dateEdited: toDoItem.dateEdited
+            dateEdited: toDoItem.dateEdited,
+            lastUpdatedBy: UIDevice.current.identifierForVendor?.uuidString
         )
         
         Task {
@@ -54,5 +55,5 @@ struct CheckmarkView: View {
 }
 
 #Preview {
-    CheckmarkView(toDoItem: .constant(ToDoItemsStore.mock[0]), onComplete: {})
+    CheckmarkView(toDoItem: .constant(ToDoItemsStore.mock[1]), onComplete: {})
 }

@@ -1,25 +1,28 @@
 import Foundation
 
-actor NetworkService: NetworkServiceProtocol {
+@MainActor
+class NetworkService: NetworkServiceProtocol {
     
     typealias ItemType = Codable & Sendable
     typealias IdentifiableItemType = ItemType & Identifiable
     
-    static let token = "<token>"
+    var token: String {
+        SettingsManager.shared.token
+    }
     
     private var revision: UInt32 = 0
     
     func getList<Item: ItemType>() async throws -> [Item] {
-        let request = GetListRequest<Item>(revision: 0, token: Self.token)
+        let request = GetListRequest<Item>(revision: 0, token: token)
         
-        let result = try await retryingRequest(request)
+        let result = try await request.send()
         revision = result.revision
         
         return result.list
     }
     
     func patchList<Item: ItemType>(_ list: [Item]) async throws -> [Item] {
-        let request = PatchListRequest<Item>(list: list, revision: revision, token: Self.token)
+        let request = PatchListRequest<Item>(list: list, revision: revision, token: token)
         
         let result = try await retryingRequest(request)
         revision = result.revision
@@ -28,7 +31,7 @@ actor NetworkService: NetworkServiceProtocol {
     }
     
     func getItem<Item: ItemType>(_ id: String) async throws -> Item {
-        let request = GetItemRequest<Item>(id: id, revision: 0, token: Self.token)
+        let request = GetItemRequest<Item>(id: id, revision: 0, token: token)
         
         let result = try await retryingRequest(request)
         revision = result.revision
@@ -37,7 +40,7 @@ actor NetworkService: NetworkServiceProtocol {
     }
     
     func postItem<Item: IdentifiableItemType>(_ item: Item) async throws -> Item {
-        let request = PostItemRequest<Item>(item: item, revision: revision, token: Self.token)
+        let request = PostItemRequest<Item>(item: item, revision: revision, token: token)
         
         let result = try await retryingRequest(request)
         revision = result.revision
@@ -46,7 +49,7 @@ actor NetworkService: NetworkServiceProtocol {
     }
     
     func putItem<Item: IdentifiableItemType>(_ item: Item) async throws -> Item {
-        let request = PutItemRequest<Item>(item: item, revision: revision, token: Self.token)
+        let request = PutItemRequest<Item>(item: item, revision: revision, token: token)
         
         let result = try await retryingRequest(request)
         revision = result.revision
@@ -55,7 +58,7 @@ actor NetworkService: NetworkServiceProtocol {
     }
     
     func deleteItem<Item: IdentifiableItemType>(_ item: Item) async throws -> Item {
-        let request = DeleteItemRequest<Item>(item: item, revision: revision, token: Self.token)
+        let request = DeleteItemRequest<Item>(item: item, revision: revision, token: token)
         
         let result = try await retryingRequest(request)
         revision = result.revision
@@ -64,7 +67,7 @@ actor NetworkService: NetworkServiceProtocol {
     }
     
     private func updateRevision<Item: ItemType>(_ item: Item.Type) async {
-        let request = GetListRequest<Item>(revision: 0, token: Self.token)
+        let request = GetListRequest<Item>(revision: 0, token: token)
         
         guard let result = try? await request.send() else { return }
         revision = result.revision
