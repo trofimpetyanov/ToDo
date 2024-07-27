@@ -9,7 +9,9 @@
 /* Begin PBXBuildFile section */
 		AC04CE1C2C53E36300AC93DC /* ModelContainer+Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC04CE1B2C53E36300AC93DC /* ModelContainer+Mock.swift */; };
 		AC04CE1E2C53E6D600AC93DC /* ToDoItem+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC04CE1D2C53E6D600AC93DC /* ToDoItem+Codable.swift */; };
-		AC04CE242C53F11000AC93DC /* DataBaseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC04CE232C53F11000AC93DC /* DataBaseType.swift */; };
+		AC04CE242C53F11000AC93DC /* StorageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC04CE232C53F11000AC93DC /* StorageType.swift */; };
+		AC04CE262C54437D00AC93DC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC04CE252C54437D00AC93DC /* SettingsView.swift */; };
+		AC04CE292C54464C00AC93DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC04CE282C54464C00AC93DC /* ContentView.swift */; };
 		AC1C1B912C2374560094D57C /* ToDoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1C1B902C2374560094D57C /* ToDoApp.swift */; };
 		AC1C1B932C2374560094D57C /* ToDoItemsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1C1B922C2374560094D57C /* ToDoItemsList.swift */; };
 		AC1C1B952C2374570094D57C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC1C1B942C2374570094D57C /* Assets.xcassets */; };
@@ -24,6 +26,8 @@
 		AC3BA79F2C513D0800642B24 /* Task+Retrying.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3BA79E2C513D0800642B24 /* Task+Retrying.swift */; };
 		AC3BA7A22C514B3C00642B24 /* JSONRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3BA7A12C514B3C00642B24 /* JSONRepresentable.swift */; };
 		AC3BA7A42C514B4300642B24 /* CSVRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3BA7A32C514B4300642B24 /* CSVRepresentable.swift */; };
+		AC4C65F12C54700500886A3D /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4C65F02C54700500886A3D /* SettingsManager.swift */; };
+		AC4C65F52C5474AE00886A3D /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4C65F42C5474AE00886A3D /* KeychainService.swift */; };
 		AC5630AE2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5630AD2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift */; };
 		AC5630B02C41DCFA00FB5835 /* URLSessionAsyncDataTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5630AF2C41DCFA00FB5835 /* URLSessionAsyncDataTaskTests.swift */; };
 		AC6A96972C41C8D8008659C5 /* LoggerPackage in Frameworks */ = {isa = PBXBuildFile; productRef = AC6A96962C41C8D8008659C5 /* LoggerPackage */; };
@@ -79,7 +83,9 @@
 /* Begin PBXFileReference section */
 		AC04CE1B2C53E36300AC93DC /* ModelContainer+Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelContainer+Mock.swift"; sourceTree = "<group>"; };
 		AC04CE1D2C53E6D600AC93DC /* ToDoItem+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoItem+Codable.swift"; sourceTree = "<group>"; };
-		AC04CE232C53F11000AC93DC /* DataBaseType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseType.swift; sourceTree = "<group>"; };
+		AC04CE232C53F11000AC93DC /* StorageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageType.swift; sourceTree = "<group>"; };
+		AC04CE252C54437D00AC93DC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		AC04CE282C54464C00AC93DC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AC1C1B8D2C2374560094D57C /* ToDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC1C1B902C2374560094D57C /* ToDoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoApp.swift; sourceTree = "<group>"; };
 		AC1C1B922C2374560094D57C /* ToDoItemsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemsList.swift; sourceTree = "<group>"; };
@@ -93,6 +99,8 @@
 		AC3BA79E2C513D0800642B24 /* Task+Retrying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Retrying.swift"; sourceTree = "<group>"; };
 		AC3BA7A12C514B3C00642B24 /* JSONRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONRepresentable.swift; sourceTree = "<group>"; };
 		AC3BA7A32C514B4300642B24 /* CSVRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVRepresentable.swift; sourceTree = "<group>"; };
+		AC4C65F02C54700500886A3D /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
+		AC4C65F42C5474AE00886A3D /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		AC5630AD2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+AsyncDataTask.swift"; sourceTree = "<group>"; };
 		AC5630AF2C41DCFA00FB5835 /* URLSessionAsyncDataTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionAsyncDataTaskTests.swift; sourceTree = "<group>"; };
 		AC99F67D2C4AB78000F07E49 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
@@ -157,6 +165,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AC04CE272C54438100AC93DC /* SettingsModule */ = {
+			isa = PBXGroup;
+			children = (
+				AC04CE252C54437D00AC93DC /* SettingsView.swift */,
+			);
+			path = SettingsModule;
+			sourceTree = "<group>";
+		};
 		AC1C1B842C2374560094D57C = {
 			isa = PBXGroup;
 			children = (
@@ -210,9 +226,11 @@
 		AC1C1BA02C2374780094D57C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				AC04CE282C54464C00AC93DC /* ContentView.swift */,
 				ACDA31DA2C2FC64A00C5FDCE /* ToDoItemsListModule */,
 				ACCA50592C358AD5007669BB /* ToDoItemDetailModule */,
 				ACCA50582C358AA9007669BB /* CalendarModule */,
+				AC04CE272C54438100AC93DC /* SettingsModule */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -240,7 +258,6 @@
 			isa = PBXGroup;
 			children = (
 				ACDA31CF2C2F49DB00C5FDCE /* ToDoItemsStore.swift */,
-				AC99F6972C4B16D500F07E49 /* ToDoItemsNetworkManager.swift */,
 				AC3BA7A52C514D8300642B24 /* FileCache */,
 			);
 			path = Data;
@@ -297,7 +314,7 @@
 			isa = PBXGroup;
 			children = (
 				ACA0D20D2C24ACE4003659A2 /* FileCache.swift */,
-				AC04CE232C53F11000AC93DC /* DataBaseType.swift */,
+				AC04CE232C53F11000AC93DC /* StorageType.swift */,
 				AC3BA7A62C514D9200642B24 /* Protocols */,
 			);
 			path = FileCache;
@@ -312,9 +329,26 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
+		AC4C65F22C54747F00886A3D /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				AC4C65F02C54700500886A3D /* SettingsManager.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		AC4C65F32C54749D00886A3D /* Keychain */ = {
+			isa = PBXGroup;
+			children = (
+				AC4C65F42C5474AE00886A3D /* KeychainService.swift */,
+			);
+			path = Keychain;
+			sourceTree = "<group>";
+		};
 		AC99F67C2C4AB74400F07E49 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				AC99F6972C4B16D500F07E49 /* ToDoItemsNetworkManager.swift */,
 				AC99F68A2C4ADD5400F07E49 /* NetworkService */,
 				AC99F68B2C4ADD6500F07E49 /* APIService */,
 			);
@@ -450,6 +484,8 @@
 				AC20874C2C418735009B0ECF /* Appearance */,
 				AC20874B2C418729009B0ECF /* Data */,
 				AC99F67C2C4AB74400F07E49 /* Network */,
+				AC4C65F32C54749D00886A3D /* Keychain */,
+				AC4C65F22C54747F00886A3D /* Settings */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -624,7 +660,9 @@
 				AC99F6822C4AB7BC00F07E49 /* APIRequest.swift in Sources */,
 				AC9BF5A12C3819DF008C6C58 /* CalendarView.swift in Sources */,
 				ACDA31C62C2D7AA600C5FDCE /* ListRow.swift in Sources */,
+				AC4C65F52C5474AE00886A3D /* KeychainService.swift in Sources */,
 				AC04CE1C2C53E36300AC93DC /* ModelContainer+Mock.swift in Sources */,
+				AC04CE262C54437D00AC93DC /* SettingsView.swift in Sources */,
 				AC1C1B912C2374560094D57C /* ToDoApp.swift in Sources */,
 				AC1C1BA32C2374920094D57C /* ToDoItem.swift in Sources */,
 				AC9BF5A32C38308D008C6C58 /* Date+Format.swift in Sources */,
@@ -634,7 +672,7 @@
 				ACDA31CA2C2EE38E00C5FDCE /* ToDoItemDetail.swift in Sources */,
 				AC99F6802C4AB79A00F07E49 /* NetworkServiceProtocol.swift in Sources */,
 				ACA0D20E2C24ACE4003659A2 /* FileCache.swift in Sources */,
-				AC04CE242C53F11000AC93DC /* DataBaseType.swift in Sources */,
+				AC04CE242C53F11000AC93DC /* StorageType.swift in Sources */,
 				AC5630AE2C41DC0200FB5835 /* URLSession+AsyncDataTask.swift in Sources */,
 				AC9BF5B82C3897F6008C6C58 /* CalendarContainerViewControllerDelegate.swift in Sources */,
 				AC9BF5B12C388A52008C6C58 /* CalendarDatesViewController+ViewModel.swift in Sources */,
@@ -650,6 +688,7 @@
 				AC9BF5A82C384454008C6C58 /* DateLabelCell.swift in Sources */,
 				AC1C1BA72C2375B00094D57C /* ToDoItem+Parsing.swift in Sources */,
 				AC99F6922C4AFCE600F07E49 /* Date+Clean.swift in Sources */,
+				AC04CE292C54464C00AC93DC /* ContentView.swift in Sources */,
 				AC99F6862C4AC4E900F07E49 /* ItemResponse.swift in Sources */,
 				AC3BA7A42C514B4300642B24 /* CSVRepresentable.swift in Sources */,
 				ACDA31D92C2FC10F00C5FDCE /* Color+HEX.swift in Sources */,
@@ -659,6 +698,7 @@
 				ACDA31D22C2F9CC200C5FDCE /* ColorWheel.swift in Sources */,
 				AC99F6842C4ABC7300F07E49 /* APIService.swift in Sources */,
 				ACDA31C82C2DF7E900C5FDCE /* CheckmarkView.swift in Sources */,
+				AC4C65F12C54700500886A3D /* SettingsManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

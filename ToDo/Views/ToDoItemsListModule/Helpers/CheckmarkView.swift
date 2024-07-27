@@ -55,5 +55,5 @@ struct CheckmarkView: View {
 }
 
 #Preview {
-    CheckmarkView(toDoItem: .constant(ToDoItemsStore.mock[0]), onComplete: {})
+    CheckmarkView(toDoItem: .constant(ToDoItemsStore.mock[1]), onComplete: {})
 }

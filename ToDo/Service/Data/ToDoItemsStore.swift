@@ -48,6 +48,10 @@ class ToDoItemsStore: ObservableObject {
             .count
     }
     
+    var currentDataBase: StorageType {
+        fileCache.currentDataBase
+    }
+    
     /// The current list of to-do items, sorted and filtered based on the current settings.
     @Published var currentToDoItems: [ToDoItem] = []
     
@@ -104,7 +108,7 @@ class ToDoItemsStore: ObservableObject {
                 try fileCache.clear()
                 
                 toDoItems.forEach { toDoItem in
-                    fileCache.add(toDoItem)
+                    fileCache.add(toDoItem, ignoreLog: true)
                 }
                 
                 save()

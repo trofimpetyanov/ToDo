@@ -10,7 +10,7 @@ struct FileCache<Item: Identifiable & JSONRepresentable & CSVRepresentable & Per
         case json, csv
     }
     
-    var currentDataBase: DataBaseType = .swiftData
+    var currentDataBase: StorageType = .swiftData
     
     private(set) var items: [Item]
     
@@ -189,14 +189,10 @@ extension FileCache {
     
     private func insert(_ item: Item) {
         context.insert(item)
-        
-        Logger.logVerbose("Inserted item in SwiftData storage.")
     }
     
     private func delete(_ item: Item) {
         context.delete(item)
-        
-        Logger.logVerbose("Deleted item in SwiftData storage.")
     }
     
     private func update(_ item: Item) {
@@ -205,7 +201,5 @@ extension FileCache {
     
     private mutating func load(_ descriptor: FetchDescriptor<Item> = FetchDescriptor()) throws {
         items = try context.fetch(descriptor)
-        
-        Logger.logVerbose("Loaded items from SwiftData storage.")
     }
 }

@@ -19,7 +19,7 @@ struct ToDoApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ToDoItemsList(toDoItemsStore: toDoItemsStore)
+            ContentView(toDoItemsStore: toDoItemsStore)
         }
     }
 }
