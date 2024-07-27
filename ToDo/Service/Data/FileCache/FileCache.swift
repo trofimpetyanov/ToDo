@@ -10,14 +10,17 @@ struct FileCache<Item: Identifiable & JSONRepresentable & CSVRepresentable & Per
         case json, csv
     }
     
-    var currentDataBase: StorageType = .swiftData
-    
     private(set) var items: [Item]
     
-    private(set) var modelContainer: ModelContainer
+    private var storage: StorageType {
+        SettingsManager.shared.storage
+    }
+    
+    private var swiftDataModelContainer: ModelContainer
+    private var sqliteModelContainer: any SQLiteModelContainer<Item>
     
     private var context: ModelContext {
-        modelContainer.mainContext
+        swiftDataModelContainer.mainContext
     }
     
     private var documentsDirectory: URL {
@@ -26,28 +29,37 @@ struct FileCache<Item: Identifiable & JSONRepresentable & CSVRepresentable & Per
         return paths[0]
     }
     
-    init(items: [Item] = [], modelContainer: ModelContainer) {
+    init(
+        items: [Item] = [],
+        swiftDataModelContainer: ModelContainer,
+        sqliteModelContainer: any SQLiteModelContainer<Item>
+    ) {
         self.items = items
-        self.modelContainer = modelContainer
+        self.swiftDataModelContainer = swiftDataModelContainer
+        self.sqliteModelContainer = sqliteModelContainer
     }
     
     mutating func fetch(predicate: Predicate<Item>? = nil, sortBy descriptors: [SortDescriptor<Item>] = []) throws {
-        switch currentDataBase {
+        switch storage {
         case .file:
             try load(from: "storage")
-        case .swiftData, .sqlite:
+        case .swiftData:
             let fetchDescriptor = FetchDescriptor(predicate: predicate, sortBy: descriptors)
             
             try load(fetchDescriptor)
+        case .sqlite:
+            items = try sqliteModelContainer.load()
         }
     }
     
     func save() throws {
-        switch currentDataBase {
+        switch storage {
         case .file:
             try save(to: "storage")
-        case .swiftData, .sqlite:
+        case .swiftData:
             try context.save()
+        default:
+            break
         }
     }
     
@@ -106,7 +118,15 @@ struct FileCache<Item: Identifiable & JSONRepresentable & CSVRepresentable & Per
     
     mutating func clear() throws {
         items = []
-        try context.delete(model: Item.self)
+        
+        switch storage {
+        case .swiftData:
+            try context.delete(model: Item.self)
+        case .sqlite:
+            try sqliteModelContainer.clear()
+        default:
+            break
+        }
     }
 }
 
@@ -188,15 +208,34 @@ extension FileCache {
 extension FileCache {
     
     private func insert(_ item: Item) {
-        context.insert(item)
+        switch storage {
+        case .swiftData:
+            context.insert(item)
+        case .sqlite:
+            sqliteModelContainer.add(item)
+        default:
+            break
+        }
     }
     
     private func delete(_ item: Item) {
-        context.delete(item)
+        switch storage {
+        case .swiftData:
+            context.delete(item)
+        case .sqlite:
+            sqliteModelContainer.delete(with: item.id)
+        default:
+            break
+        }
     }
     
     private func update(_ item: Item) {
-        // SwiftData updates models automatically.
+        switch storage {
+        case .sqlite:
+            sqliteModelContainer.update(item)
+        default:
+            break
+        }
     }
     
     private mutating func load(_ descriptor: FetchDescriptor<Item> = FetchDescriptor()) throws {

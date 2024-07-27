@@ -18,5 +18,10 @@ struct CalendarView: UIViewControllerRepresentable {
 }
 
 #Preview {
-    CalendarView(toDoItemsStore: ToDoItemsStore(modelContainer: ModelContainer.mock))
+    CalendarView(
+        toDoItemsStore: ToDoItemsStore(
+            swiftDataModelContainer: ModelContainer.mock,
+            sqliteModelContainer: SQLiteToDoItems()
+        )
+    )
 }

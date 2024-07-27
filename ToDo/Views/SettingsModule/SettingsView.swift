@@ -25,7 +25,7 @@ struct SettingsView: View {
         }
         .task {
             token = SettingsManager.shared.token
-            selectedDataBase = SettingsManager.shared.currentDataBase
+            selectedDataBase = SettingsManager.shared.storage
         }
     }
     
@@ -65,8 +65,8 @@ struct SettingsView: View {
                 }
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    selectedDataBase = dataBaseType
-                    SettingsManager.shared.currentDataBase = dataBaseType
+                    SettingsManager.shared.storage = dataBaseType
+                    selectedDataBase = SettingsManager.shared.storage
                     
                     Logger.logInfo("Storage set to \(selectedDataBase).")
                 }

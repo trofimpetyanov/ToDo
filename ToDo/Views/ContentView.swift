@@ -15,5 +15,10 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView(toDoItemsStore: .init(modelContainer: .mock))
+    ContentView(
+        toDoItemsStore: .init(
+            swiftDataModelContainer: .mock,
+            sqliteModelContainer: SQLiteToDoItems()
+        )
+    )
 }

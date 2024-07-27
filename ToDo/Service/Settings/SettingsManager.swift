@@ -1,7 +1,7 @@
 import Foundation
 
 @MainActor
-struct SettingsManager {
+class SettingsManager {
     
     enum Keys {
         static let storage = "storage"
@@ -10,7 +10,7 @@ struct SettingsManager {
     
     static var shared = SettingsManager()
     
-    var currentDataBase: StorageType {
+    var storage: StorageType {
         get {
             guard
                 let string = UserDefaults.standard.string(forKey: Keys.storage),
@@ -19,6 +19,8 @@ struct SettingsManager {
             
             return storage
         } set {
+            guard newValue != storage else { return }
+            
             UserDefaults.standard.setValue(newValue.rawValue, forKey: Keys.storage)
         }
     }
@@ -38,6 +40,21 @@ struct SettingsManager {
         }
     }
     
-    private init() { }
+    private init() { 
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateFromSettingsBundle),
+            name: UserDefaults.didChangeNotification,
+            object: nil
+        )
+    }
     
+    @objc private func updateFromSettingsBundle() {
+        guard
+            let string = UserDefaults.standard.string(forKey: Keys.storage),
+            let storage = StorageType(rawValue: string)
+        else { return }
+        
+        self.storage = storage
+    }
 }

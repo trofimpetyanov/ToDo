@@ -352,7 +352,10 @@ extension ToDoItemsList {
 
 // MARK: – Preview
 #Preview {
-    let toDoItemsStore = ToDoItemsStore(modelContainer: ModelContainer.mock)
+    let toDoItemsStore = ToDoItemsStore(
+        swiftDataModelContainer: ModelContainer.mock,
+        sqliteModelContainer: SQLiteToDoItems()
+    )
     
     return ToDoItemsList(toDoItemsStore: toDoItemsStore)
 }

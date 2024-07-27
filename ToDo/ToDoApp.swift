@@ -11,7 +11,12 @@ struct ToDoApp: App {
         
         do {
             let modelContainer = try ModelContainer(for: ToDoItem.self)
-            self._toDoItemsStore = State(initialValue: ToDoItemsStore(modelContainer: modelContainer))
+            self._toDoItemsStore = State(
+                initialValue: ToDoItemsStore(
+                    swiftDataModelContainer: modelContainer,
+                    sqliteModelContainer: SQLiteToDoItems()
+                )
+            )
         } catch {
             fatalError("Cannot launch the App: Failed to create ModelContainer for ToDoItem.")
         }

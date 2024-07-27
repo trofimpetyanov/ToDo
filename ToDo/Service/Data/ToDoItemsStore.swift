@@ -48,10 +48,6 @@ class ToDoItemsStore: ObservableObject {
             .count
     }
     
-    var currentDataBase: StorageType {
-        fileCache.currentDataBase
-    }
-    
     /// The current list of to-do items, sorted and filtered based on the current settings.
     @Published var currentToDoItems: [ToDoItem] = []
     
@@ -88,8 +84,11 @@ class ToDoItemsStore: ObservableObject {
     private var fileCache: FileCache<ToDoItem>
     
     /// Initializes a new instance of `ToDoItemsStore`.
-    init(modelContainer: ModelContainer) {
-        fileCache = FileCache(modelContainer: modelContainer)
+    init(swiftDataModelContainer: ModelContainer, sqliteModelContainer: SQLiteToDoItems) {
+        fileCache = FileCache(
+            swiftDataModelContainer: swiftDataModelContainer,
+            sqliteModelContainer: sqliteModelContainer
+        )
         toDoItems = []
         
         let networkService = NetworkService()
