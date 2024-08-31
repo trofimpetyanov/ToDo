@@ -1,6 +1,6 @@
 # ToDo App
 
-ToDo App is a comprehensive task management application designed to help users organize, track, and manage their tasks efficiently. The app is being developed throughout the course to reinforce concepts covered in various lessons, and it will include features for managing tasks, saving data, and integrating with different file formats and APIs.
+ToDo App is a comprehensive task management application designed to help users organize, track, and manage their tasks efficiently
 
 ## 📚 Overview
 
